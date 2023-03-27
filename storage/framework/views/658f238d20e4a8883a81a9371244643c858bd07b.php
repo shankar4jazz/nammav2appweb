@@ -33,7 +33,7 @@
                             <div class="form-group col-md-6">
                                 <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('title',old('title'),['placeholder' => trans('messages.title'),'class' =>'form-control','required'])); ?>
+                                <?php echo e(Form::text('title',old('title'),['placeholder' => trans('messages.title'), 'id' =>'title', 'class' =>'form-control','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
@@ -43,7 +43,7 @@
                             <div class="form-group col-md-5">
                                 <?php echo e(Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('slug',old('title'),['placeholder' => trans('messages.slug'), 'id' =>'slug', 'class' =>'form-control','required'])); ?>
+                                <?php echo e(Form::text('slug',old('slug'),['placeholder' => trans('messages.slug'), 'id' =>'slug', 'class' =>'form-control','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
@@ -524,15 +524,16 @@
 
             function textToSlug(text) {
                 return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
-
             }
 
             var button = document.getElementById("convert_slug");
+
             button.addEventListener("click", function() {
+                const timestamp = Date.now();
                 var textbox = document.getElementById("title");
                 var slug = textToSlug(textbox.value);
                 var textbox = document.getElementById("slug");
-                textbox.value = slug;
+                textbox.value = slug+"-"+timestamp;
 
 
             });

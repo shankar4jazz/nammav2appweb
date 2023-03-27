@@ -689,6 +689,8 @@ class UserController extends Controller
 					
 				}
 				else{
+                    $fourRandomDigit = rand(1000, 9999);
+                $user_data->otp = $fourRandomDigit;	
 					 $smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
 					if ($smsReply->status == 'success') {
 						  	$user_data->login_attempts = 0;
