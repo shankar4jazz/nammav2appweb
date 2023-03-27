@@ -953,21 +953,19 @@ private function generateRandomString($length = 10) {
      //   $key = "gIzOiWdbFTqrCWVq";
         //$mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
         //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
-       // $message_content = urlencode('' . $otp . ' is your verification code for Tamilanjobs - Find Jobs Locally.');
+        //$message_content = urlencode('' . $otp . ' is your verification code for Tamilanjobs - Find Jobs Locally.');
 		
-      //  $senderid = "TAMLAN";
+        //$senderid = "TAMLAN";
 		
-       // $url = "http://app.mydreamstechnology.in/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
+        //$url = "http://app.mydreamstechnology.in/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
 		
-       // $output = file_get_contents($url);    /*default function for push any url*/
+        //$output = file_get_contents($url);    /*default function for push any url*/
 		//var_dump($output);		
 		//return json_decode($output, true);		
 		exit();
 		
-        //return json_decode($output, true);      
-
+        //return json_decode($output, true);   
         //return [
-
           //  'status' => 'Success',
            // 'message' => 'Please Enter Valid OTP for login'
 

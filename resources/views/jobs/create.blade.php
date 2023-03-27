@@ -299,7 +299,7 @@
                 //providerAddress(provider_id, service_address_id);
                 $(document).on('change', '#role', function() {
                     var status = $(this).val();
-                    if (status == '3') {
+                    if (status == '3' || status == '4' || status == '2') {
 
                         document.getElementById("reason").style.display = "block";
                     } else {
