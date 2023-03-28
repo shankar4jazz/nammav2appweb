@@ -86,10 +86,10 @@ class JobsDataTable extends DataTable
   
         if (auth()->user()->hasAnyRole(['admin'])) {
            
-            $model = $model->withTrashed();
+            $model = $model->withTrashed()->orderByDesc('id');
         }else{
             
-            return $model->list()->newQuery()->where("user_id", auth()->user()->id);
+            return $model->list()->newQuery()->where("user_id", auth()->user()->id)->orderByDesc('id');
 
         }
 

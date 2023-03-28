@@ -93,7 +93,7 @@ class JobsController extends Controller
 
         $auth_user = authSession();
 
-        $jobsdata = Jobs::find($id);
+        $jobsdata = Jobs::find($id)->orderBy();
         
         $pageTitle = __('messages.quick_form_title', ['form' => __('messages.jobs')]);
 

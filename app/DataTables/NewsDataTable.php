@@ -87,9 +87,9 @@ class NewsDataTable extends DataTable
     public function query(News $model)
     {
         if(auth()->user()->hasAnyRole(['admin'])){
-            $model = $model->withTrashed();
+            $model = $model->withTrashed()->orderByDesc('id');
         }
-        return $model->list()->newQuery();
+        return $model->list()->orderByDesc('id')->newQuery();
     }
     /**
      * Get columns.
