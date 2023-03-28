@@ -646,7 +646,7 @@ class UserController extends Controller
             }
             if ($request->login_type === 'mobile' && $user_data != null) {
 
-                if ($user_data->login_attempts <= 3) {
+                if ($user_data->login_attempts <= 15) {
 
 
                     $fourRandomDigit = rand(1000, 9999);
@@ -717,10 +717,7 @@ class UserController extends Controller
     {
         $input = $request->all();
 
-        $user = \Auth::user();
-
-      
-
+        $user = \Auth::user();    
 
         if (request('contact_number') != '' && request('otp') != '') {
 
@@ -742,7 +739,6 @@ class UserController extends Controller
                     'status' => true,
                     "otp_status" => false,
                     "message" => "Invalid phone number or Access"
-
 
                 ];
 
@@ -767,6 +763,7 @@ class UserController extends Controller
                     if ($user_data->otp ==  $input['otp'] && $user_data->otp != null) {
                         $success = $user_data;
                         $user_data->otp = 0;
+                        $user_data->login_attempts = 0;
                         $user_data->update();
                         $success['user_role'] = $user_data->getRoleNames();
                         $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
@@ -804,7 +801,7 @@ class UserController extends Controller
                         return comman_custom_response($otp_response, 400);
                     }
                 } else {
-                    $user_data->otp = 0;
+                    $user_data->login_attempts = 0;
                     $user_data->update();
                     $otp_response = [
                         'status' => true,
