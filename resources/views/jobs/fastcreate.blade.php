@@ -32,7 +32,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         {{ Form::model($jobsdata,['method' => 'POST','route'=>'jobs.store', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'jobsdata'] ) }}
                         {{ Form::hidden('id') }}
                         @if (auth()->user()->hasRole(['admin']))
@@ -63,14 +62,11 @@
 
                             </div> 
 							
-							   <div class="form-group col-md-4">
-
+							<div class="form-group col-md-4">
                                 {{ Form::label('contact_number',__('messages.customer').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('contact_number',  null, ['class'=>"form-control" , 'id'=>'contact_number'  , 'placeholder'=> __("Contact Number") ]) }}
                                 <small class="help-block with-errors text-danger"></small>
-
                             </div> 
-
 
                             <div class="form-group col-md-4">
                                 {{ Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
