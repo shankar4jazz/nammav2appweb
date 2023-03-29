@@ -57,15 +57,28 @@ class JobsController extends Controller
         $jobsdata = Jobs::find($id);
 
         $pageTitle = trans('messages.update_form_title', ['form' => trans('messages.jobs')]);
-
+        $decoded_description = '';
         if ($jobsdata == null) {
             $pageTitle = trans('messages.add_button_form', ['form' => trans('messages.jobs')]);
             $jobsdata = new Jobs;
             $jobsdata->country_id = '101';
             $jobsdata->state_id = '35';
         }
+        else{
+            $decoded_description = base64_decode($jobsdata->description);
+       
+            $is_base64_encoded = base64_encode(base64_decode($jobsdata->description)) === $jobsdata->description;
+            if ($is_base64_encoded) {
+    
+                $decoded_description ;
+                
+            } else {           
+                // The string is base64 encoded and has been decoded
+                 $decoded_description = $jobsdata->description; // Outputs "Hello World!"
+            }
+        }
 
-        return view('jobs.create', compact('pageTitle', 'jobsdata', 'auth_user'));
+        return view('jobs.create', compact('pageTitle', 'jobsdata', 'auth_user', 'decoded_description'));
     }
 
     public function quickJob(Request $request)
@@ -96,16 +109,29 @@ class JobsController extends Controller
         $jobsdata = Jobs::find($id);
 
         $pageTitle = __('messages.quick_form_title', ['form' => __('messages.jobs')]);
-
+        $decoded_description = '';
         if ($jobsdata == null) {
             $pageTitle = __('messages.add_button_form', ['form' => __('messages.jobs')]);
             $jobsdata = new Jobs;
+        }
+        else{
+            $decoded_description = base64_decode($jobsdata->description);
+       
+            $is_base64_encoded = base64_encode(base64_decode($jobsdata->description)) === $jobsdata->description;
+            if ($is_base64_encoded) {
+    
+                $decoded_description ;
+                
+            } else {           
+                // The string is base64 encoded and has been decoded
+                 $decoded_description = $jobsdata->description; // Outputs "Hello World!"
+            }
         }
         $jobsdata['contact_number_data'] = $id;
 
 
 
-        return view('jobs.fastcreate', compact('pageTitle', 'jobsdata', 'auth_user'));
+        return view('jobs.fastcreate', compact('pageTitle', 'jobsdata', 'auth_user', 'decoded_description'));
     }
 
     /**
@@ -134,7 +160,8 @@ class JobsController extends Controller
         } else {
             $data['user_id'] =  $auth_user->id;
         }
-
+        $data['is_featured'] = 0;
+        $data['description'] = base64_encode($request->description);
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 
         $result->jobDistricts()->detach();
@@ -179,10 +206,8 @@ class JobsController extends Controller
 
         if (isset($request->user_id)) {
             $data['user_id'] = $request->user_id;
-        } else {
-            $data['user_id'] =  $auth_user->id;
-        }
-
+        } 
+       
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 
         $result->jobDistricts()->detach();
@@ -200,6 +225,7 @@ class JobsController extends Controller
                 $result->jobDistricts()->sync($row['id'], []);
             }
         }
+        
 
         storeMediaFile($result, $request->jobs_image, 'jobs_image');
 

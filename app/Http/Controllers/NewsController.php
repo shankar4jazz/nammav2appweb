@@ -48,14 +48,30 @@ class NewsController extends Controller
         $subcategory = News::find($id);
         // $subcategory->country_id = '101';
         // $subcategory->state_id = '35';
-        $decoded_description = base64_decode($subcategory->description);
+      
+        
+      
+       
         $pageTitle = trans('messages.update_form_title', ['form' => trans('messages.news')]);
-
+        $decoded_description = '';
         if ($subcategory == null) {
             $pageTitle = trans('messages.add_button_form', ['form' => trans('messages.news')]);
             $subcategory = new News;
             $subcategory->country_id = '101';
             $subcategory->state_id = '35';
+        }
+        else{
+            $decoded_description = base64_decode($subcategory->description);
+       
+            $is_base64_encoded = base64_encode(base64_decode($subcategory->description)) === $subcategory->description;
+            if ($is_base64_encoded) {
+    
+                $decoded_description ;
+                
+            } else {           
+                // The string is base64 encoded and has been decoded
+                 $decoded_description = $subcategory->description; // Outputs "Hello World!"
+            }
         }
 
         return view('news.create', compact('pageTitle', 'subcategory', 'auth_user', 'decoded_description'));

@@ -138,7 +138,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 {{ Form::label('description',trans('messages.description'), ['class' => 'form-control-label']) }}
-                                {{ Form::textarea('description', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.description') ]) }}
+                                {{ Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ]) }}
                             </div>
 
                             <div class="row col-md-12">
@@ -252,7 +252,7 @@
         (function($) {
             "use strict";
             $(document).ready(function() {
-
+                CKEDITOR.replace('editor');
                 var category_id = "{{ isset($jobsdata->contact_number_data) ? $jobsdata->contact_number_data : '' }}";
 			
                 getCustomer(category_id);
