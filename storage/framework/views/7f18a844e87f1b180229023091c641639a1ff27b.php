@@ -3,6 +3,8 @@
  <script src="<?php echo e(asset('vendor/tinymce/js/tinymce/tinymce.min.js')); ?>"></script>
  <script src="<?php echo e(asset('vendor/tinymce/js/tinymce/jquery.tinymce.min.js')); ?>"></script>
  <link href="<?php echo e(asset('css/dragula.css')); ?>" rel="stylesheet">
+ <script src="<?php echo e(asset('js/ckeditor.js')); ?>"></script>
+<link rel="stylesheet" href="<?php echo e(asset('css/ckeditor.css')); ?>">
  <script src="<?php echo e(asset('js/dragula.min.js')); ?>"></script>
  <script>
     // Text Editor code

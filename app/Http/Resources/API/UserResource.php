@@ -34,9 +34,8 @@ class UserResource extends JsonResource
             $profile_image = getSingleMedia($this, 'profile_image',null);
         }  
         return [
-            'id'                => $this->id,
-            'first_name'        => $this->first_name,
-            'last_name'         => $this->last_name,
+            
+          
             'username'          => $this->username,
             'provider_id'       => $this->provider_id,
             'status'            => $this->status,
@@ -47,13 +46,13 @@ class UserResource extends JsonResource
             'country_id'        => $this->country_id,
             'state_id'          => $this->state_id,
             'city_id'           => $this->city_id,
-            'city_name'         => optional($this->city)->name,
+            
             'address'           => $this->address,
             'status'            => $this->status,
             'providertype_id'   => $this->providertype_id,
             'providertype'      => optional($this->providertype)->name,
             'is_featured'       => $this->is_featured,
-            'display_name'      => $this->display_name,
+         
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'deleted_at'        => $this->deleted_at,
@@ -72,6 +71,7 @@ class UserResource extends JsonResource
             'otp_attempt'=>$this->otp_attempt,
             'handymantype_id' => $this->handymantype_id,
             'handymantype' => optional($this->handymantype)->name,
+          
         ];
     }
 }

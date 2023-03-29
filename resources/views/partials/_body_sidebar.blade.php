@@ -12,6 +12,39 @@ $menu->add('<span>'.__('messages.dashboard').'</span><span class="custom-tooltip
 ->link->attr(['class' => '']);
 
 
+
+$menu->add(__('messages.sidebar_form_title',['form' => trans('messages.news')]), ['class' => 'category-main'])->data('permission', 'news list');
+
+$menu->add('<span>'.__('messages.news_lists').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.news_lists').'</span></span>', ['route' => 'news.index'])
+->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
+</svg>')
+->nickname('booking')
+->data('permission', 'news list');
+$menu->add('<span>'.__('messages.news_categories').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.news_categories').'</span></span>', ['route' => 'news-categories.index'])
+->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
+</svg>')
+->nickname('booking')
+->data('permission', 'news categories list');
+
+
+$menu->add(__('messages.sidebar_form_title',['form' => trans('messages.jobs')]), ['class' => 'category-main'])->data('permission', 'jobs list');
+
+$menu->add('<span>'.__('messages.jobs_lists').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.jobs_lists').'</span></span>', ['route' => 'jobs.index'])
+->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
+</svg>')
+->nickname('jobs')
+->data('permission', 'jobs list');
+$menu->add('<span>'.__('messages.jobs_categories').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.jobs_categories').'</span></span>', ['route' => 'jobs-categories.index'])
+->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
+</svg>')
+->nickname('jobs')
+->data('permission', 'jobs categories list');
+
+
 $menu->add(__('messages.sidebar_form_title',['form' => trans('messages.market_place')]), ['class' => 'category-main'])->data('permission', 'order list');
 
 $menu->add('<span>'.__('messages.orders').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.orders').'</span></span>', ['route' => 'orders.index'])
@@ -52,40 +85,6 @@ $menu->add('<span>'.__('messages.quick_booking').'</span><span class="custom-too
 </svg>')
 ->nickname('booking')
 ->data('permission', 'booking list');
-
-
-
-$menu->add(__('messages.sidebar_form_title',['form' => trans('messages.news')]), ['class' => 'category-main'])->data('permission', 'news list');
-
-$menu->add('<span>'.__('messages.news_lists').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.news_lists').'</span></span>', ['route' => 'news.index'])
-->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
-</svg>')
-->nickname('booking')
-->data('permission', 'news list');
-$menu->add('<span>'.__('messages.news_categories').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.news_categories').'</span></span>', ['route' => 'news-categories.index'])
-->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
-</svg>')
-->nickname('booking')
-->data('permission', 'news categories list');
-
-
-$menu->add(__('messages.sidebar_form_title',['form' => trans('messages.jobs')]), ['class' => 'category-main'])->data('permission', 'jobs list');
-
-$menu->add('<span>'.__('messages.jobs_lists').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.jobs_lists').'</span></span>', ['route' => 'jobs.index'])
-->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
-</svg>')
-->nickname('booking')
-->data('permission', 'jobs list');
-$menu->add('<span>'.__('messages.jobs_categories').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.jobs_categories').'</span></span>', ['route' => 'jobs-categories.index'])
-->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
-</svg>')
-->nickname('booking')
-->data('permission', 'jobs categories list');
-
 
 
 

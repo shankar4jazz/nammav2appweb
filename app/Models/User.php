@@ -162,6 +162,11 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Booking::class, 'customer_id', 'id');
     }
 
+    public function companies()
+    {
+        return $this->hasMany(Company::class);
+    }
+
     public function payment()
     {
         return $this->hasMany(Payment::class, 'customer_id', 'id');

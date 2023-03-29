@@ -71,6 +71,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('get-type-list',[API\CommanController::class,'getTypeList']);
 
     Route::post('add-user',[API\User\UserController::class, 'addUser']);
+    Route::post('add-company',[API\CompanyController::class, 'addCompany']);
+    Route::post('edit-company',[API\CompanyController::class, 'editCompany']);
     Route::post('edit-user',[API\User\UserController::class,'editUser']);
     Route::get('get-user-list',[API\User\UserController::class, 'userList']);
 

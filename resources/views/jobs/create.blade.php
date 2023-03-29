@@ -21,8 +21,6 @@
                         {{ Form::hidden('id') }}
                         @if (auth()->user()->hasRole(['admin']))
                         <div class="row">
-
-
                             <div class="form-group col-md-6">
                                 {{ Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('title',old('title'),['placeholder' => trans('messages.title'), 'id' =>'title', 'class' =>'form-control','required']) }}
@@ -41,14 +39,10 @@
                         <div class="row">
                             <!-- 
                             <div class="form-group col-md-4">
-
                                 {{ Form::label('contact_number',__('messages.customer').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('contact_number',  null, ['class'=>"form-control" , 'id'=>'contact_number', 'readonly', 'rows'=>3  , 'placeholder'=> __('messages.customer') ]) }}
                                 <small class="help-block with-errors text-danger"></small>
-
                             </div> -->
-
-
                             @if (auth()->user()->hasRole(['admin']))
                             <div class="form-group col-md-4">
                                 {{ Form::label('user_id', __('messages.select_name',[ 'select' => __('messages.user') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
@@ -67,7 +61,7 @@
 
 							                            <div class="form-group col-md-4">
                                 {{ Form::label('contact number',trans('Contact number').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::number('contact_number',old('contact_number'),['placeholder' => trans('messages.job_role'),'class' =>'form-control','required']) }}
+                                {{ Form::number('contact_number',old('contact_number'),['placeholder' => trans('Enter Contact Number'),'class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
 
@@ -95,8 +89,6 @@
 
                             </div>
 
-
-
                             <div class="form-group col-md-4">
                                 {{ Form::label('education',trans('messages.education').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
                                 {{ Form::select('education',['1' => __('messages.edu_1') , '0' => __('messages.edu_0'), '2' => __('messages.edu_2') ,'3' => __('messages.edu_3') ],old('education'),[ 'id' => 'edu' ,'class' =>'form-control select2js','required']) }}
@@ -109,7 +101,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 {{ Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                {{ Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required']) }}
+                                {{ Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group col-md-4">

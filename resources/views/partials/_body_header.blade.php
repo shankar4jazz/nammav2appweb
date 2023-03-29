@@ -8,6 +8,9 @@
                 <div class="ml-2">
                     <a class="btn btn-success" title="Add Quick Jobs" href="{{ route('jobs.quick') }}"><i class="fa fa-plus" aria-hidden="true"></i> Quick Jobs </a>
                 </div>
+                <div class="ml-2">
+                    <a class="btn btn-primary" title="Add News" href="{{ route('news.create') }}"><i class="fa fa-plus" aria-hidden="true"></i> Add News </a>
+                </div>
             </div>
             <div class="side-menu-bt-sidebar small-device-toggle">
                 <svg xmlns="http://www.w3.org/2000/svg" class="text-secondary wrapper-menu" width="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">

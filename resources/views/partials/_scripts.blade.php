@@ -3,6 +3,7 @@
  <script src="{{ asset('vendor/tinymce/js/tinymce/tinymce.min.js') }}"></script>
  <script src="{{ asset('vendor/tinymce/js/tinymce/jquery.tinymce.min.js') }}"></script>
  <link href="{{ asset('css/dragula.css') }}" rel="stylesheet">
+ <script src="{{ asset('vendor/ckeditor/ckeditor/ckeditor.js') }}"></script>
  <script src="{{ asset('js/dragula.min.js') }}"></script>
  <script>
     // Text Editor code

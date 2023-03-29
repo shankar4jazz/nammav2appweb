@@ -253,10 +253,9 @@
             "use strict";
             $(document).ready(function() {
 
-                var category_id = "{{ isset($jobsdata->contact_numbe_data) ? $jobsdata->contact_number_data : '' }}";
+                var category_id = "{{ isset($jobsdata->contact_number_data) ? $jobsdata->contact_number_data : '' }}";
 			
                 getCustomer(category_id);
-
 
                 var country_id = "{{ isset($jobsdata->country_id) ? $jobsdata->country_id : 101 }}";
                 var user_id = "{{ isset($jobsdata->user_id) ? $jobsdata->user_id : 0 }}";

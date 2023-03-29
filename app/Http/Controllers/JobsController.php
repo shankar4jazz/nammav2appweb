@@ -43,19 +43,19 @@ class JobsController extends Controller
         if ($request->is('api/*')) {
 
             dd("hlo");
-           // return comman_message_response($message);
+            // return comman_message_response($message);
         }
         $auth_user = authSession();
         if (!$auth_user->can('jobs add')) {
-           // return  redirect()->back()->withErrors(trans('messages.permission_denied'));
+            // return  redirect()->back()->withErrors(trans('messages.permission_denied'));
         }
         if (demoUserPermission()) {
-          //  return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
+            //  return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
         $id = $request->id;
 
         $jobsdata = Jobs::find($id);
-       
+
         $pageTitle = trans('messages.update_form_title', ['form' => trans('messages.jobs')]);
 
         if ($jobsdata == null) {
@@ -87,14 +87,14 @@ class JobsController extends Controller
     {
         //$id = $request->id;        
         $auth_user = authSession();
-       
+
 
         $id = $request->mobile_no;
 
         $auth_user = authSession();
 
         $jobsdata = Jobs::find($id);
-        
+
         $pageTitle = __('messages.quick_form_title', ['form' => __('messages.jobs')]);
 
         if ($jobsdata == null) {
@@ -102,7 +102,7 @@ class JobsController extends Controller
             $jobsdata = new Jobs;
         }
         $jobsdata['contact_number_data'] = $id;
-		
+
 
 
         return view('jobs.fastcreate', compact('pageTitle', 'jobsdata', 'auth_user'));
@@ -122,7 +122,7 @@ class JobsController extends Controller
         $auth_user = authSession();
         //if (!$auth_user->can('jobs add')) {
         //    return  redirect()->back()->withErrors(trans('messages.permission_denied'));
-       // }
+        // }
         $data = $request->all();
         $data['is_featured'] = 0;
         if ($request->has('is_featured')) {
@@ -131,24 +131,21 @@ class JobsController extends Controller
 
         if (isset($request->user_id)) {
             $data['user_id'] = $request->user_id;
-        }
-        else{
+        } else {
             $data['user_id'] =  $auth_user->id;
-            
         }
-      
+
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 
         $result->jobDistricts()->detach();
-		
-	
-	
+
+
+
         if ($request->input('districts') !== null) {
             foreach ($request->input('districts') as $row) {
-          
+
                 $result->jobDistricts()->sync($row, []);
-   
-           }
+            }
         }
 
         storeMediaFile($result, $request->jobs_image, 'jobs_image');
@@ -157,13 +154,15 @@ class JobsController extends Controller
         if ($result->wasRecentlyCreated) {
             $message = trans('messages.save_form', ['form' => trans('messages.jobs')]);
         }
+      
         if ($request->is('api/*')) {
             return comman_message_response($message);
         }
+       
         return redirect(route('jobs.index'))->withSuccess($message);
     }
-	
-	   public function saveJobPost(Request $request)
+
+    public function saveJobPost(Request $request)
     {
         // if (demoUserPermission()) {
         //     return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
@@ -171,7 +170,7 @@ class JobsController extends Controller
         $auth_user = authSession();
         //if (!$auth_user->can('jobs add')) {
         //    return  redirect()->back()->withErrors(trans('messages.permission_denied'));
-       // }
+        // }
         $data = $request->all();
         $data['is_featured'] = 0;
         if ($request->has('is_featured')) {
@@ -180,29 +179,26 @@ class JobsController extends Controller
 
         if (isset($request->user_id)) {
             $data['user_id'] = $request->user_id;
-        }
-        else{
+        } else {
             $data['user_id'] =  $auth_user->id;
-            
         }
-      
+
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 
         $result->jobDistricts()->detach();
-		$distData =  $request->input('districts');
-		  
-		
-	
+        $distData =  $request->input('districts');
+
+
+
         if ($request->input('districts') !== null) {
-			$distData = json_encode($request->input('districts'));
-			
-			$decodedJson = json_decode($distData);
-			$dcode = json_decode($decodedJson, true);
+            $distData = json_encode($request->input('districts'));
+
+            $decodedJson = json_decode($distData);
+            $dcode = json_decode($decodedJson, true);
             foreach ($dcode as $row) {
-          
+
                 $result->jobDistricts()->sync($row['id'], []);
-   
-           }
+            }
         }
 
         storeMediaFile($result, $request->jobs_image, 'jobs_image');

@@ -187,8 +187,9 @@
 
 
                             <div class="form-group col-md-12">
-                                {{ Form::label('description',trans('messages.description'), ['class' => 'form-control-label']) }}
-                                {{ Form::textarea('description', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.description') ]) }}
+                                {{ Form::label('
+                                    ',trans('messages.description'), ['class' => 'form-control-label']) }}
+                                {{ Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ]) }}
                             </div>
                             <div class="form-group col-md-4">
                                 {{ Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
@@ -222,6 +223,8 @@
         (function($) {
             "use strict";
             $(document).ready(function() {
+
+                CKEDITOR.replace('editor');
 
 
                 var country_id = "{{ isset($subcategory->country_id) ? $subcategory->country_id : 0 }}";

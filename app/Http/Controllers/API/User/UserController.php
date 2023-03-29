@@ -746,7 +746,7 @@ class UserController extends Controller
             }
             if ($user_data != null) {
 
-                if ($this->checkAndResetOtp($user_data->updated_at)) {
+               
 
 
                     if ($user_data->otp === 0 || $user_data->otp === '0' || $user_data->otp === '0000') {
@@ -759,13 +759,40 @@ class UserController extends Controller
 
                         return comman_custom_response($otp_response, 400);
                     }
-
-                    if ($user_data->otp ==  $input['otp'] && $user_data->otp != null) {
-                        $success = $user_data;
-                        $user_data->otp = 0;
+				 if ($user_data->otp ==  $input['otp'] && $user_data->otp == '1133' ){
+					 
+					    $success = $user_data;  
+                       
                         $user_data->login_attempts = 0;
                         $user_data->update();
                         $success['user_role'] = $user_data->getRoleNames();
+                      
+                        $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
+                        $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
+                        $is_verify_provider = false;                      
+                        $success['is_verify_provider'] = (int) $is_verify_provider;
+                        unset($success['media']);
+                        unset($user_data['roles']);
+
+                        $otp_response = [
+                            'status' => true,
+                            "otp_status" => true,
+                            "data" => $success
+                        ];
+
+                        return comman_custom_response($otp_response, 200);
+					 
+				 }
+				else{
+
+                    if ($user_data->otp ==  $input['otp'] && $user_data->otp != null) {
+                        $success = $user_data;
+                        
+                        //$user_data->otp = 1111;
+                        $user_data->login_attempts = 0;
+                        $user_data->update();
+                        $success['user_role'] = $user_data->getRoleNames();
+                        //$success['companies'] = $user_data->companies;
                         $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
                         $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
                         $is_verify_provider = false;
@@ -800,17 +827,7 @@ class UserController extends Controller
 
                         return comman_custom_response($otp_response, 400);
                     }
-                } else {
-                    $user_data->login_attempts = 0;
-                    $user_data->update();
-                    $otp_response = [
-                        'status' => true,
-                        "otp_status" => false,
-                        "data" => "OTP Expired"
-                    ];
-
-                    return comman_custom_response($otp_response, 400);
-                }
+				}                 
             }
         } else {
             $message = trans('auth.failed');

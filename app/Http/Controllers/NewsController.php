@@ -48,6 +48,7 @@ class NewsController extends Controller
         $subcategory = News::find($id);
         // $subcategory->country_id = '101';
         // $subcategory->state_id = '35';
+        $decoded_description = base64_decode($subcategory->description);
         $pageTitle = trans('messages.update_form_title', ['form' => trans('messages.news')]);
 
         if ($subcategory == null) {
@@ -57,7 +58,7 @@ class NewsController extends Controller
             $subcategory->state_id = '35';
         }
 
-        return view('news.create', compact('pageTitle', 'subcategory', 'auth_user'));
+        return view('news.create', compact('pageTitle', 'subcategory', 'auth_user', 'decoded_description'));
     }
 
     /**
@@ -80,6 +81,7 @@ class NewsController extends Controller
 
         $data = $request->all();
         $loginuser = \Auth::user();
+        $data['description'] = base64_encode($request->description);
         $data['is_featured'] = 0;
         if ($request->has('is_featured')) {
             $data['is_featured'] = 1;
