@@ -24,6 +24,7 @@ require __DIR__.'/admin-api.php';
 
 Route::get('news-category-list',[API\NewsCategoryController::class,'getCategoryList']);
 Route::get('news-list',[ API\NewsController::class, 'getNewsList' ]);
+Route::get('test-news-list',[ API\NewsController::class, 'getNewsListTest']);
 Route::post('city-news-list',[ API\JobsController::class, 'getNewsListByCity']);
 Route::post('user-news-list',[ API\JobsController::class, 'getNewsListByUser']);
 Route::get('jobcategory-list',[API\JobCategoryController::class,'getCategoryList']);
@@ -34,6 +35,8 @@ Route::get('jobs-list',[ API\JobsController::class, 'getJobsList' ]);
 Route::get('jobs-view/{slug}',[ API\JobsController::class, 'getJobsListBySlug' ]);
 Route::post('citywise-jobs-list',[ API\JobsController::class, 'getJobsListByCity']);
 Route::post('user-jobs-list',[ API\JobsController::class, 'getJobsListByUser']);
+
+Route::post('add-company',[ API\CompanyController::class, 'addCompany']);
 
 Route::get('category-list',[API\CategoryController::class,'getCategoryList']);
 Route::get('subcategory-list',[API\SubCategoryController::class,'getSubCategoryList']);

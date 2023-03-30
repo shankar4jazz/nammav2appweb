@@ -8,7 +8,10 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Company extends Model implements HasMedia
+class 
+
+
+Company extends Model implements HasMedia
 {
     use HasFactory,InteractsWithMedia,SoftDeletes;
     protected $table = 'companies';
