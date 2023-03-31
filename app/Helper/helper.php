@@ -1,6 +1,7 @@
 <?php
 
 use \Illuminate\Support\Facades\File;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 function authSession($force = false)
 {
@@ -173,10 +174,34 @@ function storeMediaFile($model, $file, $name)
         }
         if (is_array($file)) {
             foreach ($file as $key => $value) {
+                 // Compress the image
+    $optimizerChain = OptimizerChainFactory::create();
+    $optimizerChain->optimize($value);
+
+              
+                    // $model->addMedia($value)
+                    //     ->optimize()
+                    //     ->resize(800, null, function ($constraint) {
+                    //         $constraint->aspectRatio();
+                    //         $constraint->upsize();
+                    //     })
+                    //     ->toMediaCollection($name);
+                
                 $model->addMedia($value)->toMediaCollection($name);
             }
         } else {
-            $model->addMedia($file)->toMediaCollection($name);
+           // $model->addMedia($file)->toMediaCollection($name);
+ // Compress the image
+ $optimizerChain = OptimizerChainFactory::create();
+ $optimizerChain->optimize($file);
+            // $model->addMedia($file)
+            //             ->optimize()
+            //             ->resize(800, null, function ($constraint) {
+            //                 $constraint->aspectRatio();
+            //                 $constraint->upsize();
+            //             })
+            //             ->toMediaCollection($name);
+                         $model->addMedia($file)->toMediaCollection($name);
         }
     }
 

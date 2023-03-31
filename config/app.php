@@ -177,7 +177,7 @@ return [
         App\Providers\TranslationServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 		//App\Providers\UrlServiceProvider::class,
-
+        
     ],
 
     /*
