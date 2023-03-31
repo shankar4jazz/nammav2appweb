@@ -41,6 +41,7 @@ class Jobs extends Model implements HasMedia
         'start_date',
         'end_date',
         'company_name',
+        'company_id',
 		'contact_number',
     ];
 
@@ -87,6 +88,10 @@ class Jobs extends Model implements HasMedia
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id', 'id');
+    }
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
     public function scopeMyJobs($query)
     {

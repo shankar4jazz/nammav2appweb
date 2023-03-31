@@ -1,7 +1,7 @@
 <?php
 
 use \Illuminate\Support\Facades\File;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
+
 
 function authSession($force = false)
 {
@@ -175,8 +175,8 @@ function storeMediaFile($model, $file, $name)
         if (is_array($file)) {
             foreach ($file as $key => $value) {
                  // Compress the image
-    $optimizerChain = OptimizerChainFactory::create();
-    $optimizerChain->optimize($value);
+    // $optimizerChain = OptimizerChainFactory::create();
+    // $optimizerChain->optimize($value);
 
               
                     // $model->addMedia($value)
@@ -192,8 +192,8 @@ function storeMediaFile($model, $file, $name)
         } else {
            // $model->addMedia($file)->toMediaCollection($name);
  // Compress the image
- $optimizerChain = OptimizerChainFactory::create();
- $optimizerChain->optimize($file);
+//  $optimizerChain = OptimizerChainFactory::create();
+//  $optimizerChain->optimize($file);
             // $model->addMedia($file)
             //             ->optimize()
             //             ->resize(800, null, function ($constraint) {
