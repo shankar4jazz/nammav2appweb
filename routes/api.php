@@ -49,6 +49,7 @@ Route::post('country-list',[ API\CommanController::class, 'getCountryList']);
 Route::post('state-list',[ API\CommanController::class, 'getStateList']);
 Route::get('district-list',[ API\CommanController::class, 'getDistrictList']);
 Route::post('city-list',[ API\CommanController::class, 'getCityList' ]);
+Route::post('getcity-lists',[ API\CommanController::class, 'getCityListByDistrictId' ]);
 Route::get('search-list', [ API\CommanController::class, 'getSearchList']);
 Route::get('slider-list',[ API\SliderController::class, 'getSliderList']);
 Route::get('top-rated-service',[ API\ServiceController::class, 'getTopRatedService']);

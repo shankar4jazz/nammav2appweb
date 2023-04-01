@@ -15,8 +15,18 @@ class NewsController extends Controller
         $booking = News::withTrashed();        
        
         $booking->where('status', 1);      
-       
+       	$per_page = 10;
+		$page = $request->page;
+		
+		$start = ($page-1)*$per_page;
 
+		if(!empty($request->page)){
+			
+		$page = $request->page;
+		
+		$start = ($page-1)*$per_page;
+			
+		}
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
         $per_page = config('constant.PER_PAGE_LIMIT');
@@ -33,7 +43,8 @@ class NewsController extends Controller
             $orderBy = $request->orderby;
         }
 
-        $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
+        $booking = $booking->orderBy('updated_at', 'desc')
+                        ->get();
         $items = NewsResource::collection($booking);
 
         $response = [
@@ -70,15 +81,25 @@ class NewsController extends Controller
             }
         }
 
-        $page = $request->_limit; // get current page from query parameter
-        $offset = ($page - 1) * $per_page; // calculate offset
+       	$per_page = 10;
+		$page = $request->page;
+		
+		$start = ($page-1)*$per_page;
+
+		if(!empty($request->page)){
+			
+		$page = $request->page;
+		
+		$start = ($page-1)*$per_page;
+			
+		}
 
         $orderBy = 'desc';
         if ($request->has('orderby') && !empty($request->orderby)) {
             $orderBy = $request->orderby;
         }
 
-        $booking = $booking->orderBy('updated_at', $orderBy)->offset($offset)->limit($per_page)->get();
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
         $items = NewsResource::collection($booking);
 
         $response = [

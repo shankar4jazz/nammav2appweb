@@ -162,7 +162,6 @@ function getFileExistsCheck($media)
             $mediaCondition = \Storage::disk($media->disk)->exists($media->getPath());
         }
     }
-
     return $mediaCondition;
 }
 
@@ -174,34 +173,57 @@ function storeMediaFile($model, $file, $name)
         }
         if (is_array($file)) {
             foreach ($file as $key => $value) {
-                 // Compress the image
-    // $optimizerChain = OptimizerChainFactory::create();
-    // $optimizerChain->optimize($value);
 
-              
-                    // $model->addMedia($value)
-                    //     ->optimize()
-                    //     ->resize(800, null, function ($constraint) {
-                    //         $constraint->aspectRatio();
-                    //         $constraint->upsize();
-                    //     })
-                    //     ->toMediaCollection($name);
-                
-                $model->addMedia($value)->toMediaCollection($name);
+                $img = \Image::make($value->getPathname());
+
+                // Generate a unique filename for the resized image
+                $resizedFilename = $value->getClientOriginalName();
+
+                // Get the directory path of the original image
+                $originalDirectory = pathinfo($value->getPathname(), PATHINFO_DIRNAME);
+
+                // Generate the path for the resized image
+                $resizedPath = $originalDirectory . '/' . $resizedFilename;
+
+                // Resize the image to a specific size and save it to the new path
+                $img->resize(300, 175)->save($resizedPath, 60);
+                // Check the file size and reduce the quality further if needed
+                // while (filesize($file->getPathname()) > 10240) {
+                //     $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
+                //    // $img->save($file->getPathname(), $img->getEncodedQuality() - 10);
+                // }
+                // Add the resized image to the same media object
+                $model->addMedia($resizedPath)
+                    ->usingFileName($resizedFilename)
+                    ->toMediaCollection($name);
+                //$model->addMedia($value)->toMediaCollection($name);
             }
         } else {
-           // $model->addMedia($file)->toMediaCollection($name);
- // Compress the image
-//  $optimizerChain = OptimizerChainFactory::create();
-//  $optimizerChain->optimize($file);
-            // $model->addMedia($file)
-            //             ->optimize()
-            //             ->resize(800, null, function ($constraint) {
-            //                 $constraint->aspectRatio();
-            //                 $constraint->upsize();
-            //             })
-            //             ->toMediaCollection($name);
-                         $model->addMedia($file)->toMediaCollection($name);
+
+            //$mediaItem = $model->addMedia($file)->toMediaCollection();
+
+            $img = \Image::make($file->getPathname());
+
+            // Generate a unique filename for the resized image
+            $resizedFilename = $file->getClientOriginalName();
+
+            // Get the directory path of the original image
+            $originalDirectory = pathinfo($file->getPathname(), PATHINFO_DIRNAME);
+
+            // Generate the path for the resized image
+            $resizedPath = $originalDirectory . '/' . $resizedFilename;
+
+            // Resize the image to a specific size and save it to the new path
+            $img->resize(300, 175)->save($resizedPath, 60);
+            // Check the file size and reduce the quality further if needed
+            // while (filesize($file->getPathname()) > 10240) {
+            //     $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
+            //    // $img->save($file->getPathname(), $img->getEncodedQuality() - 10);
+            // }
+            // Add the resized image to the same media object
+            $model->addMedia($resizedPath)
+                ->usingFileName($resizedFilename)
+                ->toMediaCollection($name);
         }
     }
 

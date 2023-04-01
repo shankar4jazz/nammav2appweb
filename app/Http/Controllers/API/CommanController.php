@@ -41,6 +41,12 @@ class CommanController extends Controller
 
         return response()->json( $list );
     }
+    public function getCityListByDistrictId(Request $request){
+
+        $list = City::where('district_id',$request->district_id)->get();
+        return response()->json( $list );
+
+    }
 
     public function getCityList(Request $request)
     {

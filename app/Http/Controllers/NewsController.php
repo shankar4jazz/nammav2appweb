@@ -8,6 +8,7 @@ use App\DataTables\NewsDataTable;
 use App\Http\Requests\NewsRequest;
 use App\Models\News;
 
+
 class NewsController extends Controller
 {
     /**
@@ -106,6 +107,16 @@ class NewsController extends Controller
         
 
         $result = News::updateOrCreate(['id' => $data['id']], $data);
+
+        //$image = $request->news_image;
+        // $fileName = $image->getClientOriginalName();
+        // $resize_image = Image::make($image->getRealPath());
+        // $resize_image->resize(300, 180);
+        //$resize_image->save(public_path('images/'.$fileName));
+
+        
+
+
 
         storeMediaFile($result, $request->news_image, 'news_image');
 

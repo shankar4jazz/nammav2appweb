@@ -131,10 +131,7 @@ class TamilanJobsController extends Controller
         if (isset($request->user_id)) {
             $data['user_id'] = $request->user_id;
         }
-        else{
-            $data['user_id'] =  $auth_user->id;
-            
-        }
+      
       
         $result = TamilanJobs::updateOrCreate(['id' => $data['id']], $data);
 
