@@ -23,7 +23,7 @@ class NewsCategoryResource extends JsonResource
             'description'   => $this->description,
             'is_featured'   => $this->is_featured,
             'color'         => $this->color,
-            'jobcategory_image'=> getSingleMedia($this, 'jobs_category_image',null),
+            'newscategory_image'=> getSingleMedia($this, 'jobs_category_image',null),
             'category_extension' => $extention,
             
             'deleted_at'        => $this->deleted_at,

@@ -79,6 +79,7 @@
                                     <input type="file" name="news_image" class="custom-file-input" accept="image/*">
                                     <label class="custom-file-label upload-label"><?php echo e(__('messages.choose_file',['file' =>  __('messages.image') ])); ?></label>
                                 </div>
+                                <span class="selected_file"></span>
                             </div>
                             <?php if(getMediaFileExit($subcategory, 'news_image')): ?>
                             <div class="col-md-2 mb-2">

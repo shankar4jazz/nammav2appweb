@@ -446,14 +446,16 @@
 					else  if(jQuery.inArray(field_name, ["news_video"]) !== -1){
                    
                         var res = isVideo(input.files[0].name);
-                        if ($('.selected_file').length > 0) {
-                            $('.selected_file').text(input.files[0].name);
+                        if ($('.selected_file_video').length > 0) {
+                            $('.selected_file_video').text(input.files[0].name);
                         }
                     }else {
                         var res = isImage(input.files[0].name);
                         if ($('.selected_file').length > 0) {
                             $('.selected_file').text(input.files[0].name);
+                          
                         }
+                        
                     }
 
                     if (res == false) {
@@ -489,6 +491,7 @@
                     case 'gif':
                     case 'svg':
                     case 'ico':
+                    case 'webp':
                         return true;
                 }
                 return false;
@@ -510,7 +513,7 @@
 
             function isDocuments(filename) {
                 var ext = getExtension(filename);
-                var validExtensions = ["jpg", "pdf", "jpeg", "gif", "png"];
+                var validExtensions = ["jpg", "pdf", "jpeg", "gif", "png", "webp"];
 
                 if (jQuery.inArray(ext.toLowerCase(), validExtensions) !== -1) {
                     return true;

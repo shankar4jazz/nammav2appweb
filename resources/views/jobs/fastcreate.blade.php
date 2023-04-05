@@ -198,6 +198,7 @@
                                     <input type="file" name="jobs_image" class="custom-file-input" accept="image/*">
                                     <label class="custom-file-label upload-label">{{ __('messages.choose_file',['file' =>  __('messages.image') ]) }}</label>
                                 </div>
+                                <span class="selected_file"></span>
                             </div>
                             @if(getMediaFileExit($jobsdata, 'jobs_image'))
                             <div class="col-md-2 mb-2">

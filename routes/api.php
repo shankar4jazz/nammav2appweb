@@ -21,18 +21,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 */
 require __DIR__.'/admin-api.php';
-
+//news
 Route::get('news-category-list',[API\NewsCategoryController::class,'getCategoryList']);
 Route::get('news-list',[ API\NewsController::class, 'getNewsList' ]);
+Route::post('categorynews-list',[ API\NewsController::class, 'getNewsListByCategory' ]);
 Route::get('test-news-list',[ API\NewsController::class, 'getNewsListTest']);
 Route::post('city-news-list',[ API\JobsController::class, 'getNewsListByCity']);
 Route::post('user-news-list',[ API\JobsController::class, 'getNewsListByUser']);
+//end news
 Route::get('jobcategory-list',[API\JobCategoryController::class,'getCategoryList']);
 Route::post('save-jobs',[ App\Http\Controllers\JobsController::class, 'store' ]);
 Route::post('add-jobs',[ App\Http\Controllers\JobsController::class, 'saveJobPost' ]);
 Route::post('create-jobs',[ App\Http\Controllers\TamilanJobsController::class, 'store' ]);
 Route::get('jobs-list',[ API\JobsController::class, 'getJobsList' ]);
 Route::get('jobs-view/{slug}',[ API\JobsController::class, 'getJobsListBySlug' ]);
+Route::get('jobs/{slug}',[ API\JobsController::class, 'getJobsListBySlugUrl' ]);
 Route::post('citywise-jobs-list',[ API\JobsController::class, 'getJobsListByCity']);
 Route::post('user-jobs-list',[ API\JobsController::class, 'getJobsListByUser']);
 Route::post('company-list',[ API\CompanyController::class, 'getCompanyByUser']);

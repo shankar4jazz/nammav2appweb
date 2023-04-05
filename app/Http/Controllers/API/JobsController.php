@@ -100,6 +100,51 @@ class JobsController extends Controller
         //     ],
         //     'data' => $items,
         // ];
+        return comman_custom_response($items);
+    }
+
+    public function getJobsListBySlugUrl(Request $request)
+    {       		
+        
+        $slug = $request->slug;	
+     
+        $booking = Jobs::where('slug', $slug)->with('getJobDistricts.district');  
+		//$booking = Jobs::with('jobDistricts.district')->where('id', $id);	
+       
+        $booking->where('status', 1);         
+
+        //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
+
+        $per_page = config('constant.PER_PAGE_LIMIT');
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
+                $per_page = $request->per_page;
+            }
+            if ($request->per_page === 'all') {
+                $per_page = $booking->count();
+            }
+        }
+        $orderBy = 'desc';
+        if ($request->has('orderby') && !empty($request->orderby)) {
+            $orderBy = $request->orderby;
+        }
+
+        $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
+        $items = JobsResource::collection($booking);
+
+        // $response = [
+        //     'pagination' => [
+        //         'total_items' => $items->total(),
+        //         'per_page' => $items->perPage(),
+        //         'currentPage' => $items->currentPage(),
+        //         'totalPages' => $items->lastPage(),
+        //         'from' => $items->firstItem(),
+        //         'to' => $items->lastItem(),
+        //         'next_page' => $items->nextPageUrl(),
+        //         'previous_page' => $items->previousPageUrl(),
+        //     ],
+        //     'data' => $items,
+        // ];
 
         return comman_custom_response($items);
     }

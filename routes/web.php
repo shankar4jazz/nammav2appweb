@@ -42,6 +42,7 @@ use App\Http\Controllers\JobsCategoryController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\BookingOnlineController;
 use App\Http\Controllers\BookingShopController;
+use App\Http\Controllers\PushNotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,11 +119,16 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('comission/{id}', [SettingController::class, 'comission'])->name('setting.comission');
 
+    // Push Notification
+    Route::get('push-notification/{page?}', [PushNotificationController::class, 'setting'])->name('push-notification.index');
+  // Route::post('/layout-page', [SettingController::class, 'layoutPage'])->name('pushnotification_layout_page');
+   Route::post('/pushnotification-layout-page', [PushNotificationController::class, 'layoutPage'])->name('pushnotification_layout_page');
+    //Route::post('/pushnotification-layout-page', [PushNotificationController::class, 'layoutPage'])->name('pushnotification_layout_page');
 
     // Setting
     Route::get('setting/{page?}', [SettingController::class, 'settings'])->name('setting.index');
     Route::post('/layout-page', [SettingController::class, 'layoutPage'])->name('layout_page');
-    Route::post('/layout-page', [SettingController::class, 'layoutPage'])->name('layout_page');
+    // Route::post('/layout-page', [SettingController::class, 'layoutPage'])->name('layout_page');
     Route::post('settings/save', [SettingController::class, 'settingsUpdates'])->name('settingsUpdates');
     Route::post('dashboard-setting', [SettingController::class, 'dashboardtogglesetting'])->name('togglesetting');
     Route::post('provider-dashboard-setting', [SettingController::class, 'providerdashboardtogglesetting'])->name('providertogglesetting');
@@ -232,13 +238,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 });
 Route::get('/ajax-list', [HomeController::class, 'getAjaxList'])->name('ajax-list');
-Route::get('clear_cache', function () {
-	
-	
-	
+Route::get('clear_cache', function () {	
 
   Artisan::call('cache:clear');
-
     //dd("Cache is cleared");
 	Artisan::call('route:clear');
 	//dd("Cache is cleared");

@@ -28,13 +28,16 @@
                                     @else
                                         @hasanyrole('admin|demo_admin')
                                             <li class="nav-item">
-                                                <a href="javascript:void(0)" data-href="{{ route('layout_page') }}?page=general-setting" data-target=".paste_here" class="nav-link {{$page=='general-setting'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('messages.general_settings') }}</a>
+                                                <a href="javascript:void(0)" data-href="{{ route('pushnotification_layout_page') }}?page=privatejobs-push-notification" data-target=".paste_here" class="nav-link {{$page=='privatejobs-push-notification'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('private jobs push notification') }}</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="javascript:void(0)" data-href="{{ route('layout_page') }}?page=config-setting" data-target=".paste_here" class="nav-link {{$page=='config-setting'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('messages.config_settings') }}</a>
+                                                <a href="javascript:void(0)" data-href="{{ route('pushnotification_layout_page') }}?page=news-push-notification" data-target=".paste_here" class="nav-link {{$page=='news-push-notification'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('News push notification') }}</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="javascript:void(0)" data-href="{{ route('layout_page') }}?page=mail-setting" data-target=".paste_here" class="nav-link {{$page=='mail-setting'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('messages.mail_settings') }}</a>
+                                                <a href="javascript:void(0)" data-href="{{ route('pushnotification_layout_page') }}?page=govtjobs-push-notification" data-target=".paste_here" class="nav-link {{$page=='govtjobs-push-notification'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('Govt Jobs push notification') }}</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="javascript:void(0)" data-href="{{ route('pushnotification_layout_page') }}?page=pages-push-notification" data-target=".paste_here" class="nav-link {{$page=='pages-push-notification'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('Pages push notification') }}</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a href="javascript:void(0)" data-href="{{ route('layout_page') }}?page=language-setting" data-target=".paste_here" class="nav-link {{$page=='language-setting'?'active':''}}"  data-toggle="tabajax" rel="tooltip"> {{ __('messages.language_settings') }}</a>
@@ -76,12 +79,12 @@
     
     @section('bottom_script')
         <script>
-            (function($) {
-                 "use strict";
+            // (function($) {
+            //     "use strict";
                 $(document).ready(function(event)
                 {
                     var $this = $('.nav-item').find('a.active');
-                    loadurl = "{{route('layout_page')}}?page={{$page}}";
+                    loadurl = "{{route('pushnotification_layout_page')}}?page={{$page}}";
 
                     targ = $this.attr('data-target');
                     
@@ -94,7 +97,7 @@
                     $this.tab('show');
                     return false;
                 });
-            });
+            // });
         </script>
     @endsection
 </x-master-layout>

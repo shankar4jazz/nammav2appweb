@@ -62,6 +62,7 @@
                                     <input type="file" name="news_image" class="custom-file-input" accept="image/*">
                                     <label class="custom-file-label upload-label">{{ __('messages.choose_file',['file' =>  __('messages.image') ]) }}</label>
                                 </div>
+                                <span class="selected_file"></span>
                             </div>
                             @if(getMediaFileExit($subcategory, 'news_image'))
                             <div class="col-md-2 mb-2">
@@ -88,6 +89,7 @@
                                     <input type="file" name="news_video" class="custom-file-input" accept="video/mp4,video/x-m4v,video/*">
                                     <label class="custom-file-label upload-label">{{ __('messages.choose_file',['file' =>  __('messages.video') ]) }}</label>
                                 </div>
+                                <span class="selected_file_video"></span>
                             </div>
 
                             @if(getMediaFileExit($subcategory, 'news_video'))

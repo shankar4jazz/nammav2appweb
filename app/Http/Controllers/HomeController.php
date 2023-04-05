@@ -17,6 +17,7 @@ use App\Models\HandymanPayout;
 use App\Models\ServiceFaq;
 use App\Models\AppDownload;
 use App\Models\News;
+use App\Models\NewsCategory;
 use App\Models\JobsCategory;
 use App\Models\Jobs;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -419,13 +420,13 @@ class HomeController extends Controller
 
             case 'setuser':
 
-                  $items = \App\Models\User::select('id', 'contact_number as text', 'display_name');
-                  
-                   if (isset($request->user_type)) {
+                $items = \App\Models\User::select('id', 'contact_number as text', 'display_name');
+
+                if (isset($request->user_type)) {
                     $items->where('user_type', $request->user_type);
                 }
                 $items->where('contact_number', $request->mobile_no);
-			
+
                 $items = $items->get();
                 break;
 
@@ -511,7 +512,7 @@ class HomeController extends Controller
                 if ($value != '') {
                     $items->where('name', 'LIKE', $value . '%');
                 }
-                $items = $items->orderBy('name','asc')->get();
+                $items = $items->orderBy('name', 'asc')->get();
                 break;
             case 'district':
                 $items = \App\Models\District::select('id', 'name as text');
@@ -524,7 +525,7 @@ class HomeController extends Controller
                 if ($value != '') {
                     $items->where('name', 'LIKE', $value . '%');
                 }
-                $items = $items->orderBy('name','asc')->get();
+                $items = $items->orderBy('name', 'asc')->get();
                 break;
             case 'city':
                 $items = \App\Models\City::select('id', 'name as text');
@@ -544,19 +545,19 @@ class HomeController extends Controller
                 }
                 $items = $items->get();
                 break;
-				
+
             case 'existing_customer':
-				
-                $mobile_no = !empty($request->mobile_no) ? $request->mobile_no : '';				
-                $items = \App\Models\User::select('id')->where('contact_number', $mobile_no)->where('user_type', $request->user_type? $request->user_type : 'user')->get();  
-			
-				
-				
+
+                $mobile_no = !empty($request->mobile_no) ? $request->mobile_no : '';
+                $items = \App\Models\User::select('id')->where('contact_number', $mobile_no)->where('user_type', $request->user_type ? $request->user_type : 'user')->get();
+
+
+
                 if (!$items->isEmpty()) {
-					
+
                     $items = array("status_code" => 200, "msg" => 'user found');
                 } else {
-				
+
                     $items = array("status_code" => 404, "msg" => 'user not found');
                 }
                 break;
@@ -708,7 +709,8 @@ class HomeController extends Controller
                 $data = News::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);
                 break;
-				  case 'news_video':
+
+            case 'news_video':
                 $data = News::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.video')]);
                 break;
@@ -718,10 +720,16 @@ class HomeController extends Controller
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);
                 break;
 
+            case 'news_category_image':
+                $data = NewsCategory::find($request->id);
+                $message = __('messages.msg_removed', ['name' => __('messages.image')]);
+                break;
+
             case 'jobs_image':
                 $data = Jobs::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);
                 break;
+                
             default:
                 $data = AppSetting::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);

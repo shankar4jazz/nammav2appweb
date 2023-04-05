@@ -54,7 +54,7 @@
                                 $extention = imageExtention(getSingleMedia($categorydata, 'news_category_image'));
                                 @endphp
                                 <img id="category_image_preview" src="{{getSingleMedia($categorydata,'news_category_image')}}" alt="#" class="attachment-image mt-1" style="background-color:{{ $extention == 'svg' ? $categorydata->color : '' }}">
-                                <a class="text-danger remove-file" href="{{ route('remove.file', ['id' => $categorydata->id, 'type' => 'category_image']) }}" data--submit="confirm_form" data--confirmation='true' data--ajax="true" title='{{ __("messages.remove_file_title" , ["name" =>  __("messages.image") ]) }}' data-title='{{ __("messages.remove_file_title" , ["name" =>  __("messages.image") ]) }}' data-message='{{ __("messages.remove_file_msg") }}'>
+                                <a class="text-danger remove-file" href="{{ route('remove.file', ['id' => $categorydata->id, 'type' => 'news_category_image']) }}" data--submit="confirm_form" data--confirmation='true' data--ajax="true" title='{{ __("messages.remove_file_title" , ["name" =>  __("messages.image") ]) }}' data-title='{{ __("messages.remove_file_title" , ["name" =>  __("messages.image") ]) }}' data-message='{{ __("messages.remove_file_msg") }}'>
                                     <i class="ri-close-circle-line"></i>
                                 </a>
                             </div>

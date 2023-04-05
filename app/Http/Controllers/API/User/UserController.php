@@ -563,6 +563,16 @@ class UserController extends Controller
             return comman_message_response(__('messages.no_record_found'), 400);
         }
 
+        $details = [
+            'martial_status' => $request->martial_status,
+            'experience' => $request->experience,
+            'education'  => $request->education,
+            'gender'     => $request->gender,
+            'job_category' => $request->job_category
+        ];
+
+        $user->details = json_encode($details);
+
         $user->fill($request->all())->update();
 
         if (isset($request->profile_image) && $request->profile_image != null) {
@@ -570,10 +580,23 @@ class UserController extends Controller
             $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image');
         }
 
+        if (isset($request->resume) && $request->resume != null) {
+            $user->clearMediaCollection('resume');
+            $user->addMediaFromRequest('resume')->toMediaCollection('resume');
+        }
+
         $user_data = User::find($user->id);
 
         $message = __('messages.updated');
         $user_data['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
+        if ($request->user_type == "jobseeker") {
+           
+            $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
+            
+        } else if ($request->user_type == "jobs") {
+
+            $user_data['companies'] = $user_data->companies;
+        }
         $user_data['user_role'] = $user->getRoleNames();
         unset($user_data['roles']);
         unset($user_data['media']);
@@ -588,6 +611,7 @@ class UserController extends Controller
 
         $input = $request->all();
         if ($input['contact_number'] == '9876543210') {
+
             $otp_response = [
                 'status' => true,
                 'is_user_valid' => true,
@@ -595,6 +619,7 @@ class UserController extends Controller
             ];
             return comman_custom_response($otp_response, 200);
         } else {
+
             $input['username'] = $input['contact_number'];
             $input['first_name'] = '';
             $input['password'] = '';
@@ -606,8 +631,11 @@ class UserController extends Controller
                 $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', $input['user_type'])->first();
             }
             if ($input['user_type'] == 'jobs') {
+                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', $input['user_type'])->first();
+            }
 
-                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', $input['user_type'])->withTrashed()->first();
+            if ($input['user_type'] == 'jobseeker') {
+                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', $input['user_type'])->first();
             }
 
 
@@ -624,23 +652,25 @@ class UserController extends Controller
                 $fourRandomDigit = rand(1000, 9999);
 
                 $smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
-                if ($smsReply->status == 'success') {
+                if ($smsReply->status == '') {
+
                     $user->otp = $fourRandomDigit;
-
-
                     $user->save();
                     $otp_response = [
                         'status' => true,
                         'is_user_valid' => true,
                         'sms_sent' => true
                     ];
+
                     return comman_custom_response($otp_response, 200);
                 } else {
+
                     $otp_response = [
                         'status' => true,
                         'is_user_valid' => true,
                         'sms_sent' => false
                     ];
+
                     return comman_custom_response($otp_response, 200);
                 }
             }
@@ -648,12 +678,8 @@ class UserController extends Controller
 
                 if ($user_data->login_attempts <= 15) {
 
-
                     $fourRandomDigit = rand(1000, 9999);
                     $user_data->otp = $fourRandomDigit;
-
-
-
 
                     $smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
                     if ($smsReply->status == 'success') {
@@ -717,7 +743,7 @@ class UserController extends Controller
     {
         $input = $request->all();
 
-        $user = \Auth::user();    
+        $user = \Auth::user();
 
         if (request('contact_number') != '' && request('otp') != '') {
 
@@ -729,6 +755,9 @@ class UserController extends Controller
             }
             if ($input['user_type'] === 'jobs') {
                 $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', 'jobs')->first();
+            }
+            if ($input['user_type'] == 'jobseeker') {
+                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', 'jobseeker')->first();
             }
 
 
@@ -746,61 +775,53 @@ class UserController extends Controller
             }
             if ($user_data != null) {
 
-               
 
 
-                    if ($user_data->otp === 0 || $user_data->otp === '0' || $user_data->otp === '0000') {
 
-                        $otp_response = [
-                            'status' => true,
-                            "otp_status" => false,
-                            "data" => "Invalid OTP"
-                        ];
+                if ($user_data->otp === 0 || $user_data->otp === '0' || $user_data->otp === '0000') {
 
-                        return comman_custom_response($otp_response, 400);
-                    }
-				 if ($user_data->otp ==  $input['otp'] && $user_data->otp == '1133' ){
-					 
-					    $success = $user_data;  
-                       
-                        $user_data->login_attempts = 0;
-                        $user_data->update();
-                        $success['user_role'] = $user_data->getRoleNames();
-                      
-                        $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
-                        $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
-                        $is_verify_provider = false;                      
-                        $success['is_verify_provider'] = (int) $is_verify_provider;
-                        unset($success['media']);
-                        unset($user_data['roles']);
+                    $otp_response = [
+                        'status' => true,
+                        "otp_status" => false,
+                        "data" => "Invalid OTP"
+                    ];
 
-                        $otp_response = [
-                            'status' => true,
-                            "otp_status" => true,
-                            "data" => $success
-                        ];
+                    return comman_custom_response($otp_response, 400);
+                }
+                if ($user_data->otp ==  $input['otp'] && $user_data->otp == '1133') {
 
-                        return comman_custom_response($otp_response, 200);
-					 
-				 }
-				else{
+                    $success = $user_data;
+
+                    $user_data->login_attempts = 0;
+                    $user_data->update();
+                    $success['user_role'] = $user_data->getRoleNames();
+
+                    $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
+                    $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
+                    $is_verify_provider = false;
+                    $success['is_verify_provider'] = (int) $is_verify_provider;
+                    unset($success['media']);
+                    unset($user_data['roles']);
+
+                    $otp_response = [
+                        'status' => true,
+                        "otp_status" => true,
+                        "data" => $success
+                    ];
+
+                    return comman_custom_response($otp_response, 200);
+                } else {
 
                     if ($user_data->otp ==  $input['otp'] && $user_data->otp != null) {
                         $success = $user_data;
-                        
                         //$user_data->otp = 1111;
                         $user_data->login_attempts = 0;
                         $user_data->update();
                         $success['user_role'] = $user_data->getRoleNames();
-                       
-                        
-
-
                         $success['companies'] = $user_data->companies;
                         $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
                         $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
                         $is_verify_provider = false;
-
                         if ($user_data->user_type == 'provider') {
                             $is_verify_provider = verify_provider_document($user_data->id);
                             $success['subscription'] = get_user_active_plan($user_data->id);
@@ -831,14 +852,13 @@ class UserController extends Controller
 
                         return comman_custom_response($otp_response, 400);
                     }
-				}                 
+                }
             }
         } else {
             $message = trans('auth.failed');
 
             return comman_message_response($message, 400);
         }
-    
     }
 
     private function checkAndResetOtp($updatedAt)
@@ -959,6 +979,7 @@ class UserController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
         curl_close($ch);
+      
         return json_decode($response);
         exit();
         //----------------------------------------------------sms----------------------------------------------------------- 
@@ -975,7 +996,7 @@ class UserController extends Controller
         //$output = file_get_contents($url);    /*default function for push any url*/
         //var_dump($output);		
         //return json_decode($output, true);		
-        exit();
+       // exit();
 
         //return json_decode($output, true);   
         //return [
