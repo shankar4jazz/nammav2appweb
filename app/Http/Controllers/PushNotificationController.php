@@ -83,9 +83,7 @@ class PushNotificationController extends Controller
                         $getSetting[] = $k . '_' . $sk;
                     }
                 }
-
                 $setting_value = Setting::whereIn('key', $getSetting)->with('country')->get();
-
                 $data  = view('setting.' . $page, compact('setting', 'setting_value', 'page'))->render();
                 break;
             case 'payment-setting':
@@ -112,8 +110,10 @@ class PushNotificationController extends Controller
                 break;
             case 'govtjobs-push-notification':
                 $settings = [];
+                $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
+                $districts = $districts->pluck('name', 'id');
                 $services = Service::pluck('name', 'id');
-                $data  = view('pushnotification.' . $page, compact('settings', 'page', 'services'))->render();
+                $data  = view('pushnotification.' . $page, compact('settings', 'page', 'services', 'districts'))->render();
                 break;
             default:
                 $data  = view('setting.' . $page, compact('settings', 'page', 'envSettting'))->render();
@@ -447,37 +447,38 @@ class PushNotificationController extends Controller
         $res = Setting::updateOrCreate(['type' => 'handyman_dashboard_setting', 'key' => 'handyman_dashboard_setting'], $data);
         return redirect()->route('home');
     }
-    public function sendPushNotification(Request $request)
+    public function sendPvtJobsPushNotification(Request $request)
     {
         $data = $request->all();
-        if ($data['type'] === 'alldata') {
-            $data['service_id'] = 0;
-        }
-        $heading      = array(
-            "en" => $data['title']
+      
+        $message = array( 
+    
+            'title'     =>  $_POST['title'],
+            'body'      =>  $data['description'],		
+           //'image'     =>  $_POST['image'],
+            
         );
-        $content      = array(
-            "en" => $data['description']
+        
+        $data= array(
+            'pvt_jobid' =>  $_POST['pvt_jobid'],            
         );
-        $fields = array(
-            'app_id' => ENV('ONESIGNAL_API_KEY'),
-            'included_segments' => array(
-                'UserApp'
-            ),
-            'data' =>  array(
-                'type' => $data['type'],
-                'service_id' => $data['service_id']
-            ),
-            'headings' => $heading,
-            'contents' => $content,
+
+        $to='/topics/demotopic';
+        
+        $fields = array( 
+            'to'               => $to, 
+            'priority'         => 'high',
+            'notification'     => $message,
+            'data'             => $data
         );
+        
         $fields = json_encode($fields);
-        $rest_api_key = ENV('ONESIGNAL_REST_API_KEY');
+        $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json; charset=utf-8',
-            "Authorization:Basic $rest_api_key"
+            "Authorization:$rest_api_key"
         ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -486,6 +487,7 @@ class PushNotificationController extends Controller
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
         $response = curl_exec($ch);
+       
         curl_close($ch);
         if ($response) {
             $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
@@ -495,7 +497,7 @@ class PushNotificationController extends Controller
         if (request()->is('api/*')) {
             return comman_message_response($message);
         }
-        return redirect()->route('setting.index')->withSuccess($message);
+        return redirect()->route('push-notification.index')->withSuccess($message);
     }
     public function saveEarningTypeSetting(Request $request)
     {

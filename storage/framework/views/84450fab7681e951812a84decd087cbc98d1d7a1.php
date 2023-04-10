@@ -108,6 +108,7 @@
                                     <input type="file" name="news_video" class="custom-file-input" accept="video/mp4,video/x-m4v,video/*">
                                     <label class="custom-file-label upload-label"><?php echo e(__('messages.choose_file',['file' =>  __('messages.video') ])); ?></label>
                                 </div>
+                                <span class="selected_file_video"></span>
                             </div>
 
                             <?php if(getMediaFileExit($subcategory, 'news_video')): ?>

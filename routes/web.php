@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
   // Route::post('/layout-page', [SettingController::class, 'layoutPage'])->name('pushnotification_layout_page');
    Route::post('/pushnotification-layout-page', [PushNotificationController::class, 'layoutPage'])->name('pushnotification_layout_page');
     //Route::post('/pushnotification-layout-page', [PushNotificationController::class, 'layoutPage'])->name('pushnotification_layout_page');
+    Route::post('send-pvtjobspush-notification', [PushNotificationController::class, 'sendPvtJobsPushNotification'])->name('sendPvtJobsPushNotification');
 
     // Setting
     Route::get('setting/{page?}', [SettingController::class, 'settings'])->name('setting.index');

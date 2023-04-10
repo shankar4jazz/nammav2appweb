@@ -54,7 +54,7 @@
 
                             <input type="hidden" id="customer_id" name="user_id" value="{{$jobsdata->customer_id}}">
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
 
                                 {{ Form::label('contact_number_data',__('messages.customer').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('contact_number_data',  null, ['class'=>"form-control" , 'id'=>'contact_number_name', 'readonly', 'rows'=>3  , 'placeholder'=> __('messages.customer') ]) }}
@@ -62,20 +62,31 @@
 
                             </div> 
 							
-							<div class="form-group col-md-4">
+							<div class="form-group col-md-6">
                                 {{ Form::label('contact_number',__('messages.customer').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('contact_number',  null, ['class'=>"form-control" , 'id'=>'contact_number'  , 'placeholder'=> __("Contact Number") ]) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div> 
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 {{ Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('job_role',old('job_role'),['placeholder' => trans('messages.job_role'),'class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-							<div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
+                                {{ Form::label('tamil_job_role',trans('தமிழில் வேலைப்பெயர்(Job Role)').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::text('tamil_job_role',old('tamil_job_role'),['placeholder' => trans('வேலைப்பெயர்'),'class' =>'form-control','required']) }}
+                                <small class="help-block with-errors text-danger"></small>
+                            </div>
+
+                            <div class="form-group col-md-6">
                                 {{ Form::label('company_name',trans('messages.company_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('company_name',old('company_name'),['placeholder' => trans('messages.company_name'),'class' =>'form-control','required']) }}
+                                <small class="help-block with-errors text-danger"></small>
+                            </div>
+                            <div class="form-group col-md-6">
+                                {{ Form::label('tamil_company_name',trans('தமிழில் கம்பெனி பெயர்').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                {{ Form::text('tamil_company_name',old('tamil_company_name'),['placeholder' => trans('கம்பெனி பெயர்'),'class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
 

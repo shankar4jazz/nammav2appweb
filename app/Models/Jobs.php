@@ -18,6 +18,7 @@ class Jobs extends Model implements HasMedia
         'title',
         'slug',
         'job_role',
+        'tamil_job_role',
         'education',
         'gender',
         'marital_status',
@@ -41,6 +42,7 @@ class Jobs extends Model implements HasMedia
         'start_date',
         'end_date',
         'company_name',
+        'tamil_company_name',
         'company_id',
 		'contact_number',
     ];

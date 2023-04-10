@@ -192,7 +192,7 @@ class NewsController extends Controller
         $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
         $items = NewsResource::collection($booking);
 
-        $response = [
+       // $response = [
             // 'pagination' => [
             //     'total_items' => $items->total(),
             //     'per_page' => $items->perPage(),
@@ -203,10 +203,10 @@ class NewsController extends Controller
             //     'next_page' => $items->nextPageUrl(),
             //     'previous_page' => $items->previousPageUrl(),
             // ],
-            'data' => $items,
-        ];
+            //'data' => $items,
+        //];
 
-        return comman_custom_response($response);
+        return comman_custom_response($items);
     }
 
     public function getNewsListByUser(Request $request)

@@ -14,7 +14,7 @@ class NewsCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        $extention = imageExtention(getSingleMedia($this, 'jobs_category_image',null));
+        $extention = imageExtention(getSingleMedia($this, 'news_category_image',null));
         return [
             'id'            => $this->id,
             'name'          => $this->name,
@@ -23,7 +23,7 @@ class NewsCategoryResource extends JsonResource
             'description'   => $this->description,
             'is_featured'   => $this->is_featured,
             'color'         => $this->color,
-            'newscategory_image'=> getSingleMedia($this, 'jobs_category_image',null),
+            'newscategory_image'=> getSingleMedia($this, 'news_category_image',null),
             'category_extension' => $extention,
             
             'deleted_at'        => $this->deleted_at,

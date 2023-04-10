@@ -20,68 +20,69 @@
             </div>
             <div class="col-lg-12">
                 <div class="card">
+                    <div class="card-header text-center">
+                        <div class="row">&nbsp;&nbsp;
+                            <h5 class="font-weight-bold" style="font-size:20px"> Job post user : &nbsp;</h5>
+                            <h5 class="font-weight-bold" style="font-size:20px;color:green" id="customer_name"> </h5>
+                            <!-- <div class="form-group col-md-6 font-weight-bold">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="is_shop" id="inlineRadio1" value="1" required>
+                                    <label class="form-check-label" for="inlineRadio1">Online Booking (by customer)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="is_shop" id="inlineRadio2" value="2" checked required>
+                                    <label class="form-check-label" for="inlineRadio2">Shop Booking (by Shop)</label>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
                     <div class="card-body">
-
                         <?php echo e(Form::model($jobsdata,['method' => 'POST','route'=>'jobs.store', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'jobsdata'] )); ?>
 
                         <?php echo e(Form::hidden('id')); ?>
 
                         <?php if(auth()->user()->hasRole(['admin'])): ?>
                         <div class="row">
+
+
                             <div class="form-group col-md-6">
                                 <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('title',old('title'),['placeholder' => trans('messages.title'), 'id' =>'title', 'class' =>'form-control','required'])); ?>
+                                <?php echo e(Form::text('title',old('title'),['placeholder' => trans('messages.title'),'class' =>'form-control','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-1 mt-5">
-                                <input type='button' id="convert_slug" value="Convert Slug">
-                            </div>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                                 <?php echo e(Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('slug',old('slug'),['placeholder' => trans('messages.slug'), 'id' =>'slug', 'class' =>'form-control','required'])); ?>
+                                <?php echo e(Form::text('slug',old('title'),['placeholder' => trans('messages.slug'),'class' =>'form-control','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
                         </div>
                         <?php endif; ?>
                         <div class="row">
-                            <!-- 
-                            <div class="form-group col-md-4">
+
+                            <input type="hidden" id="customer_id" name="user_id" value="<?php echo e($jobsdata->customer_id); ?>">
+
+                            <div class="form-group col-md-6">
+
+                                <?php echo e(Form::label('contact_number_data',__('messages.customer').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+
+                                <?php echo e(Form::text('contact_number_data',  null, ['class'=>"form-control" , 'id'=>'contact_number_name', 'readonly', 'rows'=>3  , 'placeholder'=> __('messages.customer') ])); ?>
+
+                                <small class="help-block with-errors text-danger"></small>
+
+                            </div> 
+							
+							<div class="form-group col-md-6">
                                 <?php echo e(Form::label('contact_number',__('messages.customer').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('contact_number',  null, ['class'=>"form-control" , 'id'=>'contact_number', 'readonly', 'rows'=>3  , 'placeholder'=> __('messages.customer') ])); ?>
+                                <?php echo e(Form::text('contact_number',  null, ['class'=>"form-control" , 'id'=>'contact_number'  , 'placeholder'=> __("Contact Number") ])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
-                            </div> -->
-                            <?php if(auth()->user()->hasRole(['admin'])): ?>
-                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('user_id', __('messages.select_name',[ 'select' => __('messages.user') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+                            </div> 
 
-                                <br />
-                                <?php echo e(Form::select('user_id', [optional($jobsdata->user)->id => optional($jobsdata->user)->contact_number], optional($jobsdata->user)->id, [
-                                                'class' => 'select2js form-group user',
-                                                'required',
-                                                'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.user') ]),
-                                                'data-ajax--url' => route('ajax-list', ['type' => 'user']),
-                                            ])); ?>
-
-                            </div>
-                            <?php else: ?>
-                            <input type="hidden" name="user_id" value="<?php echo e($jobsdata->user_id); ?>">
-                            <?php endif; ?>
-
-							                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('contact number',trans('Contact number').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::number('contact_number',old('contact_number'),['placeholder' => trans('Enter Contact Number'),'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-
-                           
                             <div class="form-group col-md-6">
                                 <?php echo e(Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
@@ -116,7 +117,7 @@
                                 <?php echo e(Form::label('jobcategory_id', __('messages.select_name',[ 'select' => __('messages.jobs_category') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
                                 <br />
-                                <?php echo e(Form::select('jobcategory_id', [optional($jobsdata->jobscategory)->id => optional($jobsdata->jobscategory)->name], optional($jobsdata->jobscategory)->id, [
+                                <?php echo e(Form::select('jobcategory_id', [optional($jobsdata->category)->id => optional($jobsdata->category)->name], optional($jobsdata->category)->id, [
                                             'class' => 'select2js form-group category',
                                             'required',
                                             'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.jobs_category') ]),
@@ -143,7 +144,7 @@
                             <div class="form-group col-md-4">
                                 <?php echo e(Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
-                                <?php echo e(Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required'])); ?>
+                                <?php echo e(Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
@@ -245,11 +246,11 @@
 
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <?php echo e(Form::label('pincode',trans('messages.pincode'),['class'=>'form-control-label'], false )); ?>
+                                    <?php echo e(Form::label('pincode',trans('messages.pincode').' <span class="text-danger"></span>',['class'=>'form-control-label'], false )); ?>
 
                                     <?php echo e(Form::text('pincode',old('pincode'),['placeholder' => trans('messages.pincode'),'class' =>'form-control'])); ?>
 
-                                    <small class="help-block with-errors text-danger"></small>
+                                    
                                 </div>
                                 <div class="form-group col-md-8">
                                     <?php echo e(Form::label('address',trans('messages.address'), ['class' => 'form-control-label'])); ?>
@@ -267,22 +268,6 @@
                                 </div>
                                 <span class="selected_file"></span>
                             </div>
-
-                            <div class="form-group col-md-4">
-                                    <?php echo e(Form::label('name', __('messages.select_name',[ 'select' => __('districts for jobs') ]),['class'=>'form-control-label'],false)); ?>
-
-                                    <br />
-                                    <?php echo e(Form::select('districts[]', [], old('districts'), [
-                                        'class' => 'select2js form-group tax_id',
-                                        'id' =>'tax_id',
-                                        'multiple' => 'multiple',
-                                        'data-placeholder' => __('messages.select_name',[ 'select' => __('districts for jobs') ]),
-                                    ])); ?>
-
-                                  
-                                </div>
-
-                            
                             <?php if(getMediaFileExit($jobsdata, 'jobs_image')): ?>
                             <div class="col-md-2 mb-2">
                                 <?php
@@ -339,39 +324,33 @@
             </div>
         </div>
     </div>
-    <?php
-    $data = $jobsdata->getJobDistricts->pluck('district_id')->implode(',');
-    ?>
     <?php $__env->startSection('bottom_script'); ?>
     <script type="text/javascript">
         (function($) {
             "use strict";
             $(document).ready(function() {
                 CKEDITOR.replace('editor');
-                var districts = "<?php echo e(isset($data) ? $data : []); ?>";
-				console.log(districts);
-				
+                var category_id = "<?php echo e(isset($jobsdata->contact_number_data) ? $jobsdata->contact_number_data : ''); ?>";
+			
+                getCustomer(category_id);
 
-                var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 0); ?>";
+                var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 101); ?>";
                 var user_id = "<?php echo e(isset($jobsdata->user_id) ? $jobsdata->user_id : 0); ?>";
-                var state_id = "<?php echo e(isset($jobsdata->state_id) ? $jobsdata->state_id : 0); ?>";
+                var state_id = "<?php echo e(isset($jobsdata->state_id) ? $jobsdata->state_id : 35); ?>";
                 var district_id = "<?php echo e(isset($jobsdata->district_id) ? $jobsdata->district_id : 0); ?>";
                 var city_id = "<?php echo e(isset($jobsdata->city_id) ? $jobsdata->city_id : 0); ?>";
 
-               // var provider_id = "<?php echo e(isset($jobsdata->provider_id) ? $jobsdata->provider_id : '4'); ?>";
+                var provider_id = "<?php echo e(isset($jobsdata->provider_id) ? $jobsdata->provider_id : ''); ?>";
                 var service_address_id = "<?php echo e(isset($jobsdata->service_address_id) ? $jobsdata->service_address_id : 0); ?>";
-                userName(user_id);
-                var provider_id = '5';
+               // userName(user_id);
 
                 $('#state_id').attr('disabled', true);
                 stateName(country_id, state_id);
-                getTax(provider_id, districts);
-                
                 //districtName(state_id, district_id);
-                //providerAddress(provider_id, service_address_id);
+                providerAddress(provider_id, service_address_id);
                 $(document).on('change', '#role', function() {
                     var status = $(this).val();
-                    if (status == '3' || status == '4' || status == '2') {
+                    if (status == '3') {
 
                         document.getElementById("reason").style.display = "block";
                     } else {
@@ -401,31 +380,10 @@
                 $(document).on('change', '#provider_id', function() {
                     var provider_id = $(this).val();
                     $('#service_address_id').empty();
-                    //providerAddress(provider_id, service_address_id);
+                    providerAddress(provider_id, service_address_id);
                 })
 
             })
-
-            function getTax(provider_id,provider_tax_id=""){
-              
-                    var provider_tax_route = "<?php echo e(route('ajax-list', [ 'type' => 'district','provider_id' =>''])); ?>"+provider_id;
-                    provider_tax_route = provider_tax_route.replace('amp;','');
-
-                    $.ajax({
-                        url: provider_tax_route,
-                        success: function(result){
-                            $('#tax_id').select2({
-                                width: '100%',
-                                placeholder: "<?php echo e(trans('messages.select_name',['select' => trans('messages.tax')])); ?>",
-                                data: result.results
-                            });
-                            if(provider_tax_id != ""){
-                               // alert("value");
-                                $('#tax_id').val(provider_tax_id.split(',')).trigger('change');
-                            }
-                        }
-                    });
-                }
 
             function stateName(country, state = "") {
                 var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'state','country_id' =>''])); ?>" + country;
@@ -505,12 +463,6 @@
                 });
             }
 
-            $(document).on('change', '#district_id', function() {
-                    var provider_id = $(this).val();
-                    $('#provider_address_id').empty();
-                   // providerAddress(provider_id, provider_address_id);
-                })
-
             function providerAddress(provider_id, service_address_id = "") {
                 var provider_address_route = "<?php echo e(route('ajax-list', [ 'type' => 'provider_address','provider_id' =>''])); ?>" + provider_id;
                 provider_address_route = provider_address_route.replace('amp;', '');
@@ -530,21 +482,36 @@
                 });
             }
 
-            function textToSlug(text) {
-                return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+            function getCustomer(mobile_no) {
+				
+
+                var get_subcategory_list = "<?php echo e(route('ajax-list', [ 'type' => 'setuser','user_type'=> 'jobs', 'mobile_no' =>''])); ?>" + mobile_no;
+                get_subcategory_list = get_subcategory_list.replace(/&amp;/g, "&");
+
+                $.ajax({
+                    url: get_subcategory_list,
+                    success: function(result) {
+                        var datas = result.results;
+
+                        //console.log(datas);
+                        if (datas.length == 0) {
+                          //  window.location.href = "<?php echo e(route('jobs.quick')); ?>";
+
+                        } else {
+                            if (mobile_no != "") {
+
+                                // console.log(datas.text);
+                                $('#customer_id').val(datas[0].id);
+                                // $('#contact_number').val(datas[0].text);
+                                $('#customer_name').html(' ' + datas[0].display_name);
+                            }
+                        }
+                        // if (subcategory_id != "") {
+                        //     $('#subcategory_id').val(subcategory_id).trigger('change');
+                        // }
+                    }
+                });
             }
-
-            var button = document.getElementById("convert_slug");
-
-            button.addEventListener("click", function() {
-                const timestamp = Date.now();
-                var textbox = document.getElementById("title");
-                var slug = textToSlug(textbox.value);
-                var textbox = document.getElementById("slug");
-                textbox.value = slug+"-"+timestamp;
-            });
-
-
         })(jQuery);
     </script>
     <?php $__env->stopSection(); ?>
@@ -553,4 +520,4 @@
 <?php if (isset($__componentOriginalc6e081c8432fe1dd6b4e43af4871c93447ee9b23)): ?>
 <?php $component = $__componentOriginalc6e081c8432fe1dd6b4e43af4871c93447ee9b23; ?>
 <?php unset($__componentOriginalc6e081c8432fe1dd6b4e43af4871c93447ee9b23); ?>
-<?php endif; ?><?php /**PATH C:\wamp64\www\nammav2appweb\resources\views/jobs/create.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\wamp64\www\nammav2appweb\resources\views/jobs/fastcreate.blade.php ENDPATH**/ ?>

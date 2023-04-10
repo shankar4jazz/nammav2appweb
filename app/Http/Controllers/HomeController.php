@@ -637,6 +637,66 @@ class HomeController extends Controller
                 $items = \App\Models\SubCategory::select('id', 'name as text')->where('category_id', $category_id)->where('status', 1);
                 $items = $items->get();
                 break;
+
+            case 'push_pvt_jobs':
+
+                // $district_id = !empty($request->district_id) ? $request->district_id : '';
+                // $items = \App\Models\Jobs::select('id', 'address as text', 'latitude', 'longitude', 'status')->where('provider_id', $district_id)->where('status', 1);
+                // $items = $items->get();
+
+                $items = \App\Models\Jobs::select('id', 'title as text')->withTrashed();
+                if (isset($request->district_id)) {
+                    if ($request->district_id == '100') {
+                        $items->where('status', 1);
+                    } else if ($request->district_id == "null") {
+                        $items->where('status', 1);
+                    } else {
+
+                        $items->where('status', 1);
+                        $items->whereHas('jobDistricts', function ($a) use ($request) {
+                            $a->where('district_id', $request->district_id);
+                            $a->orWhere('district_id',  100);
+                        });
+                    }
+                } else {
+
+                    $items->where('status', 1);
+                }
+                $items = $items->get();
+                break;
+            case 'push_govt_jobs':
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://www.jobs7.in/api-service/push-noty-jobs.php?districtlink=jobs-in-all-districts&stateid=2");
+
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+
+                ));
+
+                $items = curl_exec($ch);
+
+                $items = json_decode($items);
+
+                if ($items === false) {
+                    echo 'cURL Error: ' . curl_error($ch);
+                    curl_close($ch);
+                    die();
+                }
+
+                $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                if ($http_code != 200) {
+                    echo 'Error: HTTP Status Code: ' . $http_code;
+                    curl_close($ch);
+                    die();
+                }
+
+                curl_close($ch);
+
+                break;
             default:
                 break;
         }
@@ -729,7 +789,7 @@ class HomeController extends Controller
                 $data = Jobs::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);
                 break;
-                
+
             default:
                 $data = AppSetting::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);

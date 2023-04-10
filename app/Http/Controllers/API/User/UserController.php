@@ -568,7 +568,9 @@ class UserController extends Controller
             'experience' => $request->experience,
             'education'  => $request->education,
             'gender'     => $request->gender,
-            'job_category' => $request->job_category
+            'category_name' => $request->category_name,
+            'job_category' => $request->job_category,
+            'districts' => $request->districts
         ];
 
         $user->details = json_encode($details);
@@ -652,7 +654,7 @@ class UserController extends Controller
                 $fourRandomDigit = rand(1000, 9999);
 
                 $smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
-                if ($smsReply->status == '') {
+                if ($smsReply->status == 'success') {
 
                     $user->otp = $fourRandomDigit;
                     $user->save();
@@ -776,8 +778,6 @@ class UserController extends Controller
             if ($user_data != null) {
 
 
-
-
                 if ($user_data->otp === 0 || $user_data->otp === '0' || $user_data->otp === '0000') {
 
                     $otp_response = [
@@ -818,7 +818,16 @@ class UserController extends Controller
                         $user_data->login_attempts = 0;
                         $user_data->update();
                         $success['user_role'] = $user_data->getRoleNames();
-                        $success['companies'] = $user_data->companies;
+
+                        if ($request->user_type == "jobseeker") {
+           
+                            $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
+                            
+                        } else if ($request->user_type == "jobs") {
+                
+                            $user_data['companies'] = $user_data->companies;
+                        }
+                       
                         $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
                         $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
                         $is_verify_provider = false;

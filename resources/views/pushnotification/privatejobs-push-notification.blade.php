@@ -1,4 +1,4 @@
-{{ Form::model($settings,['method' => 'POST','route'=>'sendPushNotification', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'push_notification'] ) }}
+{{ Form::model($settings,['method' => 'POST','route'=>'sendPvtJobsPushNotification', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'push_notification'] ) }}
 {{ Form::hidden('id') }}
 <div class="row">
     <div class="form-group col-md-12">
@@ -6,30 +6,27 @@
         {{ Form::text('title',old('title'),['placeholder' => trans('messages.title'),'class' =>'form-control','required']) }}
         <small class="help-block with-errors text-danger"></small>
     </div>
+    <input type="hidden" name="pvt_jobid" value="" id="pvt_jobid" />
 
     <div class="form-group col-md-12" id="select_district">
         {{ Form::label('name', __('messages.select_name',[ 'select' => __('District') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label','data-placeholder' => __('Select District',[ 'select' => __('districts') ])],false) }}
         <br />
-        <select class="form-control district" name="district_id">
+        <select class="form-control district" name="district_id" id="district_id">
             @foreach($districts as $key => $value)
             <option id="{{$key}}" data-type="{{$value}}" value="{{$key}}">{{$value}}</option>
             @endforeach
         </select>
     </div>
+
     <div class="form-group col-md-12">
-        {{ Form::label('type',trans('messages.type').' <span class="text-danger">*</span>',['class'=>'form-control-label '],false) }}
-        {{ Form::select('type',['alldata' => __('messages.all') , 'service' => __('messages.service') ],old('type'),[ 'id' => 'type' ,'class' =>'form-control select2js notification_type','required']) }}
-    </div>
-
-    <div class="form-group col-md-12 d-none" id="select_service">
-        {{ Form::label('name', __('jobs title',[ 'select' => __('jobs title') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label','data-placeholder' => __('jobs title',[ 'select' => __('jobs') ])],false) }}
+        {{ Form::label('job_id', __('messages.select_name',[ 'select' => __('Job') ]),['class'=>'form-control-label'],false) }}
         <br />
-        <select class="form-control service" name="service_id">
-
-            @foreach($services as $key => $value)
-            <option id="{{$key}}" data-type="{{$value}}" value="{{$key}}">{{$value}}</option>
-            @endforeach
-        </select>
+        {{ Form::select('job_id', [], old('job_id'), [
+                                        'class' => 'select2js form-group service',
+                                        'data-placeholder' => __('messages.select_name',[ 'select' => __('job') ]),
+                                        'data-type' => 'my-custom-type'
+                                        
+                                    ]) }}
     </div>
     <div class="form-group col-md-12">
         {{ Form::label('description',trans('messages.description').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
@@ -40,53 +37,70 @@
 {{ Form::close() }}
 <script>
     $(document).ready(function() {
-        var value = $('.service').find(':selected').attr('data-type');
-        $(document).on('change', '.notification_type', function() {
-            var type = $(this).val();
-            if (type == 'service') {
-                textareaValue(value)
-                $('#select_service').removeClass('d-none');
-            } else {
-                $('#select_service').addClass('d-none');
-                $('#description').val('')
-            }
-        });
-        $(document).on('change', '.service', function() {
-            var value = $(this).find(':selected').attr('data-type');
-            textareaValue(value)
 
-        });
     });
+    getJobs(100);
 
     $(document).on('change', '#district_id', function() {
         var district = $(this).val();
-        getJobs(country);
+        $('#job_id').empty();
+        getJobs(district);
     })
 
-    function textareaValue(value) {
+    $(document).on('change', '.service', function() {
+        var selectElement = document.querySelector('select[name="job_id"]');
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        $('#pvt_jobid').val(selectElement.value);
+        if (selectedOption) {
+            var selectedText = selectedOption.text;
+        } else {
+            console.log("No job selected to push notification");
+        }
 
-        
+        textareaValue(selectedText);
+    });
+
+    function textareaValue(value) {
         $('#description').val(value)
     }
 
     function getJobs(district, state = "") {
 
-        var state_route = "{{ route('ajax-list', [ 'type' => 'state','country_id' =>'']) }}" + country;
+        var state_route = "{{ route('ajax-list', [ 'type' => 'push_pvt_jobs','district_id' =>'']) }}" + district;
         state_route = state_route.replace('amp;', '');
+
 
         $.ajax({
             url: state_route,
             success: function(result) {
-                $('#state_id').select2({
+                $('#job_id').select2({
                     width: '100%',
                     placeholder: "{{ trans('messages.select_name',['select' => trans('messages.state')]) }}",
                     data: result.results
-
                 });
                 if (state != null) {
-                    $("#state_id").val(state).trigger('change');
+                    $("#job_id").val(state).trigger('change');
                 }
             }
         });
     }
+
+    // function cityName(district, city = "") {
+    //             var city_route = "{{ route('ajax-list', [ 'type' => 'city' ,'district_id' =>'']) }}" + district;
+    //             city_route = city_route.replace('amp;', '');
+
+    //             $.ajax({
+    //                 url: city_route,
+    //                 success: function(result) {
+    //                     $('#city_id').select2({
+    //                         width: '100%',
+    //                         placeholder: "{{ trans('messages.select_name',['select' => trans('messages.city')]) }}",
+    //                         data: result.results
+    //                     });
+    //                     if (city != null || city != 0) {
+    //                         $("#city_id").val(city).trigger('change');
+    //                     }
+    //                 }
+    //             });
+    //         }
 </script>
