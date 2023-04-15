@@ -1,11 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-
-
-
-
 use Illuminate\Http\Request;
 use App\Models\TamilanJobs;
 use App\Models\Service;

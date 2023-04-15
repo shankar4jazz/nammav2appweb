@@ -65,7 +65,7 @@
                                                 'class' => 'select2js form-group user',
                                                 'required',
                                                 'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.user') ]),
-                                                'data-ajax--url' => route('ajax-list', ['type' => 'user']),
+                                                'data-ajax--url' => route('ajax-list', ['type' => 'jobs']),
                                             ])); ?>
 
                             </div>
@@ -73,7 +73,7 @@
                             <input type="hidden" name="user_id" value="<?php echo e($jobsdata->user_id); ?>">
                             <?php endif; ?>
 
-							                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6">
                                 <?php echo e(Form::label('contact number',trans('Contact number').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
                                 <?php echo e(Form::number('contact_number',old('contact_number'),['placeholder' => trans('Enter Contact Number'),'class' =>'form-control','required'])); ?>
@@ -81,7 +81,7 @@
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
 
-                           
+
                             <div class="form-group col-md-6">
                                 <?php echo e(Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
@@ -269,20 +269,20 @@
                             </div>
 
                             <div class="form-group col-md-4">
-                                    <?php echo e(Form::label('name', __('messages.select_name',[ 'select' => __('districts for jobs') ]),['class'=>'form-control-label'],false)); ?>
+                                <?php echo e(Form::label('name', __('messages.select_name',[ 'select' => __('districts for jobs') ]),['class'=>'form-control-label'],false)); ?>
 
-                                    <br />
-                                    <?php echo e(Form::select('districts[]', [], old('districts'), [
+                                <br />
+                                <?php echo e(Form::select('districts[]', [], old('districts'), [
                                         'class' => 'select2js form-group tax_id',
                                         'id' =>'tax_id',
                                         'multiple' => 'multiple',
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('districts for jobs') ]),
                                     ])); ?>
 
-                                  
-                                </div>
 
-                            
+                            </div>
+
+
                             <?php if(getMediaFileExit($jobsdata, 'jobs_image')): ?>
                             <div class="col-md-2 mb-2">
                                 <?php
@@ -349,16 +349,16 @@
             $(document).ready(function() {
                 CKEDITOR.replace('editor');
                 var districts = "<?php echo e(isset($data) ? $data : []); ?>";
-				console.log(districts);
-				
+                //console.log(districts);
 
-                var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 0); ?>";
+
+                var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 101); ?>";
                 var user_id = "<?php echo e(isset($jobsdata->user_id) ? $jobsdata->user_id : 0); ?>";
-                var state_id = "<?php echo e(isset($jobsdata->state_id) ? $jobsdata->state_id : 0); ?>";
+                var state_id = "<?php echo e(isset($jobsdata->state_id) ? $jobsdata->state_id : 35); ?>";
                 var district_id = "<?php echo e(isset($jobsdata->district_id) ? $jobsdata->district_id : 0); ?>";
                 var city_id = "<?php echo e(isset($jobsdata->city_id) ? $jobsdata->city_id : 0); ?>";
 
-               // var provider_id = "<?php echo e(isset($jobsdata->provider_id) ? $jobsdata->provider_id : '4'); ?>";
+                // var provider_id = "<?php echo e(isset($jobsdata->provider_id) ? $jobsdata->provider_id : '4'); ?>";
                 var service_address_id = "<?php echo e(isset($jobsdata->service_address_id) ? $jobsdata->service_address_id : 0); ?>";
                 userName(user_id);
                 var provider_id = '5';
@@ -366,7 +366,7 @@
                 $('#state_id').attr('disabled', true);
                 stateName(country_id, state_id);
                 getTax(provider_id, districts);
-                
+
                 //districtName(state_id, district_id);
                 //providerAddress(provider_id, service_address_id);
                 $(document).on('change', '#role', function() {
@@ -406,26 +406,26 @@
 
             })
 
-            function getTax(provider_id,provider_tax_id=""){
-              
-                    var provider_tax_route = "<?php echo e(route('ajax-list', [ 'type' => 'district','provider_id' =>''])); ?>"+provider_id;
-                    provider_tax_route = provider_tax_route.replace('amp;','');
+            function getTax(provider_id, provider_tax_id = "") {
 
-                    $.ajax({
-                        url: provider_tax_route,
-                        success: function(result){
-                            $('#tax_id').select2({
-                                width: '100%',
-                                placeholder: "<?php echo e(trans('messages.select_name',['select' => trans('messages.tax')])); ?>",
-                                data: result.results
-                            });
-                            if(provider_tax_id != ""){
-                               // alert("value");
-                                $('#tax_id').val(provider_tax_id.split(',')).trigger('change');
-                            }
+                var provider_tax_route = "<?php echo e(route('ajax-list', [ 'type' => 'district','provider_id' =>''])); ?>" + provider_id;
+                provider_tax_route = provider_tax_route.replace('amp;', '');
+
+                $.ajax({
+                    url: provider_tax_route,
+                    success: function(result) {
+                        $('#tax_id').select2({
+                            width: '100%',
+                            placeholder: "<?php echo e(trans('messages.select_name',['select' => trans('messages.tax')])); ?>",
+                            data: result.results
+                        });
+                        if (provider_tax_id != "") {
+                            // alert("value");
+                            $('#tax_id').val(provider_tax_id.split(',')).trigger('change');
                         }
-                    });
-                }
+                    }
+                });
+            }
 
             function stateName(country, state = "") {
                 var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'state','country_id' =>''])); ?>" + country;
@@ -506,10 +506,10 @@
             }
 
             $(document).on('change', '#district_id', function() {
-                    var provider_id = $(this).val();
-                    $('#provider_address_id').empty();
-                   // providerAddress(provider_id, provider_address_id);
-                })
+                var provider_id = $(this).val();
+                $('#provider_address_id').empty();
+                // providerAddress(provider_id, provider_address_id);
+            })
 
             function providerAddress(provider_id, service_address_id = "") {
                 var provider_address_route = "<?php echo e(route('ajax-list', [ 'type' => 'provider_address','provider_id' =>''])); ?>" + provider_id;
@@ -541,7 +541,7 @@
                 var textbox = document.getElementById("title");
                 var slug = textToSlug(textbox.value);
                 var textbox = document.getElementById("slug");
-                textbox.value = slug+"-"+timestamp;
+                textbox.value = slug + "-" + timestamp;
             });
 
 

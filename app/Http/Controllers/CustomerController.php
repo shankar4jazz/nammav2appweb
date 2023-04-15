@@ -138,12 +138,12 @@ class CustomerController extends Controller
         
 		if($data['type'] == 'booking'){
 
-        return redirect(route('booking.addquick', ['mobile_no' =>'', 'user_type' => $data['user_type']]).$data['contact_number'])->withSuccess($message);
+        return redirect(route('booking.addquick', ['mobile_no' =>$data['contact_number'], 'user_type' => $data['user_type']]))->withSuccess($message);
        
 
        }
        if($data['type'] == 'jobs'){
-        return redirect(route('jobs.jobadd', ['mobile_no' =>'', 'user_type' => $data['user_type']]).$data['contact_number'])->withSuccess($message);
+        return redirect(route('jobs.jobadd', ['mobile_no' =>$data['contact_number'], 'user_type' => $data['user_type']]))->withSuccess($message);
 
        }
     }

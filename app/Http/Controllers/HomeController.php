@@ -407,6 +407,17 @@ class HomeController extends Controller
 
                 $items = $items->get();
                 break;
+            case 'jobs':
+                $items = \App\Models\User::select('id', 'contact_number as text')
+                    ->where('user_type', 'jobs')
+                    ->where('status', 1);
+
+                if ($value != '') {
+                    $items->where('contact_number', 'LIKE', $value . '%');
+                }
+
+                $items = $items->get();
+                break;
             case 'get-user':
                 $items = \App\Models\User::select('id', 'contact_number as text');
                 if (isset($request->user_id)) {

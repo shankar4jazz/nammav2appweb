@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 */
 require __DIR__.'/admin-api.php';
+Route::get('jobs-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
 //news
 Route::get('news-category-list',[API\NewsCategoryController::class,'getCategoryList']);
 Route::get('news-list',[ API\NewsController::class, 'getNewsList' ]);
@@ -136,6 +137,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('handyman-payout-list', [ API\PayoutController::class, 'handymanPayoutList' ] );
 
     Route::get('plan-list', [ API\PlanController::class, 'planList' ] );
+   
     Route::post('save-subscription', [ API\SubscriptionController::class, 'providerSubscribe' ] );
     Route::post('cancel-subscription', [ API\SubscriptionController::class, 'cancelSubscription' ] );
     Route::get('subscription-history', [ API\SubscriptionController::class, 'getHistory' ] );

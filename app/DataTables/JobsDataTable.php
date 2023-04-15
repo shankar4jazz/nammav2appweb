@@ -32,15 +32,15 @@ class JobsDataTable extends DataTable
                     $q->where('contact_number','like','%'.$keyword.'%');
                 });
             })
-            ->editColumn('status', function ($category) {
-                $disabled = $category->trashed() ? 'disabled' : '';
-                return '<div class="custom-control custom-switch custom-switch-text custom-switch-color custom-control-inline">
-                    <div class="custom-switch-inner">
-                        <input type="checkbox" class="custom-control-input  change_status" data-type="jobs_status" ' . ($category->status == 1? "checked" : "") . '  ' . $disabled . ' value="' . $category->id . '" id="' . $category->id . '" data-id="' . $category->id . '">
-                        <label class="custom-control-label" for="' . $category->id . '" data-on-label="" data-off-label=""></label>
-                    </div>
-                </div>';
-            })
+            // ->editColumn('status', function ($category) {
+            //     $disabled = $category->trashed() ? 'disabled' : '';
+            //     return '<div class="custom-control custom-switch custom-switch-text custom-switch-color custom-control-inline">
+            //         <div class="custom-switch-inner">
+            //             <input type="checkbox" class="custom-control-input  change_status" data-type="jobs_status" ' . ($category->status == 1? "checked" : "") . '  ' . $disabled . ' value="' . $category->id . '" id="' . $category->id . '" data-id="' . $category->id . '">
+            //             <label class="custom-control-label" for="' . $category->id . '" data-on-label="" data-off-label=""></label>
+            //         </div>
+            //     </div>';
+            // })
             ->editColumn('status_s', function ($booking) {
                 $payment_status = optional($booking)->status;
                 if ($payment_status == '2') {
@@ -58,16 +58,16 @@ class JobsDataTable extends DataTable
                 }
                 return  $status;
             })
-            ->editColumn('is_featured', function ($category) {
-                $disabled = $category->trashed() ? 'disabled' : '';
+            // ->editColumn('is_featured', function ($category) {
+            //     $disabled = $category->trashed() ? 'disabled' : '';
 
-                return '<div class="custom-control custom-switch custom-switch-text custom-switch-color custom-control-inline">
-                    <div class="custom-switch-inner">
-                        <input type="checkbox" class="custom-control-input  change_status" data-type="jobs_featured" data-name="is_featured" ' . ($category->is_featured == 1 ? "checked" : "") . '  ' .  $disabled . ' value="' . $category->id . '" id="f' . $category->id . '" data-id="' . $category->id . '">
-                        <label class="custom-control-label" for="f' . $category->id . '" data-on-label="' . __("messages.yes") . '" data-off-label="' . __("messages.no") . '"></label>
-                    </div>
-                </div>';
-            })
+            //     return '<div class="custom-control custom-switch custom-switch-text custom-switch-color custom-control-inline">
+            //         <div class="custom-switch-inner">
+            //             <input type="checkbox" class="custom-control-input  change_status" data-type="jobs_featured" data-name="is_featured" ' . ($category->is_featured == 1 ? "checked" : "") . '  ' .  $disabled . ' value="' . $category->id . '" id="f' . $category->id . '" data-id="' . $category->id . '">
+            //             <label class="custom-control-label" for="f' . $category->id . '" data-on-label="' . __("messages.yes") . '" data-off-label="' . __("messages.no") . '"></label>
+            //         </div>
+            //     </div>';
+            // })
             ->addColumn('action', function ($category) {
                 return view('jobs.action', compact('category'))->render();
             })
@@ -114,9 +114,18 @@ class JobsDataTable extends DataTable
             Column::make('job_role'),
             Column::make('user_id')
             ->title(__('messages.user')),
-            Column::make('is_featured')
-                ->title(__('messages.featured')),
-            Column::make('status'),
+            // Column::make('is_featured')
+            //     ->title(__('messages.featured')),
+            // Column::make('status'),
+            
+            Column::make('created_at')
+            ->render(function ($value) {
+                if ($value && is_string($value)) {
+                    return date('Y-m-d', strtotime($value));
+                } else {
+                    return '';
+                }
+            }),
             Column::make('status_s')
             ->title('Jobs Status'),
             Column::computed('action')
@@ -139,6 +148,7 @@ class JobsDataTable extends DataTable
                 ->title(__('messages.featured')),
                 Column::make('status_s')
                 ->title('Jobs Status'),
+                Column::make('created_at'),
                 Column::make('reason'),
             Column::computed('action')
                 ->exportable(false)

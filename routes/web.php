@@ -31,6 +31,7 @@ use App\Http\Controllers\ServiceFaqController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\JobPlanController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\PostJobRequestController;
 
@@ -102,6 +103,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('slider', SliderController::class);
     Route::post('slider-action', [SliderController::class, 'action'])->name('slider.action');
     Route::resource('payment', PaymentController::class);
+    Route::resource('jobs-payment', JobsPaymentController::class);
     Route::post('save-payment', [App\Http\Controllers\API\PaymentController::class, 'savePayment'])->name('payment.save');
     Route::resource('user', CustomerController::class);
 
@@ -135,7 +137,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('provider-dashboard-setting', [SettingController::class, 'providerdashboardtogglesetting'])->name('providertogglesetting');
     Route::post('handyman-dashboard-setting', [SettingController::class, 'handymandashboardtogglesetting'])->name('handymantogglesetting');
     Route::post('config-save', [SettingController::class, 'configUpdate'])->name('configUpdate');
-
 
     Route::post('env-setting', [SettingController::class, 'envChanges'])->name('envSetting');
     Route::post('update-profile', [SettingController::class, 'updateProfile'])->name('updateProfile');
@@ -201,6 +202,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('subcategory-action', [SubCategoryController::class, 'action'])->name('subcategory.action');
 
     Route::resource('plans', PlanController::class);
+    Route::resource('jobs-plans', JobPlanController::class);
     Route::resource('bank', BankController::class);
     Route::post('bank-action', [BankController::class, 'action'])->name('bank.action');
 

@@ -41,26 +41,7 @@
 
                         <?php echo e(Form::hidden('id')); ?>
 
-                        <?php if(auth()->user()->hasRole(['admin'])): ?>
-                        <div class="row">
 
-
-                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::text('title',old('title'),['placeholder' => trans('messages.title'),'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::text('slug',old('title'),['placeholder' => trans('messages.slug'),'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                        </div>
-                        <?php endif; ?>
                         <div class="row">
 
                             <input type="hidden" id="customer_id" name="user_id" value="<?php echo e($jobsdata->customer_id); ?>">
@@ -73,51 +54,39 @@
 
                                 <small class="help-block with-errors text-danger"></small>
 
-                            </div> 
-							
-							<div class="form-group col-md-6">
-                                <?php echo e(Form::label('contact_number',__('messages.customer').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <?php echo e(Form::label('contact_number',__('Contact Number').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
                                 <?php echo e(Form::text('contact_number',  null, ['class'=>"form-control" , 'id'=>'contact_number'  , 'placeholder'=> __("Contact Number") ])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
-                            </div> 
-
-                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::text('job_role',old('job_role'),['placeholder' => trans('messages.job_role'),'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('tamil_job_role',trans('தமிழில் வேலைப்பெயர்(Job Role)').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::text('tamil_job_role',old('tamil_job_role'),['placeholder' => trans('வேலைப்பெயர்'),'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
                             </div>
 
-                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('company_name',trans('messages.company_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:blue">Job Details</h3>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('company_name',old('company_name'),['placeholder' => trans('messages.company_name'),'class' =>'form-control','required'])); ?>
+                                        <?php echo e(Form::text('job_role',old('job_role'),['placeholder' => trans('messages.job_role'),'class' =>'form-control','required'])); ?>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <?php echo e(Form::label('tamil_company_name',trans('தமிழில் கம்பெனி பெயர்').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('tamil_job_role',trans('தமிழில் வேலைப்பெயர்(Job Role)').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('tamil_company_name',old('tamil_company_name'),['placeholder' => trans('கம்பெனி பெயர்'),'class' =>'form-control','required'])); ?>
+                                        <?php echo e(Form::text('tamil_job_role',old('tamil_job_role'),['placeholder' => trans('வேலைப்பெயர்'),'class' =>'form-control','required'])); ?>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
 
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('jobcategory_id', __('messages.select_name',[ 'select' => __('messages.jobs_category') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('jobcategory_id', __('messages.select_name',[ 'select' => __('messages.jobs_category') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
-                                <br />
-                                <?php echo e(Form::select('jobcategory_id', [optional($jobsdata->category)->id => optional($jobsdata->category)->name], optional($jobsdata->category)->id, [
+                                        <br />
+                                        <?php echo e(Form::select('jobcategory_id', [optional($jobsdata->category)->id => optional($jobsdata->category)->name], optional($jobsdata->category)->id, [
                                             'class' => 'select2js form-group category',
                                             'required',
                                             'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.jobs_category') ]),
@@ -125,196 +94,297 @@
                                         ])); ?>
 
 
+                                    </div>
+
+
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+
+                                        <?php echo e(Form::number('vacancy',old('vacancy'),['placeholder' => trans('messages.vacancy'),'class' =>'form-control','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Employement Details</h3>
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('experience',trans('messages.experience').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                        <?php echo e(Form::select('experience',['0' => __('messages.exp_0') , '1' => __('messages.exp_1'), '2' => __('messages.exp_2') ,'3' => __('messages.exp_3'), '4' => __('messages.exp_4'), '5' => __('messages.exp_5') ],old('status'),[ 'id' => 'exp' ,'class' =>'form-control select2js','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('education',trans('messages.education').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                        <?php echo e(Form::select('education',['1' => __('messages.edu_1') , '0' => __('messages.edu_0'), '2' => __('messages.edu_2') ,'3' => __('messages.edu_3') ],old('education'),[ 'id' => 'edu' ,'class' =>'form-control select2js','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+
+
+
+
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('gender',trans('messages.gender').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                        <?php echo e(Form::select('gender',['0' => __('messages.gender_0') , '1' => __('messages.gender_1'), '2' => __('messages.gender_2')  ],old('gender'),[ 'id' => 'gender' ,'class' =>'form-control select2js','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                        <?php echo e(Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-6" style="border: 1px solid #ccc; padding: 10px; background-color:lightyellow;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Salary Details</h3>
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('min_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+
+                                        <?php echo e(Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('max_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+
+                                        <?php echo e(Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-6" style="border: 1px solid #ccc; padding: 10px; background-color:lightyellow;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Date Details</h3>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('start_date',__('messages.start_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+
+                                        <?php echo e(Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control min-datetimepicker','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('end_date',__('messages.end_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
+
+                                        <?php echo e(Form::text('end_date',old('end_date'),['placeholder' => __('messages.end_date'),'class' =>'form-control end-datetimepicker','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Job Description</h3>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('description',trans('messages.description'), ['class' => 'form-control-label'])); ?>
+
+                                        <?php echo e(Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ])); ?>
+
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('education',trans('messages.education').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
-                                <?php echo e(Form::select('education',['1' => __('messages.edu_1') , '0' => __('messages.edu_0'), '2' => __('messages.edu_2') ,'3' => __('messages.edu_3') ],old('education'),[ 'id' => 'edu' ,'class' =>'form-control select2js','required'])); ?>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('gender',trans('messages.gender').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
-                                <?php echo e(Form::select('gender',['0' => __('messages.gender_0') , '1' => __('messages.gender_1'), '2' => __('messages.gender_2')  ],old('gender'),[ 'id' => 'gender' ,'class' =>'form-control select2js','required'])); ?>
+                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;">Company Details</h3>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('company_name',trans('messages.company_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+                                        <?php echo e(Form::text('company_name',old('company_name'),['placeholder' => trans('messages.company_name'),'class' =>'form-control','required'])); ?>
 
-                                <?php echo e(Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required'])); ?>
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('tamil_company_name',trans('தமிழில் கம்பெனி பெயர்').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('experience',trans('messages.experience').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+                                        <?php echo e(Form::text('tamil_company_name',old('tamil_company_name'),['placeholder' => trans('கம்பெனி பெயர்'),'class' =>'form-control','required'])); ?>
 
-                                <?php echo e(Form::select('experience',['0' => __('messages.exp_0') , '1' => __('messages.exp_1'), '2' => __('messages.exp_2') ,'3' => __('messages.exp_3'), '4' => __('messages.exp_4'), '5' => __('messages.exp_5') ],old('status'),[ 'id' => 'exp' ,'class' =>'form-control select2js','required'])); ?>
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <?php echo e(Form::label('min_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control','required'])); ?>
+                                    <div class="form-group col-md-4 d-none">
+                                        <?php echo e(Form::label('country_id', __('messages.select_name',[ 'select' => __('messages.country') ]),['class'=>'form-control-label'],false)); ?>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <?php echo e(Form::label('max_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::number('vacancy',old('vacancy'),['placeholder' => trans('messages.vacancy'),'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('start_date',__('messages.start_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control min-datetimepicker','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('end_date',__('messages.end_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::text('end_date',old('end_date'),['placeholder' => __('messages.end_date'),'class' =>'form-control end-datetimepicker','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <?php echo e(Form::label('description',trans('messages.description'), ['class' => 'form-control-label'])); ?>
-
-                                <?php echo e(Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ])); ?>
-
-                            </div>
-
-                            <div class="row col-md-12">
-                                <div class="form-group col-md-4 d-none">
-                                    <?php echo e(Form::label('country_id', __('messages.select_name',[ 'select' => __('messages.country') ]),['class'=>'form-control-label'],false)); ?>
-
-                                    <br />
-                                    <?php echo e(Form::select('country_id', [optional($jobsdata->country)->id => optional($jobsdata->country)->name], optional($jobsdata->country)->id, [
+                                        <br />
+                                        <?php echo e(Form::select('country_id', [optional($jobsdata->country)->id => optional($jobsdata->country)->name], optional($jobsdata->country)->id, [
                                         'class' => 'select2js form-group country',
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.country') ]),
                                         'data-ajax--url' => route('ajax-list', ['type' => 'country']),
                                     ])); ?>
 
-                                </div>
+                                    </div>
 
-                                <div class="form-group col-md-4">
-                                    <?php echo e(Form::label('state_id', __('messages.select_name',[ 'select' => __('messages.state') ]), ['class'=>'form-control-label'],false)); ?>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('state_id', __('messages.select_name',[ 'select' => __('messages.state') ]), ['class'=>'form-control-label'],false)); ?>
 
-                                    <br />
-                                    <?php echo e(Form::select('state_id', [
+                                        <br />
+                                        <?php echo e(Form::select('state_id', [
                                         
                                         'class' => 'select2js form-group state_id',
                                     
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.state') ]),
                                     ])); ?>
 
-                                    <input type="hidden" name="state_id" value="<?php echo e($jobsdata->state_id); ?>" />
-                                </div>
+                                        <input type="hidden" name="state_id" value="<?php echo e($jobsdata->state_id); ?>" />
+                                    </div>
 
-                                <div class="form-group col-md-4">
-                                    <?php echo e(Form::label('district_id', __('messages.select_name',[ 'select' => __('messages.district') ]),['class'=>'form-control-label'],false)); ?>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('district_id', __('messages.select_name',[ 'select' => __('messages.district') ]),['class'=>'form-control-label'],false)); ?>
 
-                                    <br />
-                                    <?php echo e(Form::select('district_id', [], old('district_id'), [
+                                        <br />
+                                        <?php echo e(Form::select('district_id', [], old('district_id'), [
                                         'class' => 'select2js form-group district_id',
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.district') ]),
                                     ])); ?>
 
-                                </div>
+                                    </div>
 
-                                <div class="form-group col-md-4">
-                                    <?php echo e(Form::label('city_id', __('messages.select_name',[ 'select' => __('messages.city') ]),['class'=>'form-control-label'],false)); ?>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('city_id', __('messages.select_name',[ 'select' => __('messages.city') ]),['class'=>'form-control-label'],false)); ?>
 
-                                    <br />
-                                    <?php echo e(Form::select('city_id', [], old('city_id'), [
+                                        <br />
+                                        <?php echo e(Form::select('city_id', [], old('city_id'), [
                                         'class' => 'select2js form-group city_id',
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.city') ]),
                                     ])); ?>
 
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <?php echo e(Form::label('pincode',trans('messages.pincode').' <span class="text-danger"></span>',['class'=>'form-control-label'], false )); ?>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('pincode',trans('messages.pincode').' <span class="text-danger"></span>',['class'=>'form-control-label'], false )); ?>
 
-                                    <?php echo e(Form::text('pincode',old('pincode'),['placeholder' => trans('messages.pincode'),'class' =>'form-control'])); ?>
+                                        <?php echo e(Form::text('pincode',old('pincode'),['placeholder' => trans('messages.pincode'),'class' =>'form-control'])); ?>
 
-                                    
-                                </div>
-                                <div class="form-group col-md-8">
-                                    <?php echo e(Form::label('address',trans('messages.address'), ['class' => 'form-control-label'])); ?>
 
-                                    <?php echo e(Form::textarea('address', null, ['class'=>"form-control textarea" , 'rows'=>2  , 'placeholder'=> __('messages.address') ])); ?>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('address',trans('messages.address'), ['class' => 'form-control-label'])); ?>
 
+                                        <?php echo e(Form::textarea('address', null, ['class'=>"form-control textarea" , 'rows'=>2  , 'placeholder'=> __('messages.address') ])); ?>
+
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-6">
-                                <label class="form-control-label" for="jobs_image"><?php echo e(__('messages.image')); ?> </label>
-                                <div class="custom-file">
-                                    <input type="file" name="jobs_image" class="custom-file-input" accept="image/*">
-                                    <label class="custom-file-label upload-label"><?php echo e(__('messages.choose_file',['file' =>  __('messages.image') ])); ?></label>
+                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:midnightblue">Application received from following city</h3>
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="jobs_image"><?php echo e(__('messages.image')); ?> </label>
+                                        <div class="custom-file">
+                                            <input type="file" name="jobs_image" class="custom-file-input" accept="image/*">
+                                            <label class="custom-file-label upload-label"><?php echo e(__('messages.choose_file',['file' =>  __('messages.image') ])); ?></label>
+                                        </div>
+                                        <span class="selected_file"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('name', __('messages.select_name',[ 'select' => __('districts for jobs') ]),['class'=>'form-control-label'],false)); ?>
+
+                                        <br />
+                                        <?php echo e(Form::select('districts[]', [], old('districts'), [
+                                        'class' => 'select2js form-group tax_id',
+                                        'id' =>'tax_id',
+                                        'multiple' => 'multiple',
+                                        'data-placeholder' => __('messages.select_name',[ 'select' => __('districts for jobs') ]),
+                                    ])); ?>
+
+
+                                    </div>
+                                    <?php if(getMediaFileExit($jobsdata, 'jobs_image')): ?>
+                                    <div class="col-md-2 mb-2">
+                                        <?php
+                                        $extention = imageExtention(getSingleMedia($jobsdata,'jobs_image'));
+                                        ?>
+                                        <img id="jobs_image_preview" src="<?php echo e(getSingleMedia($jobsdata,'jobs_image')); ?>" alt="#" class="attachment-image mt-1">
+                                        <a class="text-danger remove-file" href="<?php echo e(route('remove.file', ['id' => $jobsdata->id, 'type' => 'jobs_image'])); ?>" data--submit="confirm_form" data--confirmation='true' data--ajax="true" title='<?php echo e(__("messages.remove_file_title" , ["name" =>  __("messages.image") ])); ?>' data-title='<?php echo e(__("messages.remove_file_title" , ["name" =>  __("messages.image") ])); ?>' data-message='<?php echo e(__("messages.remove_file_msg")); ?>'>
+                                            <i class="ri-close-circle-line"></i>
+                                        </a>
+                                    </div>
+                                    <?php endif; ?>
                                 </div>
-                                <span class="selected_file"></span>
                             </div>
-                            <?php if(getMediaFileExit($jobsdata, 'jobs_image')): ?>
-                            <div class="col-md-2 mb-2">
-                                <?php
-                                $extention = imageExtention(getSingleMedia($jobsdata,'jobs_image'));
-                                ?>
-                                <img id="jobs_image_preview" src="<?php echo e(getSingleMedia($jobsdata,'jobs_image')); ?>" alt="#" class="attachment-image mt-1">
-                                <a class="text-danger remove-file" href="<?php echo e(route('remove.file', ['id' => $jobsdata->id, 'type' => 'jobs_image'])); ?>" data--submit="confirm_form" data--confirmation='true' data--ajax="true" title='<?php echo e(__("messages.remove_file_title" , ["name" =>  __("messages.image") ])); ?>' data-title='<?php echo e(__("messages.remove_file_title" , ["name" =>  __("messages.image") ])); ?>' data-message='<?php echo e(__("messages.remove_file_msg")); ?>'>
-                                    <i class="ri-close-circle-line"></i>
-                                </a>
-                            </div>
-                            <?php endif; ?>
 
                             <?php if(auth()->user()->hasRole(['admin'])): ?>
 
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:lightpink;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Admin Section (For offical use only) </h3>
+                                <div class="row">
 
-                                <?php echo e(Form::select('status',['1' => __('messages.active') , '0' => __('Pending'), '2' => __('messages.rejected') ,'3' => __('Suspended'), '4' => __('InActive')],old('status'),[ 'id' => 'role' ,'class' =>'form-control select2js','required'])); ?>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
-                            <div class="form-group col-md-12" style="display:none" id="reason">
-                                <?php echo e(Form::label('reject_reason',trans('messages.reason'), ['class' => 'form-control-label'])); ?>
+                                        <?php echo e(Form::text('title',old('title'),['placeholder' => trans('messages.title'),'class' =>'form-control','required'])); ?>
 
-                                <?php echo e(Form::textarea('reject_reason', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.reason') ])); ?>
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6 mt-5">
+                                        <input type='button' id="convert_slug" value="Convert Slug">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
+                                        <?php echo e(Form::text('slug',old('title'),['placeholder' => trans('messages.slug'),'class' =>'form-control','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+
+
+
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                        <?php echo e(Form::select('status',['1' => __('messages.active') , '0' => __('Pending'), '2' => __('messages.rejected') ,'3' => __('Suspended'), '4' => __('InActive')],old('status'),[ 'id' => 'role' ,'class' =>'form-control select2js','required'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6" style="display:none" id="reason">
+                                        <?php echo e(Form::label('reject_reason',trans('messages.reason'), ['class' => 'form-control-label'])); ?>
+
+                                        <?php echo e(Form::textarea('reject_reason', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.reason') ])); ?>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                            <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
+                                            <?php echo e(Form::checkbox('is_featured', $jobsdata->is_featured, null, ['class' => 'custom-control-input' , 'id' => 'is_featured' ])); ?>
+
+                                            <label class="custom-control-label" for="is_featured"><?php echo e(__('messages.set_as_featured')); ?>
+
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <?php else: ?>
                             <input type="hidden" name="status" value="0">
                             <?php endif; ?>
-                        </div>
-                        <?php if(auth()->user()->hasRole(['admin'])): ?>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <div class="custom-control custom-checkbox custom-control-inline">
-                                    <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
-                                    <?php echo e(Form::checkbox('is_featured', $jobsdata->is_featured, null, ['class' => 'custom-control-input' , 'id' => 'is_featured' ])); ?>
 
-                                    <label class="custom-control-label" for="is_featured"><?php echo e(__('messages.set_as_featured')); ?>
 
-                                    </label>
-                                </div>
-                            </div>
                         </div>
 
-                        <?php endif; ?>
+
+
+
                         <?php echo e(Form::submit( trans('messages.save'), ['class'=>'btn btn-md btn-primary float-right'])); ?>
 
                         <?php echo e(Form::close()); ?>
@@ -324,14 +394,18 @@
             </div>
         </div>
     </div>
+    <?php
+    $data = $jobsdata->getJobDistricts->pluck('district_id')->implode(',');
+    ?>
     <?php $__env->startSection('bottom_script'); ?>
     <script type="text/javascript">
         (function($) {
             "use strict";
             $(document).ready(function() {
                 CKEDITOR.replace('editor');
+                var districts = "<?php echo e(isset($data) ? $data : []); ?>";
                 var category_id = "<?php echo e(isset($jobsdata->contact_number_data) ? $jobsdata->contact_number_data : ''); ?>";
-			
+
                 getCustomer(category_id);
 
                 var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 101); ?>";
@@ -342,15 +416,15 @@
 
                 var provider_id = "<?php echo e(isset($jobsdata->provider_id) ? $jobsdata->provider_id : ''); ?>";
                 var service_address_id = "<?php echo e(isset($jobsdata->service_address_id) ? $jobsdata->service_address_id : 0); ?>";
-               // userName(user_id);
-
+                // userName(user_id);
+                getTax(provider_id, districts);
                 $('#state_id').attr('disabled', true);
                 stateName(country_id, state_id);
                 //districtName(state_id, district_id);
                 providerAddress(provider_id, service_address_id);
                 $(document).on('change', '#role', function() {
                     var status = $(this).val();
-                    if (status == '3') {
+                    if (status == '3' || status == '2') {
 
                         document.getElementById("reason").style.display = "block";
                     } else {
@@ -400,6 +474,27 @@
                         });
                         if (state != null) {
                             $("#state_id").val(state).trigger('change');
+                        }
+                    }
+                });
+            }
+
+            function getTax(provider_id, provider_tax_id = "") {
+
+                var provider_tax_route = "<?php echo e(route('ajax-list', [ 'type' => 'district','provider_id' =>''])); ?>" + provider_id;
+                provider_tax_route = provider_tax_route.replace('amp;', '');
+
+                $.ajax({
+                    url: provider_tax_route,
+                    success: function(result) {
+                        $('#tax_id').select2({
+                            width: '100%',
+                            placeholder: "<?php echo e(trans('messages.select_name',['select' => trans('messages.tax')])); ?>",
+                            data: result.results
+                        });
+                        if (provider_tax_id != "") {
+                            // alert("value");
+                            $('#tax_id').val(provider_tax_id.split(',')).trigger('change');
                         }
                     }
                 });
@@ -483,7 +578,7 @@
             }
 
             function getCustomer(mobile_no) {
-				
+
 
                 var get_subcategory_list = "<?php echo e(route('ajax-list', [ 'type' => 'setuser','user_type'=> 'jobs', 'mobile_no' =>''])); ?>" + mobile_no;
                 get_subcategory_list = get_subcategory_list.replace(/&amp;/g, "&");
@@ -495,7 +590,7 @@
 
                         //console.log(datas);
                         if (datas.length == 0) {
-                          //  window.location.href = "<?php echo e(route('jobs.quick')); ?>";
+                            //  window.location.href = "<?php echo e(route('jobs.quick')); ?>";
 
                         } else {
                             if (mobile_no != "") {
@@ -512,6 +607,20 @@
                     }
                 });
             }
+
+            function textToSlug(text) {
+                return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+            }
+
+            var button = document.getElementById("convert_slug");
+
+            button.addEventListener("click", function() {
+                const timestamp = Date.now();
+                var textbox = document.getElementById("title");
+                var slug = textToSlug(textbox.value);
+                var textbox = document.getElementById("slug");
+                textbox.value = slug + "-" + timestamp;
+            });
         })(jQuery);
     </script>
     <?php $__env->stopSection(); ?>
