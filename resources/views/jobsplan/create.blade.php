@@ -31,6 +31,14 @@
                                     {{ Form::select('duration',['1' => '1' , '2' => '2','3' => '3','4' => '4','5' => '5','6' => '6','7' => '7','8' => '8','9' => '9','10' => '10','11' => '11','12' => '12' ],old('duration'),[ 'id' => 'duration' ,'class' =>'form-control select2js','required']) }}
                                 </div>
                                 <div class="form-group col-md-4">
+                                    {{ Form::label('Price',__('Actual Price').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
+                                    {{ Form::number('price',old('price'),['placeholder' => __('Price'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
+                                </div>
+                                <div class="form-group col-md-4">
+                                    {{ Form::label('amount',__('Offer in Percentage(example:10, without % symbol)').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
+                                    {{ Form::number('percentage',old('percentage'),['placeholder' => __('Enter percentage'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
+                                </div>
+                                <div class="form-group col-md-4">
                                     {{ Form::label('amount',__('messages.amount').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
                                     {{ Form::number('amount',old('amount'),['placeholder' => __('messages.amount'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
                                 </div>
@@ -44,14 +52,13 @@
                                         @foreach($plan_type as $value)
                                             <option value="{{$value->value}}" data-type="{{$value->value}}" {{ $plan->plan_type == $value['value']  ? 'selected' : '' }} >{{$value->label}}</option>
                                         @endforeach
-                                    </select>
-                                    
+                                    </select>                                    
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-12 ">
                                     {{ Form::label('description',__('messages.description'), ['class' => 'form-control-label']) }}
-                                    {{ Form::textarea('description', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.description') ]) }}
+                                    {{ Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ]) }}
                                 </div>
                             </div>
                             <div>
@@ -104,6 +111,8 @@
         <script type="text/javascript">
             (function($) {
              $(document).ready(function(){
+
+                CKEDITOR.replace('editor');
                 //     $(".checklist:checkbox").each(function() {
                 //         if ($(this).is(":checked")) {
                 //             showCheckLimitData($(this).attr("id"));

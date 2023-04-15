@@ -19,6 +19,8 @@ class JobsPlanResource extends JsonResource
             'title'             => $this->title,
             'identifier'        => $this->identifier,
             'amount'            => $this->amount,
+            'price'             => $this->price,
+            'percentage'        => $this->percentage,
             'duration'          => $this->duration,
             'description'       => $this->description,
             'plan_type'         => $this->plan_type,

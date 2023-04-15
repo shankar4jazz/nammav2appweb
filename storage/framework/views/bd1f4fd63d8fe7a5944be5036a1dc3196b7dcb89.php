@@ -43,6 +43,18 @@
 
                                 </div>
                                 <div class="form-group col-md-4">
+                                    <?php echo e(Form::label('Price',__('Actual Price').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
+
+                                    <?php echo e(Form::number('price',old('price'),['placeholder' => __('Price'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
+
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <?php echo e(Form::label('amount',__('Offer in Percentage(example:10, without % symbol)').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
+
+                                    <?php echo e(Form::number('percentage',old('percentage'),['placeholder' => __('Enter percentage'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
+
+                                </div>
+                                <div class="form-group col-md-4">
                                     <?php echo e(Form::label('amount',__('messages.amount').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
 
                                     <?php echo e(Form::number('amount',old('amount'),['placeholder' => __('messages.amount'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
@@ -69,7 +81,7 @@
                                 <div class="form-group col-md-12 ">
                                     <?php echo e(Form::label('description',__('messages.description'), ['class' => 'form-control-label'])); ?>
 
-                                    <?php echo e(Form::textarea('description', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.description') ])); ?>
+                                    <?php echo e(Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ])); ?>
 
                                 </div>
                             </div>
@@ -131,6 +143,8 @@
         <script type="text/javascript">
             (function($) {
              $(document).ready(function(){
+
+                CKEDITOR.replace('editor');
                 //     $(".checklist:checkbox").each(function() {
                 //         if ($(this).is(":checked")) {
                 //             showCheckLimitData($(this).attr("id"));

@@ -38,13 +38,25 @@ class JobPlanController extends Controller
         $plan_type = StaticData::where('type','plan_type')->get();
         $plan_limit = StaticData::where('type','plan_limit_type')->get();
         $pageTitle = trans('messages.update_form_title',['form'=>trans('messages.plan')]);
-        
+        $decoded_description = '';
         if($plan == null){
             $pageTitle = trans('messages.add_button_form',['form' => trans('messages.plan')]);
             $plan = new JobsPlans;
         }
-        
-        return view('jobsplan.create', compact('pageTitle' ,'plan' ,'auth_user','plan_type','plan_limit' ));
+        else{
+            $decoded_description = base64_decode($plan->description);
+       
+            $is_base64_encoded = base64_encode(base64_decode($plan->description)) === $plan->description;
+            if ($is_base64_encoded) {
+    
+                $decoded_description ;
+                
+            } else {           
+                // The string is base64 encoded and has been decoded
+                 $decoded_description = $plan->description; // Outputs "Hello World!"
+            }
+        }
+        return view('jobsplan.create', compact('pageTitle' ,'plan' ,'auth_user','plan_type','plan_limit', 'decoded_description' ));
     }
 
     /**
@@ -63,13 +75,17 @@ class JobPlanController extends Controller
         if ($plans !== null && $request->id == null) {
             return  redirect()->back()->withErrors(__('validation.unique',['attribute'=>__('messages.plan')]));
         }
+        $data = base64_encode($requestData['description']);
 
+      
         $planData = [
             'title' => $requestData['title'],
             'amount' => $requestData['amount'],
             'status' => $requestData['status'],
             'duration' => $requestData['duration'],
-            'description' => $requestData['description'],
+            'price' => $requestData['price'],
+            'percentage' => $requestData['percentage'],
+            'description' =>  $data,
             'plan_type' => $requestData['plan_type'],
             'type'=> $requestData['type']
         ];
