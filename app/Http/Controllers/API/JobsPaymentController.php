@@ -15,11 +15,12 @@ class JobsPaymentController extends Controller
     {
         $data = $request->all();
         $data['datetime'] = isset($request->datetime) ? date('Y-m-d H:i:s',strtotime($request->datetime)) : date('Y-m-d H:i:s');
-        $result = JobsPayment::create($data);
-        // $booking = Jobs::find($request->job_id);
-        // $booking->payment_id = $result->id;
-        // $booking->total_amount = $result->total_amount;
-        // $booking->save();
+        $result = JobsPayment::updateOrCreate(['job_id' => $data['job_id']],$data);
+    
+        $booking = Jobs::find($request->job_id);
+        $booking->payment_id = $result->id;
+        $booking->plan_id = $request->plan_id;
+        $booking->save();
         $status_code = 200;
         if($result->payment_status == 'paid'){
             $message = __('messages.payment_completed');
@@ -36,7 +37,7 @@ class JobsPaymentController extends Controller
 
     public function paymentList(Request $request)
     {
-        $payment = Payment::myPayment()->with('booking');
+        $payment = JobsPayment::myPayment()->with('booking');
 
         $per_page = config('constant.PER_PAGE_LIMIT');
         if( $request->has('per_page') && !empty($request->per_page)){

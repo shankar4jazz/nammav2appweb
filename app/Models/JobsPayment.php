@@ -10,7 +10,7 @@ class JobsPayment extends Model
 {
     use HasFactory,SoftDeletes;
     protected $table = 'jobs_payments';
-    protected $fillable = [ 'employer_id', 'job_id', 'datetime', 'discount', 'total_amount', 'payment_type', 'txn_id', 'payment_status', 'other_transaction_detail' ];
+    protected $fillable = [ 'employer_id', 'job_id','plan_id', 'datetime', 'discount', 'total_amount', 'payment_type', 'txn_id','payment_id', 'signature','order_id', 'payment_status', 'order_id'. 'signature', 'payment_id', 'other_transaction_detail' ];
 
     protected $casts = [
         'job_id'    => 'integer',
@@ -51,5 +51,9 @@ class JobsPayment extends Model
         }
 
         return $query;
+    }
+
+    public function jobs(){
+        return $this->belongsTo(Jobs::class,'id', 'payment_id');
     }
 }

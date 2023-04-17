@@ -63,18 +63,16 @@ class JobsController extends Controller
             $jobsdata = new Jobs;
             $jobsdata->country_id = '101';
             $jobsdata->state_id = '35';
-        }
-        else{
+        } else {
             $decoded_description = base64_decode($jobsdata->description);
-       
+
             $is_base64_encoded = base64_encode(base64_decode($jobsdata->description)) === $jobsdata->description;
             if ($is_base64_encoded) {
-    
-                $decoded_description ;
-                
-            } else {           
+
+                $decoded_description;
+            } else {
                 // The string is base64 encoded and has been decoded
-                 $decoded_description = $jobsdata->description; // Outputs "Hello World!"
+                $decoded_description = $jobsdata->description; // Outputs "Hello World!"
             }
         }
 
@@ -113,18 +111,16 @@ class JobsController extends Controller
         if ($jobsdata == null) {
             $pageTitle = __('messages.add_button_form', ['form' => __('messages.jobs')]);
             $jobsdata = new Jobs;
-        }
-        else{
+        } else {
             $decoded_description = base64_decode($jobsdata->description);
-       
+
             $is_base64_encoded = base64_encode(base64_decode($jobsdata->description)) === $jobsdata->description;
             if ($is_base64_encoded) {
-    
-                $decoded_description ;
-                
-            } else {           
+
+                $decoded_description;
+            } else {
                 // The string is base64 encoded and has been decoded
-                 $decoded_description = $jobsdata->description; // Outputs "Hello World!"
+                $decoded_description = $jobsdata->description; // Outputs "Hello World!"
             }
         }
         $jobsdata['contact_number_data'] = $id;
@@ -181,11 +177,11 @@ class JobsController extends Controller
         if ($result->wasRecentlyCreated) {
             $message = trans('messages.save_form', ['form' => trans('messages.jobs')]);
         }
-      
+
         if ($request->is('api/*')) {
             return comman_message_response($message);
         }
-       
+
         return redirect(route('jobs.index'))->withSuccess($message);
     }
 
@@ -206,9 +202,12 @@ class JobsController extends Controller
 
         if (isset($request->user_id)) {
             $data['user_id'] = $request->user_id;
-        } 
-       
+        }
+
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
+
+       
+        $jobs = Jobs::find($result->id);
 
         $result->jobDistricts()->detach();
         $distData =  $request->input('districts');
@@ -219,13 +218,15 @@ class JobsController extends Controller
             $distData = json_encode($request->input('districts'));
 
             $decodedJson = json_decode($distData);
-            $dcode = json_decode($decodedJson, true);
-            foreach ($dcode as $row) {
+           
+            //$dcode = json_decode($decodedJson, true);
+            foreach ($decodedJson as $row) {
+                
 
-                $result->jobDistricts()->sync($row['id'], []);
+                $result->jobDistricts()->sync($row->id, []);
             }
         }
-        
+
 
         storeMediaFile($result, $request->jobs_image, 'jobs_image');
 
@@ -233,10 +234,16 @@ class JobsController extends Controller
         if ($result->wasRecentlyCreated) {
             $message = trans('messages.save_form', ['form' => trans('messages.jobs')]);
         }
+
+      
+       
+        
+
+       
         if ($request->is('api/*')) {
-            return comman_message_response($message);
+            return  comman_custom_response($jobs, 200);
         }
-        return redirect(route('jobs.index'))->withSuccess($message);
+        return redirect(route('jobs.index'))->withSuccess($jobs);
     }
 
     /**

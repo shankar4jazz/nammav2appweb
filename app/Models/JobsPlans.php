@@ -16,9 +16,13 @@ class JobsPlans extends Model
         'amount'    => 'double',
         'status'    => 'integer',
     ];
+    public function jobs(){
+        return $this->belongsTo(Jobs::class,'id', 'plan_id');
+    }
     public function planlimit(){
         return $this->belongsTo(PlanLimit::class,'id', 'plan_id');
     }
+
     public function staticdata(){
         return $this->belongsTo(StaticData::class,'plan_type', 'id');
     }

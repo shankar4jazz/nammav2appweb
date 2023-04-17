@@ -319,13 +319,10 @@
                                     <?php endif; ?>
                                 </div>
                             </div>
-
                             <?php if(auth()->user()->hasRole(['admin'])): ?>
-
                             <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:lightpink;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Admin Section (For offical use only) </h3>
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Job Title and Slug generator </h3>
                                 <div class="row">
-
                                     <div class="form-group col-md-6">
                                         <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
@@ -344,8 +341,6 @@
                                         <small class="help-block with-errors text-danger"></small>
                                     </div>
 
-
-
                                     <div class="form-group col-md-6">
                                         <?php echo e(Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
@@ -359,7 +354,6 @@
                                         <?php echo e(Form::textarea('reject_reason', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.reason') ])); ?>
 
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
@@ -588,9 +582,9 @@
                     success: function(result) {
                         var datas = result.results;
 
-                        //console.log(datas);
+                        console.log(datas.length);
                         if (datas.length == 0) {
-                            //  window.location.href = "<?php echo e(route('jobs.quick')); ?>";
+                              window.location.href = "<?php echo e(route('jobs.quick')); ?>";
 
                         } else {
                             if (mobile_no != "") {

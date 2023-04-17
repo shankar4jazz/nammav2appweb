@@ -515,9 +515,9 @@
                     success: function(result) {
                         var datas = result.results;
 
-                        //console.log(datas);
+                        console.log(datas.length);
                         if (datas.length == 0) {
-                            //  window.location.href = "{{ route('jobs.quick') }}";
+                              window.location.href = "{{ route('jobs.quick') }}";
 
                         } else {
                             if (mobile_no != "") {

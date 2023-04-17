@@ -28,12 +28,24 @@ class JobsController extends Controller
                 $per_page = $booking->count();
             }
         }
+
+        $per_page = 25;
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
         $orderBy = 'desc';
         if ($request->has('orderby') && !empty($request->orderby)) {
             $orderBy = $request->orderby;
         }
 
-        $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
         $items = JobsResource::collection($booking);
 
         // $response = [
@@ -187,12 +199,24 @@ class JobsController extends Controller
                 $per_page = $booking->count();
             }
         }
+
+        $per_page = 25;
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
         $orderBy = 'desc';
         if ($request->has('orderby') && !empty($request->orderby)) {
             $orderBy = $request->orderby;
         }
 
-        $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
         $items = JobsResource::collection($booking);
 
         // $response = [
