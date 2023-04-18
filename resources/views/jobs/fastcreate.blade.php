@@ -53,117 +53,8 @@
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
 
-                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:blue">Job Details</h3>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::text('job_role',old('job_role'),['placeholder' => trans('messages.job_role'),'class' =>'form-control','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('tamil_job_role',trans('தமிழில் வேலைப்பெயர்(Job Role)').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::text('tamil_job_role',old('tamil_job_role'),['placeholder' => trans('வேலைப்பெயர்'),'class' =>'form-control','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('jobcategory_id', __('messages.select_name',[ 'select' => __('messages.jobs_category') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                        <br />
-                                        {{ Form::select('jobcategory_id', [optional($jobsdata->category)->id => optional($jobsdata->category)->name], optional($jobsdata->category)->id, [
-                                            'class' => 'select2js form-group category',
-                                            'required',
-                                            'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.jobs_category') ]),
-                                            'data-ajax--url' => route('ajax-list', ['type' => 'jobs-category']),
-                                        ]) }}
-
-                                    </div>
-
-
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::number('vacancy',old('vacancy'),['placeholder' => trans('messages.vacancy'),'class' =>'form-control','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Employement Details</h3>
-                                <div class="row">
-
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('experience',trans('messages.experience').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                        {{ Form::select('experience',['0' => __('messages.exp_0') , '1' => __('messages.exp_1'), '2' => __('messages.exp_2') ,'3' => __('messages.exp_3'), '4' => __('messages.exp_4'), '5' => __('messages.exp_5') ],old('status'),[ 'id' => 'exp' ,'class' =>'form-control select2js','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('education',trans('messages.education').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                        {{ Form::select('education',['1' => __('messages.edu_1') , '0' => __('messages.edu_0'), '2' => __('messages.edu_2') ,'3' => __('messages.edu_3') ],old('education'),[ 'id' => 'edu' ,'class' =>'form-control select2js','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-
-
-
-
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('gender',trans('messages.gender').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                        {{ Form::select('gender',['0' => __('messages.gender_0') , '1' => __('messages.gender_1'), '2' => __('messages.gender_2')  ],old('gender'),[ 'id' => 'gender' ,'class' =>'form-control select2js','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                        {{ Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class=" col-md-6" style="border: 1px solid #ccc; padding: 10px; background-color:lightyellow;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Salary Details</h3>
-                                <div class="row">
-
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('min_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('max_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class=" col-md-6" style="border: 1px solid #ccc; padding: 10px; background-color:lightyellow;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Date Details</h3>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('start_date',__('messages.start_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control min-datetimepicker','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('end_date',__('messages.end_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::text('end_date',old('end_date'),['placeholder' => __('messages.end_date'),'class' =>'form-control end-datetimepicker','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Job Description</h3>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        {{ Form::label('description',trans('messages.description'), ['class' => 'form-control-label']) }}
-                                        {{ Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ]) }}
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;">Company Details</h3>
+                            <div class=" col-md-12" style="margin-bottom: 25px;border: 1px solid #ccc; padding: 25px; background-color:honeydew;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 25px;">Company Details</h3>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         {{ Form::label('company_name',trans('messages.company_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
@@ -228,18 +119,118 @@
                                 </div>
                             </div>
 
-                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:honeydew">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:midnightblue">Application received from following city</h3>
+                            <div class=" col-md-12" style="margin-bottom: 25px;border: 1px solid #ccc; padding: 25px; background-color:#ccc;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:blue">Job Details</h3>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('job_role',trans('messages.job_role').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                        {{ Form::text('job_role',old('job_role'),['placeholder' => trans('messages.job_role'),'class' =>'form-control','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('tamil_job_role',trans('தமிழில் வேலைப்பெயர்(Job Role)').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                        {{ Form::text('tamil_job_role',old('tamil_job_role'),['placeholder' => trans('வேலைப்பெயர்'),'class' =>'form-control','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('jobcategory_id', __('messages.select_name',[ 'select' => __('messages.jobs_category') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
+                                        <br />
+                                        {{ Form::select('jobcategory_id', [optional($jobsdata->category)->id => optional($jobsdata->category)->name], optional($jobsdata->category)->id, [
+                                            'class' => 'select2js form-group category',
+                                            'required',
+                                            'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.jobs_category') ]),
+                                            'data-ajax--url' => route('ajax-list', ['type' => 'jobs-category']),
+                                        ]) }}
+
+                                    </div>
+
+
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                        {{ Form::number('vacancy',old('vacancy'),['placeholder' => trans('messages.vacancy'),'class' =>'form-control','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-12" style="margin-bottom: 25px;border: 1px solid #ccc; padding: 25px; background-color:honeydew;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Employement Details</h3>
                                 <div class="row">
 
                                     <div class="form-group col-md-6">
-                                        <label class="form-control-label" for="jobs_image">{{ __('messages.image') }} </label>
-                                        <div class="custom-file">
-                                            <input type="file" name="jobs_image" class="custom-file-input" accept="image/*">
-                                            <label class="custom-file-label upload-label">{{ __('messages.choose_file',['file' =>  __('messages.image') ]) }}</label>
-                                        </div>
-                                        <span class="selected_file"></span>
+                                        {{ Form::label('experience',trans('messages.experience').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
+                                        {{ Form::select('experience',['0' => __('messages.exp_0') , '1' => __('messages.exp_1'), '2' => __('messages.exp_2') ,'3' => __('messages.exp_3'), '4' => __('messages.exp_4'), '5' => __('messages.exp_5') ],old('status'),[ 'id' => 'exp' ,'class' =>'form-control select2js','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
                                     </div>
+
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('education',trans('messages.education').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
+                                        {{ Form::select('education',['1' => __('messages.edu_1') , '0' => __('messages.edu_0'), '2' => __('messages.edu_2') ,'3' => __('messages.edu_3') ],old('education'),[ 'id' => 'edu' ,'class' =>'form-control select2js','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+
+
+
+
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('gender',trans('messages.gender').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
+                                        {{ Form::select('gender',['0' => __('messages.gender_0') , '1' => __('messages.gender_1'), '2' => __('messages.gender_2')  ],old('gender'),[ 'id' => 'gender' ,'class' =>'form-control select2js','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
+                                        {{ Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-6" style="margin-bottom: 25px;border: 1px solid #ccc; padding: 10px; background-color:lightyellow;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Salary Details</h3>
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('min_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                        {{ Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('max_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                        {{ Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-6" style="margin-bottom: 25px;border: 1px solid #ccc; padding: 10px; background-color:lightyellow;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Date Details</h3>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('start_date',__('messages.start_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                        {{ Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control min-datetimepicker','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        {{ Form::label('end_date',__('messages.end_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
+                                        {{ Form::text('end_date',old('end_date'),['placeholder' => __('messages.end_date'),'class' =>'form-control end-datetimepicker','required']) }}
+                                        <small class="help-block with-errors text-danger"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 15px;border: 1px solid #ccc; padding: 25px;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:darkslategrey">Job Description</h3>
+                                <div class="row offset-md-2">
+                                    <div class="form-group  col-md-10">
+                                        {{ Form::label('description',trans('messages.description'), ['class' => 'form-control-label']) }}
+                                        {{ Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ]) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class=" col-md-12" style="margin-bottom: 15px;border: 1px solid #ccc; padding: 25px; background-color:honeydew;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:midnightblue">Application received from following city</h3>
+                                <div class="row">
+
+                                   
                                     <div class="form-group col-md-6">
                                         {{ Form::label('name', __('messages.select_name',[ 'select' => __('districts for jobs') ]),['class'=>'form-control-label'],false) }}
                                         <br />
@@ -251,6 +242,23 @@
                                     ]) }}
 
                                     </div>
+                                   
+                                </div>
+                            </div>
+
+                            <div class=" col-md-12" style="margin-bottom: 15px;border: 1px solid #ccc; padding: 25px; background-color:#ccc;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:midnightblue">Banner image </h3>
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="jobs_image">{{ __('messages.image') }} </label>
+                                        <div class="custom-file">
+                                            <input type="file" name="jobs_image" class="custom-file-input" accept="image/*">
+                                            <label class="custom-file-label upload-label">{{ __('messages.choose_file',['file' =>  __('messages.image') ]) }}</label>
+                                        </div>
+                                        <span class="selected_file"></span>
+                                    </div>
+                                    
                                     @if(getMediaFileExit($jobsdata, 'jobs_image'))
                                     <div class="col-md-2 mb-2">
                                         @php
@@ -265,22 +273,22 @@
                                 </div>
                             </div>
                             @if (auth()->user()->hasRole(['admin']))
-                            <div class=" col-md-12" style="border: 1px solid #ccc; padding: 10px; background-color:lightpink;">
-                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Job Title and Slug generator </h3>
+                            <div class=" col-md-12" style="margin-bottom: 15px;border: 1px solid #ccc; padding: 25px; background-color:lightcyan;">
+                                <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:crimson">Job Title </h3>
                                 <div class="row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
                                         {{ Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                         {{ Form::text('title',old('title'),['placeholder' => trans('messages.title'),'class' =>'form-control','required']) }}
                                         <small class="help-block with-errors text-danger"></small>
                                     </div>
-                                    <div class="form-group col-md-6 mt-5">
+                                    <!-- <div class="form-group col-md-6 mt-5">
                                         <input type='button' id="convert_slug" value="Convert Slug">
-                                    </div>
-                                    <div class="form-group col-md-6">
+                                    </div> -->
+                                    <!-- <div class="form-group col-md-6">
                                         {{ Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::text('slug',old('title'),['placeholder' => trans('messages.slug'),'class' =>'form-control','required']) }}
+                                        {{ Form::text('slug',old('slug'),['placeholder' => trans('messages.slug'),'class' =>'form-control','required']) }}
                                         <small class="help-block with-errors text-danger"></small>
-                                    </div>
+                                    </div> -->
 
                                     <div class="form-group col-md-6">
                                         {{ Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}

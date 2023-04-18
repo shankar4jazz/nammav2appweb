@@ -137,7 +137,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 {{ Form::label('start_date',__('messages.start_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control min-datetimepicker','required']) }}
+                                {{ Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control end-datetimepicker','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group col-md-4">

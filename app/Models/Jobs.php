@@ -97,7 +97,7 @@ class Jobs extends Model implements HasMedia
     }
     public function jobsPlans()
     {
-        return $this->belongsTo(jobsPlans::class, 'plan_id', 'id');
+        return $this->belongsTo(JobsPlans::class, 'plan_id', 'id');
     }
     public function jobsPayment()
     {

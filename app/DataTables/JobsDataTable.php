@@ -10,6 +10,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Carbon;
 
 class JobsDataTable extends DataTable
 {
@@ -24,6 +25,9 @@ class JobsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('d-m-Y h:i:s');
+            })
             ->editColumn('user_id' , function ($service){
                 return ($service->user != null && isset($service->user)) ? $service->user->display_name."(".$service->user->contact_number.")": '';
             })
@@ -118,14 +122,8 @@ class JobsDataTable extends DataTable
             //     ->title(__('messages.featured')),
             // Column::make('status'),
             
-            Column::make('created_at')
-            ->render(function ($value) {
-                if ($value && is_string($value)) {
-                    return date('Y-m-d', strtotime($value));
-                } else {
-                    return '';
-                }
-            }),
+            Column::make('created_at'),
+            
             Column::make('status_s')
             ->title('Jobs Status'),
             Column::computed('action')

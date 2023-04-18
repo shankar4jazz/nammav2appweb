@@ -18,7 +18,6 @@ class JobsResource extends JsonResource
         $user = new UserResource($this->user);
         return [
             'id'            => $this->id,
-
             'title'         => $this->title,
             'slug'          => $this->slug,
             'job_role'      => $this->job_role,
@@ -33,10 +32,10 @@ class JobsResource extends JsonResource
             'max_salary'    => $this->max_salary,
             'description'   => $this->description,
             'vacancy'       => $this->vacancy,
-            // 'country_id'    => $this->country_id,
+            //'country_id'    => $this->country_id,
             'state_id'      => $this->state_id,
-            // 'district_id'   => $this->district_id,
-            // 'city_id'       => $this->city_id,
+            //'district_id'   => $this->district_id,
+            //'city_id'       => $this->city_id,
             'state_name'    => optional($this->state)->name,
             'district_id'   => $this->district_id ?? 0,
             'district_name'    => optional($this->district)->name ,

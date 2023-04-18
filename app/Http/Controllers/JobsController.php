@@ -219,11 +219,12 @@ class JobsController extends Controller
 
             $decodedJson = json_decode($distData);
            
-            //$dcode = json_decode($decodedJson, true);
-            foreach ($decodedJson as $row) {
+            $dcode = json_decode($decodedJson, true);
+	
+            foreach ($dcode as $row) {
                 
 
-                $result->jobDistricts()->sync($row->id, []);
+                $result->jobDistricts()->sync($row['id'], []);
             }
         }
 

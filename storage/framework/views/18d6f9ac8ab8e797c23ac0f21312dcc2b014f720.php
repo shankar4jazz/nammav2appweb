@@ -178,7 +178,7 @@
                             <div class="form-group col-md-4">
                                 <?php echo e(Form::label('start_date',__('messages.start_date').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control min-datetimepicker','required'])); ?>
+                                <?php echo e(Form::text('start_date',old('start_date'),['placeholder' => __('messages.start_date'),'class' =>'form-control end-datetimepicker','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
