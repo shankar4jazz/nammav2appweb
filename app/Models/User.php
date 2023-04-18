@@ -266,6 +266,10 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Bank::class, 'provider_id', 'id');
     }
+    public function jobseeker()
+    {
+        return $this->hasMany(JobCallActivities::class, 'jobseeker_id', 'id');
+    }
     public function scopeList($query)
     {
         return $query->orderBy('deleted_at', 'asc');

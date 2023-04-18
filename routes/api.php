@@ -24,6 +24,7 @@ require __DIR__.'/admin-api.php';
 Route::get('jobs-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
 Route::post('jobs-save-payment',[API\JobsPaymentController::class, 'savePayment']);
 Route::post('save-call-activities',[API\JobCallActivitiesController::class, 'saveCallActivities']);
+Route::post('get-call-activities',[API\JobCallActivitiesController::class, 'getCallActivitiesByJobId']);
 //news
 Route::get('news-category-list',[API\NewsCategoryController::class,'getCategoryList']);
 Route::get('news-list',[ API\NewsController::class, 'getNewsList' ]);

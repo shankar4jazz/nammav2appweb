@@ -38,6 +38,7 @@
                         <div class="row">
 
                             <input type="hidden" id="customer_id" name="user_id" value="{{$jobsdata->customer_id}}">
+                            <input type="hidden" id="city_name" name="city_name" value="">
 
                             <div class="form-group col-md-6">
 
@@ -281,14 +282,7 @@
                                         {{ Form::text('title',old('title'),['placeholder' => trans('messages.title'),'class' =>'form-control','required']) }}
                                         <small class="help-block with-errors text-danger"></small>
                                     </div>
-                                    <!-- <div class="form-group col-md-6 mt-5">
-                                        <input type='button' id="convert_slug" value="Convert Slug">
-                                    </div> -->
-                                    <!-- <div class="form-group col-md-6">
-                                        {{ Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                        {{ Form::text('slug',old('slug'),['placeholder' => trans('messages.slug'),'class' =>'form-control','required']) }}
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div> -->
+                                   
 
                                     <div class="form-group col-md-6">
                                         {{ Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
@@ -390,6 +384,15 @@
                     var provider_id = $(this).val();
                     $('#service_address_id').empty();
                     providerAddress(provider_id, service_address_id);
+                })
+
+                $(document).on('change', '#city_id', function() {
+                    
+                    
+                    let selectedCityName = $(this).find('option:selected').text();
+                    $('#city_name').val(selectedCityName);
+                    
+                    
                 })
 
             })
@@ -543,19 +546,19 @@
                 });
             }
 
-            function textToSlug(text) {
-                return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
-            }
+            // function textToSlug(text) {
+            //     return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+            // }
 
-            var button = document.getElementById("convert_slug");
+            // var button = document.getElementById("convert_slug");
 
-            button.addEventListener("click", function() {
-                const timestamp = Date.now();
-                var textbox = document.getElementById("title");
-                var slug = textToSlug(textbox.value);
-                var textbox = document.getElementById("slug");
-                textbox.value = slug + "-" + timestamp;
-            });
+            // button.addEventListener("click", function() {
+            //     const timestamp = Date.now();
+            //     var textbox = document.getElementById("title");
+            //     var slug = textToSlug(textbox.value);
+            //     var textbox = document.getElementById("slug");
+            //     textbox.value = slug + "-" + timestamp;
+            // });
         })(jQuery);
     </script>
     @endsection

@@ -158,6 +158,11 @@ class JobsController extends Controller
         }
         $data['is_featured'] = 0;
         $data['description'] = base64_encode($request->description);
+        
+        $slug_text = $data['job_role'] . ' in ' . $data['company_name']. ' ' . $data['city_name'] .' '. time();
+        $data['slug'] = $this->convertSlug($slug_text);
+      
+
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 
         $result->jobDistricts()->detach();
@@ -206,7 +211,7 @@ class JobsController extends Controller
 
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 
-       
+
         $jobs = Jobs::find($result->id);
 
         $result->jobDistricts()->detach();
@@ -218,11 +223,11 @@ class JobsController extends Controller
             $distData = json_encode($request->input('districts'));
 
             $decodedJson = json_decode($distData);
-           
+
             $dcode = json_decode($decodedJson, true);
-	
+
             foreach ($dcode as $row) {
-                
+
 
                 $result->jobDistricts()->sync($row['id'], []);
             }
@@ -236,11 +241,11 @@ class JobsController extends Controller
             $message = trans('messages.save_form', ['form' => trans('messages.jobs')]);
         }
 
-      
-       
-        
 
-       
+
+
+
+
         if ($request->is('api/*')) {
             return  comman_custom_response($jobs, 200);
         }
@@ -332,5 +337,14 @@ class JobsController extends Controller
             return comman_message_response($msg);
         }
         return comman_custom_response(['message' => $msg, 'status' => true]);
+    }
+
+    private function convertSlug($text)
+    {
+
+        $text = strtolower($text);
+        $text = preg_replace('/\s+/', '-', $text);
+        $text = preg_replace('/[^\w-]+/', '', $text);
+        return $text;
     }
 }

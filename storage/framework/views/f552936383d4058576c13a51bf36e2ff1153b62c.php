@@ -45,6 +45,7 @@
                         <div class="row">
 
                             <input type="hidden" id="customer_id" name="user_id" value="<?php echo e($jobsdata->customer_id); ?>">
+                            <input type="hidden" id="city_name" name="city_name" value="">
 
                             <div class="form-group col-md-6">
 
@@ -457,6 +458,15 @@
                     var provider_id = $(this).val();
                     $('#service_address_id').empty();
                     providerAddress(provider_id, service_address_id);
+                })
+
+                $(document).on('change', '#city_id', function() {
+                    
+                    
+                    let selectedCityName = $(this).find('option:selected').text();
+                    $('#city_name').val(selectedCityName);
+                    
+                    
                 })
 
             })

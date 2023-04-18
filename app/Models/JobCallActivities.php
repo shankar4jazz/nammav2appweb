@@ -20,7 +20,10 @@ class JobCallActivities extends Model
     ];
 
     public function jobs(){
-        return $this->hasMany(Jobs::class, 'job_id','id');
+        return $this->belongsTo(Jobs::class, 'job_id','id');
+    }
+    public function jobseeker(){
+        return $this->belongsTo(User::class, 'jobseeker_id','id');
     }
     
 }
