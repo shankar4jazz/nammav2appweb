@@ -123,6 +123,7 @@ class JobsController extends Controller
                 $decoded_description = $jobsdata->description; // Outputs "Hello World!"
             }
         }
+      
         $jobsdata['contact_number_data'] = $id;
 
 
@@ -158,10 +159,12 @@ class JobsController extends Controller
         }
         $data['is_featured'] = 0;
         $data['description'] = base64_encode($request->description);
+
+        if(isset($data['city_name'])){
         
         $slug_text = $data['job_role'] . ' in ' . $data['company_name']. ' ' . $data['city_name'] .' '. time();
         $data['slug'] = $this->convertSlug($slug_text);
-      
+        }
 
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 

@@ -16,7 +16,7 @@ class JobCallAcitvitiesResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'job_id'          => $this->job_id,
+            'job_id'          => $this->jobs_id,
             'jobseeker_id'        => $this->jobseeker_id,
             'jobseeker_name'        =>optional($this->jobseeker)->first_name,
             'activity_type'   => $this->activity_type,

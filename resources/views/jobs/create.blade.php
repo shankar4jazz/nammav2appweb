@@ -29,11 +29,7 @@
                             <div class="form-group col-md-1 mt-5">
                                 <input type='button' id="convert_slug" value="Convert Slug">
                             </div>
-                            <div class="form-group col-md-5">
-                                {{ Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::text('slug',old('slug'),['placeholder' => trans('messages.slug'), 'id' =>'slug', 'class' =>'form-control','required']) }}
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
+                          
                         </div>
                         @endif
                         <div class="row">
@@ -58,7 +54,7 @@
                             @else
                             <input type="hidden" name="user_id" value="{{$jobsdata->user_id}}">
                             @endif
-
+                            <input type="hidden" id="city_name" name="city_name" value="{{$jobsdata->city_name}}">
                             <div class="form-group col-md-6">
                                 {{ Form::label('contact number',trans('Contact number').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::number('contact_number',old('contact_number'),['placeholder' => trans('Enter Contact Number'),'class' =>'form-control','required']) }}
@@ -283,6 +279,8 @@
                 var districts = "{{ isset($data) ? $data : [] }}";
                 //console.log(districts);
 
+                let selectedCityName = $("#city_id").find('option:selected').text();                
+                $('#city_name').val(selectedCityName);
 
                 var country_id = "{{ isset($jobsdata->country_id) ? $jobsdata->country_id : 101 }}";
                 var user_id = "{{ isset($jobsdata->user_id) ? $jobsdata->user_id : 0 }}";
@@ -413,6 +411,8 @@
                         });
                         if (city != null || city != 0) {
                             $("#city_id").val(city).trigger('change');
+                            let selectedCityName = $("select[name='city_id']").find('option:selected').text();			
+                			$('#city_name').val(selectedCityName);
                         }
                     }
                 });
@@ -461,6 +461,15 @@
                     }
                 });
             }
+
+            $(document).on('change', '#city_id', function() {
+
+
+                let selectedCityName = $(this).find('option:selected').text();
+                $('#city_name').val(selectedCityName);
+
+
+            })
 
             function textToSlug(text) {
                 return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');

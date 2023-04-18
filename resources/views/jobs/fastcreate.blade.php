@@ -38,7 +38,7 @@
                         <div class="row">
 
                             <input type="hidden" id="customer_id" name="user_id" value="{{$jobsdata->customer_id}}">
-                            <input type="hidden" id="city_name" name="city_name" value="">
+                            <input type="hidden" id="city_name" name="city_name" value="{{$jobsdata->city_name}}">
 
                             <div class="form-group col-md-6">
 
@@ -336,6 +336,9 @@
                 var category_id = "{{ isset($jobsdata->contact_number_data) ? $jobsdata->contact_number_data : '' }}";
 
                 getCustomer(category_id);
+
+                let selectedCityName = $("#city_id").find('option:selected').text();
+                $('#city_name').val(selectedCityName);
 
                 var country_id = "{{ isset($jobsdata->country_id) ? $jobsdata->country_id : 101 }}";
                 var user_id = "{{ isset($jobsdata->user_id) ? $jobsdata->user_id : 0 }}";
