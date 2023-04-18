@@ -26,9 +26,9 @@
                                 {{ Form::text('title',old('title'),['placeholder' => trans('messages.title'), 'id' =>'title', 'class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-1 mt-5">
+                            <!-- <div class="form-group col-md-1 mt-5">
                                 <input type='button' id="convert_slug" value="Convert Slug">
-                            </div>
+                            </div> -->
                           
                         </div>
                         @endif

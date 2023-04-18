@@ -81,6 +81,8 @@ class JobPlanController extends Controller
         $planData = [
             'title' => $requestData['title'],
             'amount' => $requestData['amount'],
+            'tax' => $requestData['tax'],
+            'total_amount' => $requestData['total_amount'],
             'status' => $requestData['status'],
             'duration' => $requestData['duration'],
             'price' => $requestData['price'],

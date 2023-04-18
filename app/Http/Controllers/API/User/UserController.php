@@ -795,7 +795,7 @@ class UserController extends Controller
                     $user_data->login_attempts = 0;
                     $user_data->update();
                     $success['user_role'] = $user_data->getRoleNames();
-
+                    $user_data['companies'] = [];
                     $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
                     $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
                     $is_verify_provider = false;

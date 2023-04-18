@@ -54,10 +54,23 @@
                                     <?php echo e(Form::number('percentage',old('percentage'),['placeholder' => __('Enter percentage'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
 
                                 </div>
+                                
                                 <div class="form-group col-md-4">
                                     <?php echo e(Form::label('amount',__('messages.amount').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
 
                                     <?php echo e(Form::number('amount',old('amount'),['placeholder' => __('messages.amount'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
+
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <?php echo e(Form::label('tax',__('Tax in Percentage(example:10, without % symbol)').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
+
+                                    <?php echo e(Form::number('tax',old('tax'),['placeholder' => __('Enter tax percentage'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
+
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <?php echo e(Form::label('total_amount',__('Total Amount').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
+
+                                    <?php echo e(Form::number('total_amount',old('total_amount'),['placeholder' => __('Total Amount'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
 
                                 </div>
                                 <div class="form-group col-md-4">
@@ -73,8 +86,7 @@
                                         <?php $__currentLoopData = $plan_type; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($value->value); ?>" data-type="<?php echo e($value->value); ?>" <?php echo e($plan->plan_type == $value['value']  ? 'selected' : ''); ?> ><?php echo e($value->label); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </select>
-                                    
+                                    </select>                                    
                                 </div>
                             </div>
                             <div class="row">

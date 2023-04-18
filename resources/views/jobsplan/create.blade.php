@@ -38,9 +38,18 @@
                                     {{ Form::label('amount',__('Offer in Percentage(example:10, without % symbol)').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
                                     {{ Form::number('percentage',old('percentage'),['placeholder' => __('Enter percentage'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
                                 </div>
+                                
                                 <div class="form-group col-md-4">
                                     {{ Form::label('amount',__('messages.amount').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
                                     {{ Form::number('amount',old('amount'),['placeholder' => __('messages.amount'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
+                                </div>
+                                <div class="form-group col-md-4">
+                                    {{ Form::label('tax',__('Tax in Percentage(example:10, without % symbol)').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
+                                    {{ Form::number('tax',old('tax'),['placeholder' => __('Enter tax percentage'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
+                                </div>
+                                <div class="form-group col-md-4">
+                                    {{ Form::label('total_amount',__('Total Amount').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
+                                    {{ Form::number('total_amount',old('total_amount'),['placeholder' => __('Total Amount'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
                                 </div>
                                 <div class="form-group col-md-4">
                                     {{ Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
