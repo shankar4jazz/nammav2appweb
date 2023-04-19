@@ -765,7 +765,6 @@ class UserController extends Controller
 
             if ($user_data == null) {
 
-
                 $otp_response = [
                     'status' => true,
                     "otp_status" => false,
