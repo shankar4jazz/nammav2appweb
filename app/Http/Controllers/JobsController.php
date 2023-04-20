@@ -151,13 +151,21 @@ class JobsController extends Controller
         if ($request->has('is_featured')) {
             $data['is_featured'] = 1;
         }
+        $data['disclose_company'] = 0;
+        if ($request->has('disclose_company')) {
+            $data['disclose_company'] = 1;
+        }
+        $data['disclose_salary'] = 0;
+        if ($request->has('disclose_salary')) {
+            $data['disclose_salary'] = 1;
+        }
 
         if (isset($request->user_id)) {
             $data['user_id'] = $request->user_id;
         } else {
             $data['user_id'] =  $auth_user->id;
         }
-        $data['is_featured'] = 0;
+        
         $data['description'] = base64_encode($request->description);
 
         if(isset($data['city_name'])){

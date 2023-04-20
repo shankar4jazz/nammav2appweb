@@ -35,16 +35,10 @@
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-1 mt-5">
+                            <!-- <div class="form-group col-md-1 mt-5">
                                 <input type='button' id="convert_slug" value="Convert Slug">
-                            </div>
-                            <div class="form-group col-md-5">
-                                <?php echo e(Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                <?php echo e(Form::text('slug',old('slug'),['placeholder' => trans('messages.slug'), 'id' =>'slug', 'class' =>'form-control','required'])); ?>
-
-                                <small class="help-block with-errors text-danger"></small>
-                            </div>
+                            </div> -->
+                          
                         </div>
                         <?php endif; ?>
                         <div class="row">
@@ -72,7 +66,7 @@
                             <?php else: ?>
                             <input type="hidden" name="user_id" value="<?php echo e($jobsdata->user_id); ?>">
                             <?php endif; ?>
-
+                            <input type="hidden" id="city_name" name="city_name" value="<?php echo e($jobsdata->city_name); ?>">
                             <div class="form-group col-md-6">
                                 <?php echo e(Form::label('contact number',trans('Contact number').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
@@ -97,19 +91,30 @@
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <?php echo e(Form::label('company_name',trans('messages.company_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
                                 <?php echo e(Form::text('company_name',old('company_name'),['placeholder' => trans('messages.company_name'),'class' =>'form-control','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <?php echo e(Form::label('tamil_company_name',trans('தமிழில் கம்பெனி பெயர்').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
                                 <?php echo e(Form::text('tamil_company_name',old('tamil_company_name'),['placeholder' => trans('கம்பெனி பெயர்'),'class' =>'form-control','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
+                            </div>
+
+                            <div class="form-group col-md-4 mt-5">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
+                                    <?php echo e(Form::checkbox('disclose_company', $jobsdata->disclose_company, null, ['class' => 'custom-control-input' , 'id' => 'disclose_company' ])); ?>
+
+                                    <label class="custom-control-label" for="disclose_company"><?php echo e(__('Disclose Company')); ?>
+
+                                    </label>
+                                </div>
                             </div>
 
                             <div class="form-group col-md-4">
@@ -140,34 +145,46 @@
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 <?php echo e(Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
                                 <?php echo e(Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 <?php echo e(Form::label('experience',trans('messages.experience').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
                                 <?php echo e(Form::select('experience',['0' => __('messages.exp_0') , '1' => __('messages.exp_1'), '2' => __('messages.exp_2') ,'3' => __('messages.exp_3'), '4' => __('messages.exp_4'), '5' => __('messages.exp_5') ],old('status'),[ 'id' => 'exp' ,'class' =>'form-control select2js','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-4">
                                 <?php echo e(Form::label('min_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control','required'])); ?>
+                                <?php echo e(Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-4">
                                 <?php echo e(Form::label('max_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
-                                <?php echo e(Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control','required'])); ?>
+                                <?php echo e(Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
+                            
+                            <div class="form-group col-md-4 mt-5">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
+                                    <?php echo e(Form::checkbox('disclose_salary', $jobsdata->disclose_salary, null, ['class' => 'custom-control-input' , 'id' => 'disclose_salary' ])); ?>
+
+                                    <label class="custom-control-label" for="disclose_salary"><?php echo e(__('Disclose Salary')); ?>
+
+                                    </label>
+                                </div>
+                            </div>
+                       
                             <div class="form-group col-md-4">
                                 <?php echo e(Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
@@ -351,6 +368,8 @@
                 var districts = "<?php echo e(isset($data) ? $data : []); ?>";
                 //console.log(districts);
 
+                let selectedCityName = $("#city_id").find('option:selected').text();                
+                $('#city_name').val(selectedCityName);
 
                 var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 101); ?>";
                 var user_id = "<?php echo e(isset($jobsdata->user_id) ? $jobsdata->user_id : 0); ?>";
@@ -481,6 +500,8 @@
                         });
                         if (city != null || city != 0) {
                             $("#city_id").val(city).trigger('change');
+                            let selectedCityName = $("select[name='city_id']").find('option:selected').text();			
+                			$('#city_name').val(selectedCityName);
                         }
                     }
                 });
@@ -529,6 +550,15 @@
                     }
                 });
             }
+
+            $(document).on('change', '#city_id', function() {
+
+
+                let selectedCityName = $(this).find('option:selected').text();
+                $('#city_name').val(selectedCityName);
+
+
+            })
 
             function textToSlug(text) {
                 return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');

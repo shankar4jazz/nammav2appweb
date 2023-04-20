@@ -71,6 +71,8 @@ class JobsResource extends JsonResource
                     // Add other district fields as needed
                 ];
             }),
+            'disclose_salary' => $this->disclose_salary,
+            'disclose_company' => $this->disclose_company,
         ];
     }
 }

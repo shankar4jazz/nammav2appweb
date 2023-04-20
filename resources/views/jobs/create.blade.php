@@ -73,15 +73,24 @@
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 {{ Form::label('company_name',trans('messages.company_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('company_name',old('company_name'),['placeholder' => trans('messages.company_name'),'class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 {{ Form::label('tamil_company_name',trans('தமிழில் கம்பெனி பெயர்').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('tamil_company_name',old('tamil_company_name'),['placeholder' => trans('கம்பெனி பெயர்'),'class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
+                            </div>
+
+                            <div class="form-group col-md-4 mt-5">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
+                                    {{ Form::checkbox('disclose_company', $jobsdata->disclose_company, null, ['class' => 'custom-control-input' , 'id' => 'disclose_company' ]) }}
+                                    <label class="custom-control-label" for="disclose_company">{{ __('Disclose Company')  }}
+                                    </label>
+                                </div>
                             </div>
 
                             <div class="form-group col-md-4">
@@ -106,26 +115,36 @@
                                 {{ Form::select('gender',['0' => __('messages.gender_0') , '1' => __('messages.gender_1'), '2' => __('messages.gender_2')  ],old('gender'),[ 'id' => 'gender' ,'class' =>'form-control select2js','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 {{ Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
                                 {{ Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 {{ Form::label('experience',trans('messages.experience').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
                                 {{ Form::select('experience',['0' => __('messages.exp_0') , '1' => __('messages.exp_1'), '2' => __('messages.exp_2') ,'3' => __('messages.exp_3'), '4' => __('messages.exp_4'), '5' => __('messages.exp_5') ],old('status'),[ 'id' => 'exp' ,'class' =>'form-control select2js','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-4">
                                 {{ Form::label('min_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control','required']) }}
+                                {{ Form::number('min_salary',old('min_salary'),['placeholder' => trans('messages.min_salary'),'class' =>'form-control']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-4">
                                 {{ Form::label('max_salary',trans('messages.min_salary').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-                                {{ Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control','required']) }}
+                                {{ Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
+                            
+                            <div class="form-group col-md-4 mt-5">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
+                                    {{ Form::checkbox('disclose_salary', $jobsdata->disclose_salary, null, ['class' => 'custom-control-input' , 'id' => 'disclose_salary' ]) }}
+                                    <label class="custom-control-label" for="disclose_salary">{{ __('Disclose Salary')  }}
+                                    </label>
+                                </div>
+                            </div>
+                       
                             <div class="form-group col-md-4">
                                 {{ Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::number('vacancy',old('vacancy'),['placeholder' => trans('messages.vacancy'),'class' =>'form-control','required']) }}

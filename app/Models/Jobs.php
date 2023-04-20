@@ -45,6 +45,8 @@ class Jobs extends Model implements HasMedia
         'tamil_company_name',
         'company_id',
 		'contact_number',
+        'disclose_salary',
+        'disclose_company'
     ];
 
     protected $casts = [
