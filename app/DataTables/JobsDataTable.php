@@ -45,7 +45,7 @@ class JobsDataTable extends DataTable
             //         </div>
             //     </div>';
             // })
-            ->editColumn('status_s', function ($booking) {
+            ->editColumn('status', function ($booking) {
                 $payment_status = optional($booking)->status;
                 if ($payment_status == '2') {
                     $status = '<span class="badge badge-pay-pending">' . __('Rejected') . '</span>';
@@ -124,7 +124,7 @@ class JobsDataTable extends DataTable
             
             Column::make('created_at'),
             
-            Column::make('status_s')
+            Column::make('status')
             ->title('Jobs Status'),
             Column::computed('action')
                 ->exportable(false)

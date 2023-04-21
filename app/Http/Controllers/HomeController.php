@@ -20,6 +20,7 @@ use App\Models\News;
 use App\Models\NewsCategory;
 use App\Models\JobsCategory;
 use App\Models\Jobs;
+use App\Models\JobsPlanCategory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class HomeController extends Controller
@@ -380,6 +381,15 @@ class HomeController extends Controller
                     $items->where('name', 'LIKE', '%' . $value . '%');
                 }
 
+                $items = $items->get();
+                break;
+
+            case 'jobs_plan_category':
+                $items = \App\Models\JobsPlanCategory::select('id', 'ta_name as text')->where('status', 1);
+
+                if ($value != '') {
+                    $items->where('name', 'LIKE', '%' . $value . '%');
+                }
                 $items = $items->get();
                 break;
 
@@ -800,6 +810,11 @@ class HomeController extends Controller
                 $data = Jobs::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);
                 break;
+            case 'jobs_plans_category_image':
+                $data = JobsPlanCategory::find($request->id);
+                $message = __('messages.msg_removed', ['name' => __('messages.image')]);
+                break;
+
 
             default:
                 $data = AppSetting::find($request->id);

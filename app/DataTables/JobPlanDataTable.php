@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DataTables;
+
 use App\Traits\DataTableTrait;
 
 use App\Models\JobsPlans;
@@ -23,22 +24,43 @@ class JobPlanDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('status' , function ($plan){
+            ->editColumn('plancategory_id' , function ($subcategory){
+                return ($subcategory->plancategory_id != null && isset($subcategory->jobsplans)) ? $subcategory->jobsplans->ta_name : '-';
+            })
+            ->filterColumn('plancategory_id',function($query,$keyword){
+                $query->whereHas('category',function ($q) use($keyword){
+                    $q->where('name','like','%'.$keyword.'%');
+                });
+            })
+            ->editColumn('status', function ($plan) {
                 return '<div class="custom-control custom-switch custom-switch-text custom-switch-color custom-control-inline">
                     <div class="custom-switch-inner">
-                        <input type="checkbox" class="custom-control-input bg-primary change_status"  data-type="plan_status" '.($plan->status ? "checked" : "").' value="'.$plan->id.'" id="'.$plan->id.'" data-id="'.$plan->id.'" >
-                        <label class="custom-control-label" for="'.$plan->id.'" data-on-label="" data-off-label=""></label>
+                        <input type="checkbox" class="custom-control-input bg-primary change_status"  data-type="plan_status" ' . ($plan->status ? "checked" : "") . ' value="' . $plan->id . '" id="' . $plan->id . '" data-id="' . $plan->id . '" >
+                        <label class="custom-control-label" for="' . $plan->id . '" data-on-label="" data-off-label=""></label>
                     </div>
                 </div>';
             })
-            ->editColumn('amount' , function ($plan){
+            ->editColumn('price', function ($plan) {
+                return getPriceFormat($plan->price);
+            })
+            ->editColumn('total_amount', function ($plan) {
+               
+                return getPriceFormat($plan->total_amount);
+            })
+            ->editColumn('percentage', function ($plan) {
+                return $plan->percentage ."%";
+            })
+            ->editColumn('amount', function ($plan) {
                 return getPriceFormat($plan->amount);
             })
-            ->addColumn('action', function($plan){
-                return view('jobsplan.action',compact('plan'))->render();
+            ->editColumn('tax', function ($plan) {
+                return $plan->tax ."%";
+            })
+            ->addColumn('action', function ($plan) {
+                return view('jobsplan.action', compact('plan'))->render();
             })
             ->addIndexColumn()
-            ->rawColumns(['action','status']);
+            ->rawColumns(['action', 'status']);
     }
 
     /**
@@ -63,15 +85,23 @@ class JobPlanDataTable extends DataTable
                 ->searchable(false)
                 ->title(__('messages.no'))
                 ->orderable(false),
-            Column::make('title'),
+            Column::make('plancategory_id')
+                ->title(__('messages.category')),          
             Column::make('type'),
+            Column::make('price'),
+            Column::make('percentage')
+            ->title(__('Offer %')),
             Column::make('amount'),
+            Column::make('tax')
+            ->title(__('GST %')),
+            Column::make('total_amount')
+            ->title(__('Total Amount(with GST) %')),
             Column::make('status'),
             Column::computed('action')
-            ->exportable(false)
-            ->printable(false)
-            ->width(60)
-            ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
         ];
     }
 

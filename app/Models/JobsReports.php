@@ -11,7 +11,7 @@ class JobsReports extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'jobs_reports';
     protected $fillable = [
-        'jobs_id', 'jobseeker_id', 'reports_type', 'reports_message','datetime'
+        'jobs_id', 'jobseeker_id', 'report_type', 'report_message','datetime'
     ];
 
     protected $casts = [

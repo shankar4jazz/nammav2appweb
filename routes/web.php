@@ -32,6 +32,7 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\JobPlanController;
+use App\Http\Controllers\JobsPlansCategoryController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\PostJobRequestController;
 
@@ -203,6 +204,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::resource('plans', PlanController::class);
     Route::resource('jobs-plans', JobPlanController::class);
+    Route::resource('jobs-plans-category', JobsPlansCategoryController::class);
     Route::resource('bank', BankController::class);
     Route::post('bank-action', [BankController::class, 'action'])->name('bank.action');
 

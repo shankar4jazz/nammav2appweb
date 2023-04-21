@@ -24,7 +24,7 @@
                                 {{ Form::text('name',old('name'),['placeholder' => trans('messages.name'),'class' =>'form-control','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            
+
                             <div class="form-group col-md-4">
                                 {{ Form::label('tamil_name',trans('messages.tamil_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::text('tamil_name',old('tamil_name'),['placeholder' => trans('messages.tamil_name'),'class' =>'form-control','required']) }}

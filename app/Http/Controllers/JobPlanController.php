@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\JobsPlans;
 use App\Models\PlanLimit;
 use App\Models\StaticData;
+use App\Models\JobsPlanCategory;
 use App\DataTables\JobPlanDataTable;
 use App\Http\Requests\PlanRequest;
 
@@ -36,6 +37,7 @@ class JobPlanController extends Controller
 
         $plan = JobsPlans::with('planlimit')->find($id);
         $plan_type = StaticData::where('type','plan_type')->get();
+     
         $plan_limit = StaticData::where('type','plan_limit_type')->get();
         $pageTitle = trans('messages.update_form_title',['form'=>trans('messages.plan')]);
         $decoded_description = '';
@@ -89,7 +91,8 @@ class JobPlanController extends Controller
             'percentage' => $requestData['percentage'],
             'description' =>  $data,
             'plan_type' => $requestData['plan_type'],
-            'type'=> $requestData['type']
+            'type'=> $requestData['type'],
+            'plancategory_id'=> $requestData['plancategory_id']
         ];
         if(empty($request->id) && $request->id == null){
             $planData['identifier'] = strtolower($requestData['title']);

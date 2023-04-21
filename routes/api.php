@@ -45,6 +45,7 @@ Route::get('jobs-list',[ API\JobsController::class, 'getJobsList' ]);
 Route::get('jobs-view/{slug}',[ API\JobsController::class, 'getJobsListBySlug' ]);
 Route::get('jobs/{slug}',[ API\JobsController::class, 'getJobsListBySlugUrl' ]);
 Route::post('citywise-jobs-list',[ API\JobsController::class, 'getJobsListByCity']);
+Route::post('category-city-jobs-list',[ API\JobsController::class, 'getJobsListByCityAndCategory']);
 Route::post('user-jobs-list',[ API\JobsController::class, 'getJobsListByUser']);
 Route::post('company-list',[ API\CompanyController::class, 'getCompanyByUser']);
 

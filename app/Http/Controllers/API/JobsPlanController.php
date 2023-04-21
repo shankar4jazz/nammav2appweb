@@ -4,15 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\JobsPlans;
+use App\Models\JobsPlanCategory;
 use App\Models\ProviderSubscription;
-use App\Http\Resources\API\JobsPlanResource;
+use App\Http\Resources\API\JobsPlanCategoryResource;
 
 class JobsPlanController extends Controller
 {
     public function jobsPlanList(Request $request)
     {
-        $plans = JobsPlans::where('status', 1);
+        $plans = JobsPlanCategory::where('status', 1);
         // $get_user_free_plan = ProviderSubscription::where('user_id', auth()->id())->first();
         // if (!empty($get_user_free_plan)) {
         //     $plans =  $plans->whereNotIn('identifier', ['free']);
@@ -30,7 +30,7 @@ class JobsPlanController extends Controller
         }
 
         $plans = $plans->orderBy('id', $orderBy)->paginate($per_page);
-        $items = JobsPlanResource::collection($plans);
+        $items = JobsPlanCategoryResource::collection($plans);
 
         //$response = [
             // 'pagination' => [

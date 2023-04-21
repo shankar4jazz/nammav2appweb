@@ -215,17 +215,15 @@ class JobsController extends Controller
         if ($request->has('is_featured')) {
             $data['is_featured'] = 1;
         }
-
         if (isset($request->user_id)) {
             $data['user_id'] = $request->user_id;
         }
-
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
-
 
         $jobs = Jobs::find($result->id);
 
         $result->jobDistricts()->detach();
+        
         $distData =  $request->input('districts');
 
 
