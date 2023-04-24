@@ -48,7 +48,7 @@
                             <div class="form-group col-md-4">
                                 <?php echo e(Form::label('type',trans('messages.type').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
-                                <?php echo e(Form::select('type',['monthly' => __('messages.monthly') , 'yearly' => __('messages.yearly') ],old('type'),[ 'id' => 'type' ,'class' =>'form-control select2js','required'])); ?>
+                                <?php echo e(Form::select('type',['days' => __('Days') ,'monthly' => __('messages.monthly') , 'yearly' => __('messages.yearly') ],old('type'),[ 'id' => 'type' ,'class' =>'form-control select2js','required'])); ?>
 
                             </div>
                             <div class="form-group col-md-4">

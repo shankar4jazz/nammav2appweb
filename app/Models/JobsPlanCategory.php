@@ -17,11 +17,7 @@ class JobsPlanCategory extends Model implements HasMedia
     ];
     protected $casts = [
         'status'    => 'integer'      
-    ];
-
- 
-
-    
+    ];    
     public function scopeList($query)
     {
         return $query->orderBy('deleted_at', 'asc');

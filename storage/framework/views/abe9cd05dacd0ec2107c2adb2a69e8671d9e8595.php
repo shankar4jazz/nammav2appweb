@@ -2,6 +2,7 @@
 
 <?php echo e(Form::hidden('id')); ?>
 
+<input type="hidden" id="district_name" name="district_name" value="">
 <div class="row">
     <div class="form-group col-md-12">
         <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
@@ -11,7 +12,6 @@
         <small class="help-block with-errors text-danger"></small>
     </div>
     <input type="hidden" name="pvt_jobid" value="" id="pvt_jobid" />
-
     <div class="form-group col-md-12" id="select_district">
         <?php echo e(Form::label('name', __('messages.select_name',[ 'select' => __('District') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label','data-placeholder' => __('Select District',[ 'select' => __('districts') ])],false)); ?>
 
@@ -22,7 +22,6 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </select>
     </div>
-
     <div class="form-group col-md-12">
         <?php echo e(Form::label('job_id', __('messages.select_name',[ 'select' => __('Job') ]),['class'=>'form-control-label'],false)); ?>
 
@@ -54,6 +53,10 @@
 
     $(document).on('change', '#district_id', function() {
         var district = $(this).val();
+        var district_name = $(this).find('option:selected').text();
+   
+     
+        $('#district_name').val(district_name)
         $('#job_id').empty();
         getJobs(district);
     })

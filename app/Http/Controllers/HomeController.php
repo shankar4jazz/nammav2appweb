@@ -22,6 +22,7 @@ use App\Models\JobsCategory;
 use App\Models\Jobs;
 use App\Models\JobsPlanCategory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -421,11 +422,9 @@ class HomeController extends Controller
                 $items = \App\Models\User::select('id', 'contact_number as text')
                     ->where('user_type', 'jobs')
                     ->where('status', 1);
-
                 if ($value != '') {
                     $items->where('contact_number', 'LIKE', $value . '%');
                 }
-
                 $items = $items->get();
                 break;
             case 'get-user':
@@ -672,7 +671,6 @@ class HomeController extends Controller
                     } else if ($request->district_id == "null") {
                         $items->where('status', 1);
                     } else {
-
                         $items->where('status', 1);
                         $items->whereHas('jobDistricts', function ($a) use ($request) {
                             $a->where('district_id', $request->district_id);
@@ -685,6 +683,19 @@ class HomeController extends Controller
                 }
                 $items = $items->get();
                 break;
+            case 'push_news':
+
+                $items = \App\Models\News::select('id', 'title as text')->withTrashed();
+                $daysAgo = 5;
+                $dateThreshold = Carbon::now()->subDays($daysAgo);
+
+
+                $items->where('status', 1);
+
+                $items->where('updated_at', '>=', $dateThreshold);
+                $items = $items->get();
+                break;
+
             case 'push_govt_jobs':
 
                 $ch = curl_init();
@@ -717,6 +728,37 @@ class HomeController extends Controller
 
                 curl_close($ch);
 
+                break;
+
+            case 'get-jobs':
+                $items = \App\Models\Jobs::select('id', 'title as text')
+                    ->orderBy('id', 'desc')
+                    ->where('status', 1);
+                if ($value != '') {
+                    $items->where('title', 'LIKE', $value . '%');
+                }
+                $items = $items->get();
+                break;
+
+            case 'get-employer':
+                $items = \App\Models\Jobs::select('user_id')
+                    ->orderBy('id', 'desc')
+                    ->where('status', 1)
+                    ->where('id', $request->job_id);
+
+                if ($value != '') {
+                    $items->where('title', 'LIKE', $value . '%');
+                }
+                $items = $items->get();
+                break;
+            case 'get-plans':
+                $items = \App\Models\Jobs::select('id', 'title as text')
+                    ->orderBy('id', 'desc')
+                    ->where('status', 1);
+                if ($value != '') {
+                    $items->where('title', 'LIKE', $value . '%');
+                }
+                $items = $items->get();
                 break;
             default:
                 break;

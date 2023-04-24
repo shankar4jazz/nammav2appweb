@@ -21,7 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 */
 require __DIR__.'/admin-api.php';
-Route::get('jobs-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
+Route::get('jobs-plan-list', [API\JobsPlanController::class, 'planLists']);
+Route::get('get-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
 Route::post('jobs-save-payment',[API\JobsPaymentController::class, 'savePayment']);
 Route::post('save-call-activities',[API\JobCallActivitiesController::class, 'saveCallActivities']);
 Route::post('get-call-activities',[API\JobCallActivitiesController::class, 'getCallActivitiesByJobId']);

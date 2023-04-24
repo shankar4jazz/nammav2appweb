@@ -90,16 +90,19 @@ class PushNotificationController extends Controller
                 $tabpage = 'cash';
                 $data  = view('setting.' . $page, compact('settings', 'tabpage', 'page'))->render();
                 break;
-
             case 'pages-push-notification':
                 $settings = [];
-                $services = Service::pluck('name', 'id');
-                $data  = view('pushnotification.' . $page, compact('settings', 'page', 'services'))->render();
+                $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
+                $districts = $districts->pluck('name', 'id');
+                $services = $this->getPages();
+                $data  = view('pushnotification.' . $page, compact('settings', 'page', 'services', 'districts'))->render();
                 break;
             case 'news-push-notification':
                 $settings = [];
                 $services = Service::pluck('name', 'id');
-                $data  = view('pushnotification.' . $page, compact('settings', 'page', 'services'))->render();
+                $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
+                $districts = $districts->pluck('name', 'id');
+                $data  = view('pushnotification.' . $page, compact('settings', 'page', 'services', 'districts'))->render();
                 break;
             case 'privatejobs-push-notification':
                 $settings = [];
@@ -450,28 +453,29 @@ class PushNotificationController extends Controller
     public function sendPvtJobsPushNotification(Request $request)
     {
         $data = $request->all();
-      
-        $message = array( 
-    
+        $district_name = $data['district_name'];
+
+        $message = array(
+
             'title'     =>  $_POST['title'],
-            'body'      =>  $data['description'],		
-           //'image'     =>  $_POST['image'],
-            
-        );
-        
-        $data= array(
-            'pvt_jobid' =>  $_POST['pvt_jobid'],            
+            'body'      =>  $data['description'],
+            //'image'     =>  $_POST['image'],
+
         );
 
-        $to='/topics/demotopic';
-        
-        $fields = array( 
-            'to'               => $to, 
+        $data = array(
+            'pvt_jobid' =>  $_POST['pvt_jobid'],
+        );
+
+        $to = '/topics/TN-' . $district_name;
+
+        $fields = array(
+            'to'               => $to,
             'priority'         => 'high',
             'notification'     => $message,
             'data'             => $data
         );
-        
+
         $fields = json_encode($fields);
         $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
         $ch = curl_init();
@@ -487,7 +491,173 @@ class PushNotificationController extends Controller
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
         $response = curl_exec($ch);
-       
+
+        curl_close($ch);
+        if ($response) {
+            $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+        } else {
+            $message = trans('messages.failed');
+        }
+        if (request()->is('api/*')) {
+            return comman_message_response($message);
+        }
+        return redirect()->route('push-notification.index')->withSuccess($message);
+    }
+    public function sendGovtJobsPushNotification(Request $request)
+    {
+        $data = $request->all();
+        $district_name = $data['district_name'];
+        $message = array(
+
+            'title'     =>  $_POST['title'],
+            'body'      =>  $data['description'],
+            //'image'     =>  $_POST['image'],
+
+        );
+
+
+
+        $data = array(
+            'govt_jobid' =>  $_POST['job_id'],
+        );
+
+        $to = '/topics/TN-' . $district_name;
+
+        $fields = array(
+            'to'               => $to,
+            'priority'         => 'high',
+            'notification'     => $message,
+            'data'             => $data
+        );
+
+        $fields = json_encode($fields);
+        $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json; charset=utf-8',
+            "Authorization:$rest_api_key"
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+        $response = curl_exec($ch);
+
+
+        curl_close($ch);
+        if ($response) {
+            $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+        } else {
+            $message = trans('messages.failed');
+        }
+        if (request()->is('api/*')) {
+            return comman_message_response($message);
+        }
+        return redirect()->route('push-notification.index')->withSuccess($message);
+    }
+
+    public function sendNewsPushNotification(Request $request)
+    {
+        $data = $request->all();
+        $district_name = $data['district_name'];
+        $message = array(
+            'title'     =>  $_POST['title'],
+            'body'      =>  $data['description'],
+            //'image'     =>  $_POST['image'],
+        );
+
+
+
+        $data = array(
+            'news_id' =>  $_POST['job_id'],
+        );
+
+        $to = '/topics/TN-' . $district_name;
+
+        $fields = array(
+            'to'               => $to,
+            'priority'         => 'high',
+            'notification'     => $message,
+            'data'             => $data
+        );
+
+        $fields = json_encode($fields);
+        $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json; charset=utf-8',
+            "Authorization:$rest_api_key"
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+        $response = curl_exec($ch);
+
+
+        curl_close($ch);
+        if ($response) {
+            $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+        } else {
+            $message = trans('messages.failed');
+        }
+        if (request()->is('api/*')) {
+            return comman_message_response($message);
+        }
+        return redirect()->route('push-notification.index')->withSuccess($message);
+    }
+
+    public function sendPagePushNotification(Request $request)
+    {
+        $data = $request->all();
+        $district_name = $data['district_name'];
+
+
+        var_dump($data);
+        exit();
+        $message = array(
+
+            'title'     =>  $_POST['title'],
+            'body'      =>  $data['description'],
+            //'image'     =>  $_POST['image'],
+
+        );
+
+        $data = array(
+            'page' =>  $_POST['page'],
+        );
+
+        $to = '/topics/TN-' . $district_name;
+
+        $fields = array(
+            'to'               => $to,
+            'priority'         => 'high',
+            'notification'     => $message,
+            'data'             => $data
+        );
+
+        $fields = json_encode($fields);
+        $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json; charset=utf-8',
+            "Authorization:$rest_api_key"
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+        $response = curl_exec($ch);
+
         curl_close($ch);
         if ($response) {
             $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
@@ -523,5 +693,13 @@ class PushNotificationController extends Controller
         return $dataTable
             ->with('provider_id', $id)
             ->render('setting.comission', compact('pageTitle', 'providerdata', 'auth_user'));
+    }
+
+    private function getPages(){
+        return array(
+            "today_jobs"=>'Today Jobs',
+            "10th_jobs" => '!0th Jobs'
+
+        );
     }
 }

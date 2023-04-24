@@ -29,7 +29,7 @@ class JobsController extends Controller
             }
         }
 
-        $per_page = 25;
+        $per_page = 10;
         $page = $request->page;
 
         $start = ($page - 1) * $per_page;

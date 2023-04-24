@@ -20,7 +20,8 @@ class JobsPlanCategoryResource extends JsonResource
             'ta_namer'              => $this->ta_name,
             'en_description'        => $this->en_description,
             'ta_description'        => $this->ta_description,
-            'icon'                  => $this->price,
+            'plan_type'             => $this->plan_type,
+            'icon'                  => getSingleMedia($this, 'jobs_plans_category_image', null),
             'plan_details' => $this->getPlans,
             //'plan_limitation'   => optional($this->planlimit)->plan_limitation
         ];

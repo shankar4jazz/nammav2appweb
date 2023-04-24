@@ -33,6 +33,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\JobPlanController;
 use App\Http\Controllers\JobsPlansCategoryController;
+use App\Http\Controllers\JobsPaymentController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\PostJobRequestController;
 
@@ -124,10 +125,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     // Push Notification
     Route::get('push-notification/{page?}', [PushNotificationController::class, 'setting'])->name('push-notification.index');
-  // Route::post('/layout-page', [SettingController::class, 'layoutPage'])->name('pushnotification_layout_page');
-   Route::post('/pushnotification-layout-page', [PushNotificationController::class, 'layoutPage'])->name('pushnotification_layout_page');
+    // Route::post('/layout-page', [SettingController::class, 'layoutPage'])->name('pushnotification_layout_page');
+    Route::post('/pushnotification-layout-page', [PushNotificationController::class, 'layoutPage'])->name('pushnotification_layout_page');
     //Route::post('/pushnotification-layout-page', [PushNotificationController::class, 'layoutPage'])->name('pushnotification_layout_page');
     Route::post('send-pvtjobspush-notification', [PushNotificationController::class, 'sendPvtJobsPushNotification'])->name('sendPvtJobsPushNotification');
+    Route::post('send-govtobspush-notification', [PushNotificationController::class, 'sendGovtJobsPushNotification'])->name('sendGovtJobsPushNotification');
+    Route::post('send-newspush-notification', [PushNotificationController::class, 'sendNewsPushNotification'])->name('sendNewsPushNotification');
+    Route::post('send-pagepush-notification', [PushNotificationController::class, 'sendPagePushNotification'])->name('sendPagePushNotification');
 
     // Setting
     Route::get('setting/{page?}', [SettingController::class, 'settings'])->name('setting.index');

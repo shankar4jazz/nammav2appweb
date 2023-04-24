@@ -36,7 +36,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 {{ Form::label('type',trans('messages.type').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                {{ Form::select('type',['monthly' => __('messages.monthly') , 'yearly' => __('messages.yearly') ],old('type'),[ 'id' => 'type' ,'class' =>'form-control select2js','required']) }}
+                                {{ Form::select('type',['days' => __('Days') ,'monthly' => __('messages.monthly') , 'yearly' => __('messages.yearly') ],old('type'),[ 'id' => 'type' ,'class' =>'form-control select2js','required']) }}
                             </div>
                             <div class="form-group col-md-4">
                                 {{ Form::label('duration',trans('messages.duration').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}

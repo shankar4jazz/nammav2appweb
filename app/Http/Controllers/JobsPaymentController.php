@@ -1,0 +1,144 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\JobsPayment;
+use App\Models\JobsPlanCategory;
+
+use App\DataTables\JobsPaymentDataTable;
+
+class JobsPaymentController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(JobsPaymentDataTable $dataTable)
+    {
+        $pageTitle = __('messages.list_form_title', ['form' => __('messages.payment')]);
+        $assets = ['datatable'];
+        return $dataTable->render('jobspayment.index', compact('pageTitle', 'assets'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        $id = $request->id;
+        $auth_user = authSession();
+        $plan = JobsPayment::find($id);
+
+        $plan_category = JobsPlanCategory::where('status', 1)->get();
+
+
+        $pageTitle = trans('messages.update_form_title', ['form' => trans('messages.plan')]);
+        $decoded_description = '';
+        if ($plan == null) {
+            $pageTitle = trans('messages.add_button_form', ['form' => trans('messages.plan')]);
+            $plan = new JobsPayment();
+        } else {
+            $decoded_description = base64_decode($plan->description);
+            $is_base64_encoded = base64_encode(base64_decode($plan->description)) === $plan->description;
+
+            if ($is_base64_encoded) {
+
+                $decoded_description;
+            } else {
+
+                $decoded_description = $plan->description; // Outputs "Hello World!"
+            }
+        }
+        return view('jobspayment.create', compact('pageTitle', 'plan', 'plan_category', 'auth_user', 'decoded_description'));
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        if (demoUserPermission()) {
+            return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
+        }
+        $requestData = $request->all();
+
+        $date_data = isset($request->datetime) ? date('Y-m-d H:i:s', strtotime($request->datetime)) : date('Y-m-d H:i:s');
+        $data = base64_encode($requestData['description']);
+       
+        
+        $planData = [
+            'job_id' => $requestData['job_id'],
+            'employer_id' => $requestData['employer_id'],
+            'plan_id' => $requestData['plan_id'],
+            'total_amount' => $requestData['all_total_amount'],
+            'payment_type' => $requestData['payment_type'],
+            'payment_status' => $requestData['payment_status'],
+            'description' => $data,
+            'datetime' => $date_data
+        ];
+
+        $result = JobsPayment::updateOrCreate(['id' => $requestData['id']], $planData);
+
+
+        $message = trans('messages.update_form', ['form' => trans('messages.plan')]);
+
+        if ($result->wasRecentlyCreated) {
+            $message = trans('messages.save_form', ['form' => trans('messages.plan')]);
+        }
+
+        return redirect(route('jobs-payment.index'))->withSuccess($message);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}
