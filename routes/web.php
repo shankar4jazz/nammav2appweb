@@ -106,6 +106,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('slider-action', [SliderController::class, 'action'])->name('slider.action');
     Route::resource('payment', PaymentController::class);
     Route::resource('jobs-payment', JobsPaymentController::class);
+    Route::post('jobs-payment-action', [JobsPaymentController::class, 'action'])->name('jobs-payment.action');
     Route::post('save-payment', [App\Http\Controllers\API\PaymentController::class, 'savePayment'])->name('payment.save');
     Route::resource('user', CustomerController::class);
 

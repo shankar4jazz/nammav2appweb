@@ -23,8 +23,8 @@
 
                         <?php echo e(Form::hidden('id')); ?>
 
-                        <input type="text" id="employer_id" name="employer_id" value="<?php echo e($plan->employer_id); ?>">
-                        <input type="text" id="all_total_amount" name="all_total_amount" value="<?php echo e($plan->total_amount); ?>">
+                        <input type="hidden" id="employer_id" name="employer_id" value="<?php echo e($plan->employer_id); ?>">
+                        <input type="hidden" id="all_total_amount" name="all_total_amount" value="<?php echo e($plan->total_amount); ?>">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <?php echo e(Form::label('job_id', __('messages.select_name',[ 'select' => __('Job') ]),['class'=>'form-control-label'],false)); ?>
@@ -48,7 +48,7 @@
                                         <?php $__currentLoopData = $data->getPlans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
 
-                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-<?php echo e($p->id); ?>" type="radio" name="plan_id" value='<?php echo e($p->id); ?>' onclick='updateFields("<?php echo e($p->id); ?>", "<?php echo e($p->total_amount); ?>");' > </td>
+                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-<?php echo e($p->id); ?>" type="radio" name="plan_id" value='<?php echo e($p->id); ?>' onclick='updateFields("<?php echo e($p->id); ?>", "<?php echo e($p->total_amount); ?>");' <?php echo e($p->id ==  $plan->plan_id? 'checked' : ''); ?>> </td>
                                             <td style="background-color:lightgreen;" class="text-capitalize"><?php echo e($p->duration); ?> <?php echo e($p->type); ?></td>
                                         </tr>
                                         <tr>
@@ -151,10 +151,15 @@
         (function($) {
             $(document).ready(function() {
 
-                getJobs();
+                var job_id = "<?php echo e(isset($plan->job_id) ? $plan->job_id : ''); ?>";
+
+                getJobs(job_id);
+                getEmployer(job_id);
                 getPlans();
 
                 CKEDITOR.replace('editor');
+
+            });
                 //     $(".checklist:checkbox").each(function() {
                 //         if ($(this).is(":checked")) {
                 //             showCheckLimitData($(this).attr("id"));
@@ -188,18 +193,18 @@
                 })
 
                 window.updateFields = function(plan_id, total_amount) {
-            document.getElementById('all_total_amount').value = total_amount;
-            // Any other fields you want to update based on the selected radio button
-        };
+                    document.getElementById('all_total_amount').value = total_amount;
+                    // Any other fields you want to update based on the selected radio button
+                };
 
                 // function updateFields(plan_id, total_amount) {
                 //     document.getElementById('all_total_amount').value = total_amount;
                 //     // Any other fields you want to update based on the selected radio button
                 // }
 
-                function getJobs(state = "") {
+                function getJobs(job_id="") {
 
-                    var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'get-jobs'])); ?>";
+                    var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'get-jobs', 'job_id' =>''])); ?>" + job_id;
                     state_route = state_route.replace('amp;', '');
 
 
@@ -213,7 +218,7 @@
                                 data: result.results
                             });
 
-                            if (state != null) {
+                            if (job_id != null) {
                                 $("#job_id").val(state).trigger('change');
                             }
                         }
@@ -242,7 +247,7 @@
                     });
                 }
 
-                function getPlans(state = "") {
+                function getPlans(job_id = "") {
 
                     var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'get-plans'])); ?>";
                     state_route = state_route.replace('amp;', '');
@@ -256,13 +261,13 @@
                                 placeholder: "<?php echo e(trans('messages.select_name',['select' => trans('messages.state')])); ?>",
                                 data: result.results
                             });
-                            if (state != null) {
+                            if (job_id != null) {
                                 $("#job_id").val(state).trigger('change');
                             }
                         }
                     });
                 }
-            });
+          
         })(jQuery);
     </script>
     <?php $__env->stopSection(); ?>

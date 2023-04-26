@@ -734,6 +734,9 @@ class HomeController extends Controller
                 $items = \App\Models\Jobs::select('id', 'title as text')
                     ->orderBy('id', 'desc')
                     ->where('status', 1);
+                if (isset($request->job_id)) {
+                    $items->where('id', $request->job_id);
+                }
                 if ($value != '') {
                     $items->where('title', 'LIKE', $value . '%');
                 }

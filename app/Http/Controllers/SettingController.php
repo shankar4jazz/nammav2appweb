@@ -490,11 +490,11 @@ class SettingController extends Controller
             $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
         }
         return redirect()->route('setting.index')->withSuccess($message);
-      }
-      public function comission(ServiceDataTable $dataTable,$id)
+    }
+    public function comission(ServiceDataTable $dataTable, $id)
     {
         $auth_user = authSession();
-        $providerdata = User::with('providertype')->where('user_type', 'provider')->where('id',$id)->first();
+        $providerdata = User::with('providertype')->where('user_type', 'provider')->where('id', $id)->first();
         if (empty($providerdata)) {
             $msg = __('messages.not_found_entry', ['name' => __('messages.provider')]);
             return redirect(route('provider.index'))->withError($msg);

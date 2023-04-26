@@ -11,22 +11,21 @@ use Carbon\Carbon;
 class NewsController extends Controller
 {
     public function getNewsList(Request $request)
-    {       
-        $booking = News::withTrashed();        
-       
-        $booking->where('status', 1);      
-       	$per_page = 10;
-		$page = $request->page;
-		
-		$start = ($page-1)*$per_page;
+    {
+        $booking = News::withTrashed();
 
-		if(!empty($request->page)){
-			
-		$page = $request->page;
-		
-		$start = ($page-1)*$per_page;
-			
-		}
+        $booking->where('status', 1);
+        $per_page = 10;
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
         $per_page = config('constant.PER_PAGE_LIMIT');
@@ -44,20 +43,20 @@ class NewsController extends Controller
         }
 
         $booking = $booking->orderBy('updated_at', 'desc')
-                        ->get();
+            ->get();
         $items = NewsResource::collection($booking);
 
         $response = [
-           // 'pagination' => [
+            // 'pagination' => [
             //    'total_items' => $items->total(),
-             //   'per_page' => $items->perPage(),
-             //   'currentPage' => $items->currentPage(),
-             //   'totalPages' => $items->lastPage(),
-              //  'from' => $items->firstItem(),
-             //   'to' => $items->lastItem(),
-             //   'next_page' => $items->nextPageUrl(),
+            //   'per_page' => $items->perPage(),
+            //   'currentPage' => $items->currentPage(),
+            //   'totalPages' => $items->lastPage(),
+            //  'from' => $items->firstItem(),
+            //   'to' => $items->lastItem(),
+            //   'next_page' => $items->nextPageUrl(),
             //    'previous_page' => $items->previousPageUrl(),
-           // ],
+            // ],
             //'data' => $items,
         ];
 
@@ -81,18 +80,17 @@ class NewsController extends Controller
             }
         }
 
-       	$per_page = 10;
-		$page = $request->page;
-		
-		$start = ($page-1)*$per_page;
+        $per_page = 10;
+        $page = $request->page;
 
-		if(!empty($request->page)){
-			
-		$page = $request->page;
-		
-		$start = ($page-1)*$per_page;
-			
-		}
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
 
         $orderBy = 'desc';
         if ($request->has('orderby') && !empty($request->orderby)) {
@@ -120,14 +118,14 @@ class NewsController extends Controller
     }
 
     public function getNewsListByCity(Request $request)
-    {       
-        $booking = News::withTrashed();        
-       
-        $booking->where('status', 1);   
+    {
+        $booking = News::withTrashed();
+
+        $booking->where('status', 1);
         $booking->whereHas('city', function ($a) use ($request) {
             $a->where('city_id', $request->city_id);
-        });   
-       
+        });
+
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
@@ -166,12 +164,12 @@ class NewsController extends Controller
     }
 
     public function getNewsListByCategory(Request $request)
-    {       
-    
-        $booking = News::withTrashed()->where("news_category_id", $request->category_id);        
-       
-        $booking->where('status', 1);   
-        
+    {
+
+        $booking = News::withTrashed()->where("news_category_id", $request->category_id);
+
+        $booking->where('status', 1);
+
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
@@ -192,32 +190,32 @@ class NewsController extends Controller
         $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
         $items = NewsResource::collection($booking);
 
-       // $response = [
-            // 'pagination' => [
-            //     'total_items' => $items->total(),
-            //     'per_page' => $items->perPage(),
-            //     'currentPage' => $items->currentPage(),
-            //     'totalPages' => $items->lastPage(),
-            //     'from' => $items->firstItem(),
-            //     'to' => $items->lastItem(),
-            //     'next_page' => $items->nextPageUrl(),
-            //     'previous_page' => $items->previousPageUrl(),
-            // ],
-            //'data' => $items,
+        // $response = [
+        // 'pagination' => [
+        //     'total_items' => $items->total(),
+        //     'per_page' => $items->perPage(),
+        //     'currentPage' => $items->currentPage(),
+        //     'totalPages' => $items->lastPage(),
+        //     'from' => $items->firstItem(),
+        //     'to' => $items->lastItem(),
+        //     'next_page' => $items->nextPageUrl(),
+        //     'previous_page' => $items->previousPageUrl(),
+        // ],
+        //'data' => $items,
         //];
 
         return comman_custom_response($items);
     }
 
     public function getNewsListByUser(Request $request)
-    {       
-        $booking = News::withTrashed();     
-       
-        $booking->where('status', 1);   
+    {
+        $booking = News::withTrashed();
+
+        $booking->where('status', 1);
         $booking->whereHas('user', function ($a) use ($request) {
             $a->where('user_id', $request->user_id);
-        });   
-       
+        });
+
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
@@ -253,5 +251,54 @@ class NewsController extends Controller
         ];
 
         return comman_custom_response($response);
+    }
+
+    public function getAllNewsList(Request $request)
+    {
+        $booking = News::withTrashed();
+        $booking->where('status', 1);
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+        }
+        //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
+
+        $per_page = config('constant.PER_PAGE_LIMIT');
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
+                $per_page = $request->per_page;
+            }
+            if ($request->per_page === 'all') {
+                $per_page = $booking->count();
+            }
+        }
+        $start = ($page - 1) * $per_page;
+        $orderBy = 'desc';
+        if ($request->has('orderby') && !empty($request->orderby)) {
+            $orderBy = $request->orderby;
+        }
+        $daysAgo = 15;
+        $dateThreshold = Carbon::now()->subDays($daysAgo);
+
+        //$booking = $booking->where('id', $request->news_id)->where('updated_at', '>=', $dateThreshold)->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
+        $booking = $booking->where('id', '<=', $request->news_id)->orderBy('id', $orderBy)->offset($start)->limit($per_page)->get();
+        $items = NewsResource::collection($booking);
+
+        $response = [
+            // 'pagination' => [
+            //    'total_items' => $items->total(),
+            //   'per_page' => $items->perPage(),
+            //   'currentPage' => $items->currentPage(),
+            //   'totalPages' => $items->lastPage(),
+            //  'from' => $items->firstItem(),
+            //   'to' => $items->lastItem(),
+            //   'next_page' => $items->nextPageUrl(),
+            //    'previous_page' => $items->previousPageUrl(),
+            // ],
+            //'data' => $items,
+        ];
+
+        return comman_custom_response($items);
     }
 }

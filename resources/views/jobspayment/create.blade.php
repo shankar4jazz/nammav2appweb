@@ -16,8 +16,8 @@
                     <div class="card-body">
                         {{ Form::model($plan,['method' => 'POST','route'=>'jobs-payment.store', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'plan'] ) }}
                         {{ Form::hidden('id') }}
-                        <input type="text" id="employer_id" name="employer_id" value="{{$plan->employer_id}}">
-                        <input type="text" id="all_total_amount" name="all_total_amount" value="{{$plan->total_amount}}">
+                        <input type="hidden" id="employer_id" name="employer_id" value="{{$plan->employer_id}}">
+                        <input type="hidden" id="all_total_amount" name="all_total_amount" value="{{$plan->total_amount}}">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 {{ Form::label('job_id', __('messages.select_name',[ 'select' => __('Job') ]),['class'=>'form-control-label'],false) }}
@@ -39,7 +39,7 @@
                                         @foreach($data->getPlans as $p)
                                         <tr>
 
-                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-{{$p->id}}" type="radio" name="plan_id" value='{{$p->id}}' onclick='updateFields("{{$p->id}}", "{{$p->total_amount}}");'> </td>
+                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-{{$p->id}}" type="radio" name="plan_id" value='{{$p->id}}' onclick='updateFields("{{$p->id}}", "{{$p->total_amount}}");' {{ $p->id ==  $plan->plan_id? 'checked' : '' }}> </td>
                                             <td style="background-color:lightgreen;" class="text-capitalize">{{ $p->duration }} {{ $p->type }}</td>
                                         </tr>
                                         <tr>
@@ -123,10 +123,15 @@
         (function($) {
             $(document).ready(function() {
 
-                getJobs();
+                var job_id = "{{ isset($plan->job_id) ? $plan->job_id : ''}}";
+
+                getJobs(job_id);
+                getEmployer(job_id);
                 getPlans();
 
                 CKEDITOR.replace('editor');
+
+            });
                 //     $(".checklist:checkbox").each(function() {
                 //         if ($(this).is(":checked")) {
                 //             showCheckLimitData($(this).attr("id"));
@@ -169,9 +174,9 @@
                 //     // Any other fields you want to update based on the selected radio button
                 // }
 
-                function getJobs(state = "") {
+                function getJobs(job_id="") {
 
-                    var state_route = "{{ route('ajax-list', [ 'type' => 'get-jobs']) }}";
+                    var state_route = "{{ route('ajax-list', [ 'type' => 'get-jobs', 'job_id' =>'']) }}" + job_id;
                     state_route = state_route.replace('amp;', '');
 
 
@@ -185,7 +190,7 @@
                                 data: result.results
                             });
 
-                            if (state != null) {
+                            if (job_id != null) {
                                 $("#job_id").val(state).trigger('change');
                             }
                         }
@@ -214,7 +219,7 @@
                     });
                 }
 
-                function getPlans(state = "") {
+                function getPlans(job_id = "") {
 
                     var state_route = "{{ route('ajax-list', [ 'type' => 'get-plans']) }}";
                     state_route = state_route.replace('amp;', '');
@@ -228,13 +233,13 @@
                                 placeholder: "{{ trans('messages.select_name',['select' => trans('messages.state')]) }}",
                                 data: result.results
                             });
-                            if (state != null) {
+                            if (job_id != null) {
                                 $("#job_id").val(state).trigger('change');
                             }
                         }
                     });
                 }
-            });
+          
         })(jQuery);
     </script>
     @endsection

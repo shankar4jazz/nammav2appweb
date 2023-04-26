@@ -72,8 +72,8 @@ class JobsPaymentController extends Controller
 
         $date_data = isset($request->datetime) ? date('Y-m-d H:i:s', strtotime($request->datetime)) : date('Y-m-d H:i:s');
         $data = base64_encode($requestData['description']);
-       
-        
+
+
         $planData = [
             'job_id' => $requestData['job_id'],
             'employer_id' => $requestData['employer_id'],
@@ -84,6 +84,8 @@ class JobsPaymentController extends Controller
             'description' => $data,
             'datetime' => $date_data
         ];
+
+
 
         $result = JobsPayment::updateOrCreate(['id' => $requestData['id']], $planData);
 
@@ -139,6 +141,50 @@ class JobsPaymentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $auth_user = authSession();
+        if (!$auth_user->can('jobs delete')) {
+            return  redirect()->back()->withErrors(trans('messages.permission_denied'));
+        }
+        if (demoUserPermission()) {
+            return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
+        }
+        $category = Jobspayment::find($id);
+        $msg = __('messages.msg_fail_to_delete', ['name' => __('jobs payment')]);
+
+        if ($category != '') {
+
+            ///$service = Service::where('category_id',$id)->first();
+
+            $category->delete();
+            $msg = __('messages.msg_deleted', ['name' => __('jobs payment')]);
+        }
+        if (request()->is('api/*')) {
+            return comman_message_response($msg);
+        }
+        return redirect()->back()->withSuccess($msg);
+    }
+
+
+    public function action(Request $request)
+    {
+
+
+        $id = $request->id;
+
+        $category  = JobsPayment::withTrashed()->where('id', $id)->first();
+        $msg = __('messages.not_found_entry', ['name' => __('jobs payment')]);
+        if ($request->type == 'restore') {
+            $category->restore();
+            $msg = __('messages.msg_restored', ['name' => __('jobs payment')]);
+        }
+        if ($request->type === 'forcedelete') {
+            $category->forceDelete();
+            $msg = __('messages.msg_forcedelete', ['name' => __('jobs payment')]);
+        }
+
+        if (request()->is('api/*')) {
+            return comman_message_response($msg);
+        }
+        return comman_custom_response(['message' => $msg, 'status' => true]);
     }
 }

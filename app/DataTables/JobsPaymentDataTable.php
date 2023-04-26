@@ -57,6 +57,18 @@ class JobsPaymentDataTable extends DataTable
      */
     public function query(JobsPayment $model)
     {
+       
+
+        
+        if (auth()->user()->hasAnyRole(['admin'])) {
+           
+            $model = $model->withTrashed()->orderByDesc('id');
+        }else{
+            
+            return $model->list()->newQuery()->orderByDesc('id');
+
+        }
+
         return $model->newQuery()->myPayment();
     }
 

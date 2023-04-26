@@ -13,9 +13,7 @@ class JobsController extends Controller
 {
     public function getJobsList(Request $request)
     {
-        $booking = Jobs::withTrashed();
-
-        $booking->where('status', 1);
+        $booking = Jobs::where('status', 1);
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
@@ -238,20 +236,24 @@ class JobsController extends Controller
 
     public function getJobsListByCityAndCategory(Request $request)
     {
-        $booking = Jobs::withTrashed();
-        
+        $booking = Jobs::query();
+
         if (isset($request->district_id)) {
-            if ($request->district_id == 'jobs-in-all-districts') {
-                
+            if ($request->district_id == 'jobs-in-all-districts' && $request->jobcategory_id == 'select-categories') {
+
+
+                $booking->where('status', 1);
+            } else if ($request->district_id == 'jobs-in-all-districts') {
+
                 $booking->where('jobcategory_id', $request->jobcategory_id);
 
                 $booking->where('status', 1);
             } else if ($request->district_id == "null") {
 
                 $booking->where('status', 1);
-            } else {  
+            } else {
 
-                $district =  District::where('slug', $request->district_id)->get();               
+                $district =  District::where('slug', $request->district_id)->get();
                 $booking->where('jobcategory_id', $request->jobcategory_id);
                 $booking->where('status', 1);
                 $booking->whereHas('jobDistricts', function ($a) use ($district) {
@@ -315,7 +317,7 @@ class JobsController extends Controller
 
     public function getJobsListByUser(Request $request)
     {
-        $booking = Jobs::withTrashed();
+        $booking = Jobs::where();
 
 
         $booking->whereHas('user', function ($a) use ($request) {
