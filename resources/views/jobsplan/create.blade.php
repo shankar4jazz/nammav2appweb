@@ -43,6 +43,10 @@
                                 {{ Form::select('duration',['1' => '1' , '2' => '2','3' => '3','4' => '4','5' => '5','6' => '6','7' => '7','8' => '8','9' => '9','10' => '10','11' => '11','12' => '12' ],old('duration'),[ 'id' => 'duration' ,'class' =>'form-control select2js','required']) }}
                             </div>
                             <div class="form-group col-md-4">
+                                {{ Form::label('trial_period',__('Period (Plan validity days)').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
+                                {{ Form::number('trial_period',old('trial_period'),['placeholder' => __('Enter the days plan validity'),'class' =>'form-control', 'required']) }}
+                            </div>
+                            <div class="form-group col-md-4">
                                 {{ Form::label('Price',__('Actual Price').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
                                 {{ Form::number('price',old('price'),['placeholder' => __('Price'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0]) }}
                             </div>
@@ -82,44 +86,8 @@
                                 {{ Form::textarea('description', $decoded_description, ['class'=>"form-control textarea" , 'rows'=>3  , 'id'=>"editor", 'placeholder'=> __('messages.description') ]) }}
                             </div>
                         </div>
-                        <div>
-                            @foreach($plan_limit as $key => $value)
-                            <?php
-                            $planValue = $plan->planlimit;
-                            if (!empty($planValue)) {
-                                $planValue = $plan->planlimit->plan_limitation;
-                                if (!array_key_exists('is_checked', $planValue[$value->value])) {
-                                    $planValue[$value->value]['is_checked'] = 'off';
-                                }
-                            } else {
-                                $planValue = null;
-                            }
-
-                            ?>
-
-                            <div class="row d-none show-checklist" id="show-checklist">
-                                <div class="form-group col-md-6">
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        {{ Form::checkbox("plan_limitation[$value->value][is_checked]", $planValue!= null ? $planValue[$value->value]['is_checked'] : null, $planValue!= null && $planValue[$value->value]['is_checked'] == 'on' ? true : false, ['class' => 'custom-control-input checklist' , 'id' => "enable_".$value->value ,'onClick' => "showCheckLimitData('enable_$value->value')"  ]) }}
-                                        <label class="custom-control-label" for="{{'enable_'.$value->value}}">{{__('messages.plan_limitations',['keyword' => __('messages.'.$value->value)] )  }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class=" col-md-6 d-none {{'enable_'.$value->value}}" id="show-limit-{{$key}}">
-                                    <div class="form-group">
-                                        {{ Form::label('service_limit',__('messages.limit'), ['class' => 'form-control-label']) }}
-                                        {{ Form::number("plan_limitation[$value->value][limit]",$planValue!= null ? $planValue[$value->value]['limit'] : null,['placeholder' => __('messages.plan_limitations',['keyword' => __('messages.'.$value->value)] ),'class' =>'form-control', 'step' => 'any', 'min' => 0]) }}
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                        <div class="row d-none show_trial_period">
-                            <div class="form-group col-md-4">
-                                {{ Form::label('trial_period',__('messages.trial_period'), ['class' => 'form-control-label']) }}
-                                {{ Form::number('trial_period',old('trial_period'),['placeholder' => __('messages.trial_period'),'class' =>'form-control', 'step' => 'any', 'min' => 0]) }}
-                            </div>
-                        </div>
+              
+                       
 
                         {{ Form::submit( trans('messages.save'), ['class'=>'btn btn-md btn-primary float-right']) }}
                         {{ Form::close() }}

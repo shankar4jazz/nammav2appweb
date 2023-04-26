@@ -572,10 +572,10 @@ class PushNotificationController extends Controller
 
 
         $data = array(
-            'news_id' =>  $_POST['job_id'],
+            'news_id' =>  $_POST['news_id'],
         );
 
-        $to = '/topics/TN-' . $district_name;
+        $to = '/topics/TN-'.$district_name;
 
         $fields = array(
             'to'               => $to,

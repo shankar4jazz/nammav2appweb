@@ -58,6 +58,12 @@
 
                             </div>
                             <div class="form-group col-md-4">
+                                <?php echo e(Form::label('trial_period',__('Period (Plan validity days)').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
+
+                                <?php echo e(Form::number('trial_period',old('trial_period'),['placeholder' => __('Enter the days plan validity'),'class' =>'form-control', 'required'])); ?>
+
+                            </div>
+                            <div class="form-group col-md-4">
                                 <?php echo e(Form::label('Price',__('Actual Price').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false)); ?>
 
                                 <?php echo e(Form::number('price',old('price'),['placeholder' => __('Price'),'class' =>'form-control', 'required', 'step' => 'any', 'min' => 0])); ?>
@@ -112,50 +118,8 @@
 
                             </div>
                         </div>
-                        <div>
-                            <?php $__currentLoopData = $plan_limit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php
-                            $planValue = $plan->planlimit;
-                            if (!empty($planValue)) {
-                                $planValue = $plan->planlimit->plan_limitation;
-                                if (!array_key_exists('is_checked', $planValue[$value->value])) {
-                                    $planValue[$value->value]['is_checked'] = 'off';
-                                }
-                            } else {
-                                $planValue = null;
-                            }
-
-                            ?>
-
-                            <div class="row d-none show-checklist" id="show-checklist">
-                                <div class="form-group col-md-6">
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        <?php echo e(Form::checkbox("plan_limitation[$value->value][is_checked]", $planValue!= null ? $planValue[$value->value]['is_checked'] : null, $planValue!= null && $planValue[$value->value]['is_checked'] == 'on' ? true : false, ['class' => 'custom-control-input checklist' , 'id' => "enable_".$value->value ,'onClick' => "showCheckLimitData('enable_$value->value')"  ])); ?>
-
-                                        <label class="custom-control-label" for="<?php echo e('enable_'.$value->value); ?>"><?php echo e(__('messages.plan_limitations',['keyword' => __('messages.'.$value->value)] )); ?>
-
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class=" col-md-6 d-none <?php echo e('enable_'.$value->value); ?>" id="show-limit-<?php echo e($key); ?>">
-                                    <div class="form-group">
-                                        <?php echo e(Form::label('service_limit',__('messages.limit'), ['class' => 'form-control-label'])); ?>
-
-                                        <?php echo e(Form::number("plan_limitation[$value->value][limit]",$planValue!= null ? $planValue[$value->value]['limit'] : null,['placeholder' => __('messages.plan_limitations',['keyword' => __('messages.'.$value->value)] ),'class' =>'form-control', 'step' => 'any', 'min' => 0])); ?>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </div>
-                        <div class="row d-none show_trial_period">
-                            <div class="form-group col-md-4">
-                                <?php echo e(Form::label('trial_period',__('messages.trial_period'), ['class' => 'form-control-label'])); ?>
-
-                                <?php echo e(Form::number('trial_period',old('trial_period'),['placeholder' => __('messages.trial_period'),'class' =>'form-control', 'step' => 'any', 'min' => 0])); ?>
-
-                            </div>
-                        </div>
+              
+                       
 
                         <?php echo e(Form::submit( trans('messages.save'), ['class'=>'btn btn-md btn-primary float-right'])); ?>
 

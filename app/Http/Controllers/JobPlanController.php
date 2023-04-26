@@ -79,7 +79,7 @@ class JobPlanController extends Controller
         }
         $data = base64_encode($requestData['description']);
 
-      
+     
         $planData = [
             'title' => $requestData['title'],
             'amount' => $requestData['amount'],
@@ -87,6 +87,7 @@ class JobPlanController extends Controller
             'total_amount' => $requestData['total_amount'],
             'status' => $requestData['status'],
             'duration' => $requestData['duration'],
+            'trial_period' => $requestData['trial_period'],
             'price' => $requestData['price'],
             'percentage' => $requestData['percentage'],
             'description' =>  $data,
@@ -94,21 +95,13 @@ class JobPlanController extends Controller
             'type'=> $requestData['type'],
             'plancategory_id'=> $requestData['plancategory_id']
         ];
+
+      
         if(empty($request->id) && $request->id == null){
             $planData['identifier'] = strtolower($requestData['title']);
         }
         $result = JobsPlans::updateOrCreate(['id' => $requestData['id'] ],$planData);
-        if($result){
-            if($result->planlimit()->count() > 0)
-            {
-                $result->planlimit()->delete();
-            }
-            $limitdata = [
-                'plan_id' =>  $result->id,
-                'plan_limitation' => $requestData['plan_limitation']
-            ];
-            PlanLimit::updateOrCreate(['id' => $requestData['id'] ],$limitdata);            
-        }
+    
         
         $message = trans('messages.update_form',['form' => trans('messages.plan')]);
 

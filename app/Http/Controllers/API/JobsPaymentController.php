@@ -16,9 +16,13 @@ class JobsPaymentController extends Controller
         $data = $request->all();
         $data['datetime'] = isset($request->datetime) ? date('Y-m-d H:i:s',strtotime($request->datetime)) : date('Y-m-d H:i:s');
         $result = JobsPayment::updateOrCreate(['job_id' => $data['job_id']],$data);
+
+        $startDate = date('Y-m-d'); // use the current date as the start date
+        $endDate = date('Y-m-d', strtotime($startDate . ' + '.$request->trial_period.' days')); // add 30 days to the start date to get the end date
     
         $booking = Jobs::find($request->job_id);
         $booking->payment_id = $result->id;
+        $booking->end_date = $endDate;
         $booking->plan_id = $request->plan_id;
         $booking->save();
         $status_code = 200;

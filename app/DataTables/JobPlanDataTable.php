@@ -86,14 +86,14 @@ class JobPlanDataTable extends DataTable
                 ->title(__('messages.no'))
                 ->orderable(false),
             Column::make('plancategory_id')
-                ->title(__('messages.category')),          
+                ->title(__('messages.category')),    
+                Column::make('title'),      
             Column::make('type'),
             Column::make('price'),
             Column::make('percentage')
             ->title(__('Offer %')),
             Column::make('amount'),
-            Column::make('tax')
-            ->title(__('GST %')),
+         
             Column::make('total_amount')
             ->title(__('Total Amount(with GST) %')),
             Column::make('status'),

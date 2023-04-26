@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\JobsPayment;
+use App\Models\Jobs;
 use App\Models\JobsPlanCategory;
 
 use App\DataTables\JobsPaymentDataTable;
@@ -88,6 +89,14 @@ class JobsPaymentController extends Controller
 
 
         $result = JobsPayment::updateOrCreate(['id' => $requestData['id']], $planData);
+        $startDate = date('Y-m-d'); // use the current date as the start date
+        $endDate = date('Y-m-d', strtotime($startDate . ' + '.$requestData['trial_period'].' days')); // add 30 days to the start date to get the end date
+
+        $booking = Jobs::find($requestData['job_id']);
+        $booking->payment_id = $requestData['id'];
+        $booking->end_date = $endDate;
+        $booking->plan_id = $requestData['plan_id'];
+        $booking->save();
 
 
         $message = trans('messages.update_form', ['form' => trans('messages.plan')]);

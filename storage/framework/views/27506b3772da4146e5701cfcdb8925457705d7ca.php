@@ -23,8 +23,9 @@
 
                         <?php echo e(Form::hidden('id')); ?>
 
-                        <input type="hidden" id="employer_id" name="employer_id" value="<?php echo e($plan->employer_id); ?>">
+                        <input type="text" id="employer_id" name="employer_id" value="<?php echo e($plan->employer_id); ?>">
                         <input type="hidden" id="all_total_amount" name="all_total_amount" value="<?php echo e($plan->total_amount); ?>">
+                        <input type="hidden" id="trial_period" name="trial_period" value="<?php echo e($plan->trial_period); ?>">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <?php echo e(Form::label('job_id', __('messages.select_name',[ 'select' => __('Job') ]),['class'=>'form-control-label'],false)); ?>
@@ -48,7 +49,9 @@
                                         <?php $__currentLoopData = $data->getPlans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
 
-                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-<?php echo e($p->id); ?>" type="radio" name="plan_id" value='<?php echo e($p->id); ?>' onclick='updateFields("<?php echo e($p->id); ?>", "<?php echo e($p->total_amount); ?>");' <?php echo e($p->id ==  $plan->plan_id? 'checked' : ''); ?>> </td>
+                                        
+
+                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-<?php echo e($p->id); ?>" type="radio" name="plan_id" value='<?php echo e($p->id); ?>' onclick='updateFields("<?php echo e($p->id); ?>", "<?php echo e($p->total_amount); ?>", "<?php echo e($p->trial_period); ?>");' <?php echo e($p->id ==  $plan->plan_id? 'checked' : ''); ?>> </td>
                                             <td style="background-color:lightgreen;" class="text-capitalize"><?php echo e($p->duration); ?> <?php echo e($p->type); ?></td>
                                         </tr>
                                         <tr>
@@ -192,8 +195,10 @@
                     getEmployer(job_id);
                 })
 
-                window.updateFields = function(plan_id, total_amount) {
+                window.updateFields = function(plan_id, total_amount, period) {
                     document.getElementById('all_total_amount').value = total_amount;
+                    document.getElementById('trial_period').value = period;
+
                     // Any other fields you want to update based on the selected radio button
                 };
 

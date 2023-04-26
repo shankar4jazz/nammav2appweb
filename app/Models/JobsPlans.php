@@ -14,6 +14,7 @@ class JobsPlans extends Model
     ];
     protected $casts = [
         'amount'    => 'double',
+        'trial_period'    => 'integer',
         'status'    => 'integer',
         'plancategory_id'    => 'integer',
     ];

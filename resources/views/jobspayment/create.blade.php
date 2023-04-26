@@ -18,6 +18,7 @@
                         {{ Form::hidden('id') }}
                         <input type="hidden" id="employer_id" name="employer_id" value="{{$plan->employer_id}}">
                         <input type="hidden" id="all_total_amount" name="all_total_amount" value="{{$plan->total_amount}}">
+                        <input type="hidden" id="trial_period" name="trial_period" value="{{$plan->trial_period}}">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 {{ Form::label('job_id', __('messages.select_name',[ 'select' => __('Job') ]),['class'=>'form-control-label'],false) }}
@@ -39,7 +40,9 @@
                                         @foreach($data->getPlans as $p)
                                         <tr>
 
-                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-{{$p->id}}" type="radio" name="plan_id" value='{{$p->id}}' onclick='updateFields("{{$p->id}}", "{{$p->total_amount}}");' {{ $p->id ==  $plan->plan_id? 'checked' : '' }}> </td>
+                                        
+
+                                            <td style="background-color:lightgreen;"><input class="checkbox no-wh permission_check" id="permission-{{$p->id}}" type="radio" name="plan_id" value='{{$p->id}}' onclick='updateFields("{{$p->id}}", "{{$p->total_amount}}", "{{$p->trial_period}}");' {{ $p->id ==  $plan->plan_id? 'checked' : '' }}> </td>
                                             <td style="background-color:lightgreen;" class="text-capitalize">{{ $p->duration }} {{ $p->type }}</td>
                                         </tr>
                                         <tr>
@@ -164,8 +167,10 @@
                     getEmployer(job_id);
                 })
 
-                window.updateFields = function(plan_id, total_amount) {
+                window.updateFields = function(plan_id, total_amount, period) {
                     document.getElementById('all_total_amount').value = total_amount;
+                    document.getElementById('trial_period').value = period;
+
                     // Any other fields you want to update based on the selected radio button
                 };
 

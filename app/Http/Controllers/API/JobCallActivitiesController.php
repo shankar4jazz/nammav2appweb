@@ -34,7 +34,7 @@ class JobCallActivitiesController extends Controller
 
     public function getCallActivitiesByJobId(Request $request){
 
-        $document = JobCallActivities::where('job_id',$request->job_id);
+        $document = JobCallActivities::where('jobs_id',$request->jobs_id);
        
         $per_page = config('constant.PER_PAGE_LIMIT');
         if( $request->has('per_page') && !empty($request->per_page)){

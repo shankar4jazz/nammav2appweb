@@ -317,7 +317,7 @@ class JobsController extends Controller
 
     public function getJobsListByUser(Request $request)
     {
-        $booking = Jobs::where();
+        $booking = Jobs::query();
 
 
         $booking->whereHas('user', function ($a) use ($request) {
