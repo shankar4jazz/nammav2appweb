@@ -1,6 +1,6 @@
 {{ Form::model($settings,['method' => 'POST','route'=>'sendPagePushNotification', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'push_notification'] ) }}
 {{ Form::hidden('id') }}
-<input type="hidden" id="district_name" name="district_name" value="TamilNadu">
+<input type="hidden" id="district_name" name="district_name" value="AllTamilNadu">
 <div class="row">
     <div class="form-group col-md-12">
         {{ Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
