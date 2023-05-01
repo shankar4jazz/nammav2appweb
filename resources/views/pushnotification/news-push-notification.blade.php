@@ -1,6 +1,6 @@
 {{ Form::model($settings,['method' => 'POST','route'=>'sendNewsPushNotification', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'push_notification'] ) }}
 {{ Form::hidden('id') }}
-<input type="hidden" id="district_name" name="district_name" value="TamilNadu">
+<input type="hidden" id="district_name" name="district_name" value="AllTamilNadu">
 <div class="row">
     <div class="form-group col-md-12">
         {{ Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
@@ -59,8 +59,11 @@
         var district = $(this).val();
         var district_name = $(this).find('option:selected').text();
 
+        console.log(district_name);
+
 
         $('#district_name').val(district_name)
+        
         $('#news_id').empty();
         getJobs(district);
     })
@@ -82,6 +85,7 @@
     });
 
     function getJobs(district, state = "") {
+       
 
         var state_route = "{{ route('ajax-list', [ 'type' => 'push_news','district_id' =>'']) }}" + district;
         state_route = state_route.replace('amp;', '');

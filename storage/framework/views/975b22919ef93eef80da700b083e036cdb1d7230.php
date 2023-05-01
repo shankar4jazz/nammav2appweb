@@ -70,8 +70,11 @@
         var district = $(this).val();
         var district_name = $(this).find('option:selected').text();
 
+        console.log(district_name);
+
 
         $('#district_name').val(district_name)
+        
         $('#news_id').empty();
         getJobs(district);
     })
@@ -93,6 +96,7 @@
     });
 
     function getJobs(district, state = "") {
+        console.log(district);
 
         var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'push_news','district_id' =>''])); ?>" + district;
         state_route = state_route.replace('amp;', '');

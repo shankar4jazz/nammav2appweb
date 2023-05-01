@@ -15,7 +15,7 @@ class NewsController extends Controller
         $booking = News::withTrashed();
 
         $booking->where('status', 1);
-        $per_page = 10;
+        $per_page = 100;
         $page = $request->page;
 
         $start = ($page - 1) * $per_page;
@@ -42,8 +42,8 @@ class NewsController extends Controller
             $orderBy = $request->orderby;
         }
 
-        $booking = $booking->orderBy('updated_at', 'desc')
-            ->get();
+       // $booking = $booking->orderBy('updated_at', 'desc')->get();
+		 $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
         $items = NewsResource::collection($booking);
 
         $response = [
@@ -138,12 +138,22 @@ class NewsController extends Controller
                 $per_page = $booking->count();
             }
         }
+		  $per_page = 50;
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+		 if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
         $orderBy = 'desc';
         if ($request->has('orderby') && !empty($request->orderby)) {
             $orderBy = $request->orderby;
         }
 
-        $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
         $items = NewsResource::collection($booking);
 
         $response = [
@@ -182,12 +192,22 @@ class NewsController extends Controller
                 $per_page = $booking->count();
             }
         }
+		  $per_page = 50;
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+		 if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
         $orderBy = 'desc';
         if ($request->has('orderby') && !empty($request->orderby)) {
             $orderBy = $request->orderby;
         }
 
-        $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
         $items = NewsResource::collection($booking);
 
         // $response = [

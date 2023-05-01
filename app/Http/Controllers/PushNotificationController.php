@@ -453,7 +453,7 @@ class PushNotificationController extends Controller
     public function sendPvtJobsPushNotification(Request $request)
     {
         $data = $request->all();
-        $district_name = $data['district_name'];
+        $district_name = str_replace(" ", "", $data['district_name']);
 
         $message = array(
 
@@ -467,7 +467,14 @@ class PushNotificationController extends Controller
             'pvt_jobid' =>  $_POST['pvt_jobid'],
         );
 
-        $to = '/topics/TN-' . $district_name;
+        if ($district_name == 'AllTamilNadu') {
+
+            $to = '/topics/'.$district_name;
+        } else {
+
+            $to = '/topics/TN-'.$district_name;
+        }
+
 
         $fields = array(
             'to'               => $to,
@@ -506,7 +513,7 @@ class PushNotificationController extends Controller
     public function sendGovtJobsPushNotification(Request $request)
     {
         $data = $request->all();
-        $district_name = $data['district_name'];
+        $district_name = str_replace(" ", "", $data['district_name']);
         $message = array(
 
             'title'     =>  $_POST['title'],
@@ -521,7 +528,13 @@ class PushNotificationController extends Controller
             'govt_jobid' =>  $_POST['job_id'],
         );
 
-        $to = '/topics/TN-' . $district_name;
+        if ($district_name == 'AllTamilNadu') {
+
+            $to = '/topics/'.$district_name;
+        } else {
+
+            $to = '/topics/TN-'.$district_name;
+        }
 
         $fields = array(
             'to'               => $to,
@@ -562,7 +575,9 @@ class PushNotificationController extends Controller
     public function sendNewsPushNotification(Request $request)
     {
         $data = $request->all();
-        $district_name = $data['district_name'];
+        $district_name = str_replace(" ", "", $data['district_name']);
+      
+       
         $message = array(
             'title'     =>  $_POST['title'],
             'body'      =>  $data['description'],
@@ -575,7 +590,14 @@ class PushNotificationController extends Controller
             'news_id' =>  $_POST['news_id'],
         );
 
-        $to = '/topics/TN-'.$district_name;
+
+        if ($district_name == 'AllTamilNadu') {
+
+            $to = '/topics/'.$district_name;
+        } else {
+
+            $to = '/topics/TN-'.$district_name;
+        }
 
         $fields = array(
             'to'               => $to,
@@ -583,6 +605,8 @@ class PushNotificationController extends Controller
             'notification'     => $message,
             'data'             => $data
         );
+
+       
 
         $fields = json_encode($fields);
         $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
@@ -618,9 +642,7 @@ class PushNotificationController extends Controller
         $data = $request->all();
         $district_name = $data['district_name'];
 
-
-        var_dump($data);
-        exit();
+exit();
         $message = array(
 
             'title'     =>  $_POST['title'],
@@ -695,9 +717,10 @@ class PushNotificationController extends Controller
             ->render('setting.comission', compact('pageTitle', 'providerdata', 'auth_user'));
     }
 
-    private function getPages(){
+    private function getPages()
+    {
         return array(
-            "today_jobs"=>'Today Jobs',
+            "today_jobs" => 'Today Jobs',
             "10th_jobs" => '!0th Jobs'
 
         );

@@ -24,7 +24,7 @@ class JobsPaymentDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('job_id', function($payment) {
-                return ($payment->job_id != null &&isset($payment->booking->title)) ? $payment->booking->title :'-';
+                return ($payment->job_id != null &&isset($payment->booking->title)) ? '['.$payment->job_id.']--'.$payment->booking->title :'-';
             })
             ->filterColumn('job_id',function($query,$keyword){
                 $query->whereHas('booking.service',function ($q) use($keyword){

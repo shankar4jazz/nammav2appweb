@@ -134,4 +134,8 @@ class Jobs extends Model implements HasMedia
     {
         return $query->orderBy('deleted_at', 'asc');
     }
+    public function views()
+    {
+        return $this->hasOne(JobsViews::class);
+    }
 }

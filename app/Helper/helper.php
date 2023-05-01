@@ -1551,3 +1551,26 @@ function bookingstatus($status)
     }
     return $html;
 }
+
+function sendWhatsAppText($jobid, $user_id, $status){
+
+
+    switch ($status) {
+        case 'failed':
+            $html = '<span class="badge badge-warning ">' . $status . '</span>';
+
+            break;
+
+        case 'paid':
+            $html = '<span class="badge badge-primary">' . $status . '</span>';
+
+            break;
+            
+        default:
+            $html = '<span class="badge badge-danger">' . $status . '</span>';
+            break;
+    }
+    return $html;
+
+
+}

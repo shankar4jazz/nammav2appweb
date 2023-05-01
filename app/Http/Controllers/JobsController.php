@@ -19,8 +19,9 @@ class JobsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(JobsDataTable $dataTable)
+    public function index(JobsDataTable $dataTable, Request $request)
     {
+        $status = $request->input('status');
         $auth_user = authSession();
         if (!$auth_user->can('jobs list')) {
             return  redirect()->back()->withErrors(trans('messages.permission_denied'));
@@ -28,7 +29,7 @@ class JobsController extends Controller
         $pageTitle = trans('messages.list_form_title', ['form' => trans('messages.jobs')]);
         $auth_user = authSession();
         $assets = ['datatable'];
-        return $dataTable->render('jobs.index', compact('pageTitle', 'auth_user', 'assets'));
+        return $dataTable->render('jobs.index', compact('pageTitle', 'auth_user', 'assets', 'status'));
     }
 
     /**
@@ -123,7 +124,7 @@ class JobsController extends Controller
                 $decoded_description = $jobsdata->description; // Outputs "Hello World!"
             }
         }
-      
+
         $jobsdata['contact_number_data'] = $id;
 
 
@@ -165,13 +166,13 @@ class JobsController extends Controller
         } else {
             $data['user_id'] =  $auth_user->id;
         }
-        
+
         $data['description'] = base64_encode($request->description);
 
-        if(isset($data['city_name'])){
-        
-        $slug_text = $data['job_role'] . ' in ' . $data['company_name']. ' ' . $data['city_name'] .' '. time();
-        $data['slug'] = $this->convertSlug($slug_text);
+        if (isset($data['city_name'])) {
+
+            $slug_text = $data['job_role'] . ' in ' . $data['company_name'] . ' ' . $data['city_name'] . ' ' . time();
+            $data['slug'] = $this->convertSlug($slug_text);
         }
 
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
@@ -223,7 +224,7 @@ class JobsController extends Controller
         $jobs = Jobs::find($result->id);
 
         $result->jobDistricts()->detach();
-        
+
         $distData =  $request->input('districts');
 
 
@@ -249,11 +250,6 @@ class JobsController extends Controller
         if ($result->wasRecentlyCreated) {
             $message = trans('messages.save_form', ['form' => trans('messages.jobs')]);
         }
-
-
-
-
-
 
         if ($request->is('api/*')) {
             return  comman_custom_response($jobs, 200);
@@ -355,5 +351,18 @@ class JobsController extends Controller
         $text = preg_replace('/\s+/', '-', $text);
         $text = preg_replace('/[^\w-]+/', '', $text);
         return $text;
+    }
+
+    public function changeStatus(Request $request, $id)
+    {
+
+        $data = $request->all();
+
+        Jobs::updateOrCreate(['id' => $data['job_id']], $data);
+
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

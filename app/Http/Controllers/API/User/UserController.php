@@ -535,6 +535,7 @@ class UserController extends Controller
         $input = $request->all();
 
         $password = $input['password'];
+    
         $input['display_name'] = $input['first_name'] . " " . $input['last_name'];
         $input['user_type'] = isset($input['user_type']) ? $input['user_type'] : 'user';
         $input['password'] = Hash::make($password);

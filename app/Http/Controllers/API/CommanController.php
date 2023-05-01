@@ -19,6 +19,7 @@ use App\Models\Coupon;
 use App\Http\Resources\API\ServiceResource;
 use App\Http\Resources\API\TypeResource;
 use App\Http\Resources\API\CouponResource;
+use App\Models\PaymentGateway;
 
 class CommanController extends Controller
 {
@@ -41,11 +42,10 @@ class CommanController extends Controller
 
         return response()->json( $list );
     }
-    public function getCityListByDistrictId(Request $request){
-
+    public function getCityListByDistrictId(Request $request)
+    {
         $list = City::where('district_id',$request->district_id)->get();
         return response()->json( $list );
-
     }
 
     public function getCityList(Request $request)
@@ -262,5 +262,19 @@ class CommanController extends Controller
         ];
         
         return comman_custom_response($items);
+    }
+
+    public function getPaymentConfig(Request $request){
+        $mode = $request->type;
+        $page = $request->page;
+        $select = 'value' ;
+
+        if($mode == 'is_live_mode'){
+            $select = 'live_value';
+        }
+        $payment_data = PaymentGateway::select('id','title', $select,'is_test','status','type')->where('type', $request->page)->first();
+        $payment_data['type'] = $mode;
+        return comman_custom_response($payment_data);
+       // return response()->json(['success'=>'Ajax request submitted successfully','data'=>$payment_data]);
     }
 }

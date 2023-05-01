@@ -732,8 +732,8 @@ class HomeController extends Controller
 
             case 'get-jobs':
                 $items = \App\Models\Jobs::select('id', 'title as text')
-                    ->orderBy('id', 'desc')
-                    ->where('status', 1);
+                    ->orderBy('id', 'desc');
+                    
                 if (isset($request->job_id)) {
                     $items->where('id', $request->job_id);
                 }

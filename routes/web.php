@@ -241,21 +241,21 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('jobs-categories-action', [JobsCategoryController::class, 'action'])->name('jobs_categories.action');
 
     Route::resource('jobs', JobsController::class);
+    Route::put('/jobs/{id}/change-status', [JobsController::class, 'changeStatus'])->name('jobs.change_status');
+    
     Route::post('jobs-action', [JobsController::class, 'action'])->name('jobs.action');
     Route::get('jobs/quick/process', [JobsController::class, 'quickJob'])->name('jobs.quick');
     Route::get('jobs/quick/add', [JobsController::class, 'quickJobAdd'])->name('jobs.jobadd');
     Route::get('jobs/quick/store', [JobsController::class, 'quickStoreJob'])->name('jobs.storequick');
-
 });
 Route::get('/ajax-list', [HomeController::class, 'getAjaxList'])->name('ajax-list');
-Route::get('clear_cache', function () {	
+Route::get('clear_cache', function () {
 
-  Artisan::call('cache:clear');
+    Artisan::call('cache:clear');
     //dd("Cache is cleared");
-	Artisan::call('route:clear');
-	//dd("Cache is cleared");
-	Artisan::call('config:clear');
-	Artisan::call('view:clear');
-	dd("config is cleared");
-
+    Artisan::call('route:clear');
+    //dd("Cache is cleared");
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    dd("config is cleared");
 });
