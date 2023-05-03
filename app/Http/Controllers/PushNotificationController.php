@@ -35,6 +35,7 @@ class PushNotificationController extends Controller
         $pageTitle = __('Push Notification');
         $page = $request->page;
 
+
         if ($page == '') {
             if ($auth_user->hasAnyRole(['admin', 'demo_admin'])) {
                 $page = 'privatejobs-push-notification';
@@ -42,7 +43,9 @@ class PushNotificationController extends Controller
                 $page = 'profile_form';
             }
         }
+       
 
+  
         return view('pushnotification.index', compact('page', 'pageTitle', 'auth_user'));
     }
 
@@ -50,7 +53,7 @@ class PushNotificationController extends Controller
     public function layoutPage(Request $request)
     {
 
-        $page = $request->page;
+        $page = $request->page;      
         $auth_user = authSession();
         $user_id = $auth_user->id;
         $settings = AppSetting::first();
@@ -452,6 +455,7 @@ class PushNotificationController extends Controller
     }
     public function sendPvtJobsPushNotification(Request $request)
     {
+        $page = $request->page;
         $data = $request->all();
         $district_name = str_replace(" ", "", $data['district_name']);
 
@@ -462,20 +466,20 @@ class PushNotificationController extends Controller
             //'image'     =>  $_POST['image'],
 
         );
-
+        exit();
         $data = array(
             'pvt_jobid' =>  $_POST['pvt_jobid'],
         );
 
         if ($district_name == 'AllTamilNadu') {
 
-            $to = '/topics/'.$district_name;
+            $to = '/topics/' . $district_name;
         } else {
 
-            $to = '/topics/TN-'.$district_name;
+            $to = '/topics/TN-' . $district_name;
         }
 
-
+        exit();
         $fields = array(
             'to'               => $to,
             'priority'         => 'high',
@@ -508,10 +512,12 @@ class PushNotificationController extends Controller
         if (request()->is('api/*')) {
             return comman_message_response($message);
         }
+        
         return redirect()->route('push-notification.index')->withSuccess($message);
     }
     public function sendGovtJobsPushNotification(Request $request)
     {
+        $page = $request->page;
         $data = $request->all();
         $district_name = str_replace(" ", "", $data['district_name']);
         $message = array(
@@ -530,10 +536,10 @@ class PushNotificationController extends Controller
 
         if ($district_name == 'AllTamilNadu') {
 
-            $to = '/topics/'.$district_name;
+            $to = '/topics/' . $district_name;
         } else {
 
-            $to = '/topics/TN-'.$district_name;
+            $to = '/topics/TN-' . $district_name;
         }
 
         $fields = array(
@@ -569,15 +575,17 @@ class PushNotificationController extends Controller
         if (request()->is('api/*')) {
             return comman_message_response($message);
         }
-        return redirect()->route('push-notification.index')->withSuccess($message);
+       
+        return redirect()->route('push-notification.index', ['page' => $page])->withSuccess($message);
     }
 
     public function sendNewsPushNotification(Request $request)
     {
         $data = $request->all();
+        $page = $request->page;
         $district_name = str_replace(" ", "", $data['district_name']);
-      
-       
+
+
         $message = array(
             'title'     =>  $_POST['title'],
             'body'      =>  $data['description'],
@@ -593,10 +601,10 @@ class PushNotificationController extends Controller
 
         if ($district_name == 'AllTamilNadu') {
 
-            $to = '/topics/'.$district_name;
+            $to = '/topics/' . $district_name;
         } else {
 
-            $to = '/topics/TN-'.$district_name;
+            $to = '/topics/TN-' . $district_name;
         }
 
         $fields = array(
@@ -606,7 +614,7 @@ class PushNotificationController extends Controller
             'data'             => $data
         );
 
-       
+
 
         $fields = json_encode($fields);
         $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
@@ -634,7 +642,8 @@ class PushNotificationController extends Controller
         if (request()->is('api/*')) {
             return comman_message_response($message);
         }
-        return redirect()->route('push-notification.index')->withSuccess($message);
+       
+        return redirect()->route('push-notification.index', ['page' => $page])->withSuccess($message);
     }
 
     public function sendPagePushNotification(Request $request)
@@ -642,7 +651,7 @@ class PushNotificationController extends Controller
         $data = $request->all();
         $district_name = $data['district_name'];
 
-exit();
+        exit();
         $message = array(
 
             'title'     =>  $_POST['title'],

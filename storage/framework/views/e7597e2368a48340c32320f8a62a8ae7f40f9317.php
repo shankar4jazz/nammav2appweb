@@ -37,12 +37,20 @@ $menu->add('<span>'.__('messages.jobs_lists').'</span><span class="custom-toolti
 </svg>')
 ->nickname('jobs')
 ->data('permission', 'jobs list');
+
 $menu->add('<span>'.__('messages.jobs_categories').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.jobs_categories').'</span></span>', ['route' => 'jobs-categories.index'])
 ->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
 </svg>')
 ->nickname('jobs')
 ->data('permission', 'jobs categories list');
+
+$menu->add('<span>'.__('Push Notification').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('Push Notification').'</span></span>', ['route' => 'push-notification.index'])
+->prepend('<svg width="14" height="16" class="sidebar-menu-icon" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.25 2H11.5V0.5H10V2H4V0.5H2.5V2H1.75C0.9175 2 0.2575 2.675 0.2575 3.5L0.25 14C0.25 14.825 0.9175 15.5 1.75 15.5H12.25C13.075 15.5 13.75 14.825 13.75 14V3.5C13.75 2.675 13.075 2 12.25 2ZM12.25 14H1.75V6.5H12.25V14ZM12.25 5H1.75V3.5H12.25V5ZM7 8.75H10.75V12.5H7V8.75Z" fill="#6C757D" />
+</svg>')
+->nickname('jobs')
+->data('permission', 'jobs list');
 
 
 $menu->add(__('messages.sidebar_form_title',['form' => trans('messages.market_place')]), ['class' => 'category-main'])->data('permission', 'order list');
@@ -384,6 +392,14 @@ $menu->add('<span>'.__('messages.payment').'</span><span class="custom-tooltip">
 ->nickname('payment')
 ->data('permission', 'payment list');
 
+$menu->add('<span>'.__('Jobs Payment').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('Jobs Payment').'</span></span>', ['route' => 'jobs-payment.index'])
+->prepend('<svg width="16" height="12" class="sidebar-menu-icon" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 0H2C1.1675 0 0.5075 0.6675 0.5075 1.5L0.5 10.5C0.5 11.3325 1.1675 12 2 12H14C14.8325 12 15.5 11.3325 15.5 10.5V1.5C15.5 0.6675 14.8325 0 14 0ZM14 10.5H2V6H14V10.5ZM14 3H2V1.5H14V3Z" fill="#6C757D" />
+</svg>
+')
+->nickname('payment')
+->data('permission', 'payment list');
+
 $menu->add('<span>'.__('messages.earning').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.earning').'</span></span>', ['route' => 'earning'])
 ->prepend('<svg width="16" height="16" class="sidebar-menu-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M8 0.5C3.86 0.5 0.5 3.86 0.5 8C0.5 12.14 3.86 15.5 8 15.5C12.14 15.5 15.5 12.14 15.5 8C15.5 3.86 12.14 0.5 8 0.5ZM8 14C4.6925 14 2 11.3075 2 8C2 4.6925 4.6925 2 8 2C11.3075 2 14 4.6925 14 8C14 11.3075 11.3075 14 8 14ZM8.6675 7.325C7.3325 6.8825 6.6875 6.605 6.6875 5.9C6.6875 5.135 7.52 4.8575 8.045 4.8575C9.0275 4.8575 9.3875 5.6 9.47 5.8625L10.655 5.36C10.5425 5.03 10.04 3.9275 8.66 3.6875V2.75H7.3475V3.695C5.3975 4.115 5.3825 5.8325 5.3825 5.915C5.3825 7.6175 7.07 8.0975 7.895 8.3975C9.08 8.8175 9.605 9.2 9.605 9.92C9.605 10.7675 8.8175 11.1275 8.12 11.1275C6.755 11.1275 6.365 9.725 6.32 9.56L5.075 10.0625C5.5475 11.705 6.785 12.1475 7.34 12.2825V13.25H8.6525V12.32C9.0425 12.2525 10.9175 11.8775 10.9175 9.905C10.925 8.8625 10.4675 7.9475 8.6675 7.325Z" fill="#6C757D" />
@@ -396,6 +412,19 @@ $menu->add(__('messages.sidebar_form_title',['form' => trans('messages.system')]
 ->data('permission', ['terms condition','privacy policy','help support','refund cancellation policy','document list']);
 
 $menu->add('<span>'.__('messages.plan').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.plan').'</span></span>', ['route' => 'plans.index'])
+->prepend('<svg width="15" height="15" class="sidebar-menu-icon" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0_2412_1261)">
+        <path d="M8.85625 3.125L11.875 6.14375V11.875H3.125V3.125H8.85625ZM8.85625 1.875H3.125C2.4375 1.875 1.875 2.4375 1.875 3.125V11.875C1.875 12.5625 2.4375 13.125 3.125 13.125H11.875C12.5625 13.125 13.125 12.5625 13.125 11.875V6.14375C13.125 5.8125 12.9937 5.49375 12.7562 5.2625L9.7375 2.24375C9.50625 2.00625 9.1875 1.875 8.85625 1.875ZM4.375 9.375H10.625V10.625H4.375V9.375ZM4.375 6.875H10.625V8.125H4.375V6.875ZM4.375 4.375H8.75V5.625H4.375V4.375Z" fill="#6C757D" />
+    </g>
+    <defs>
+        <clipPath id="clip0_2412_1261">
+            <rect width="15" height="15" fill="white" />
+        </clipPath>
+    </defs>
+</svg>')
+->nickname('plan')
+->data('permission', 'plan list');
+$menu->add('<span>'.__('Jobs Plans').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('Jobs Plans').'</span></span>', ['route' => 'jobs-plans.index'])
 ->prepend('<svg width="15" height="15" class="sidebar-menu-icon" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_2412_1261)">
         <path d="M8.85625 3.125L11.875 6.14375V11.875H3.125V3.125H8.85625ZM8.85625 1.875H3.125C2.4375 1.875 1.875 2.4375 1.875 3.125V11.875C1.875 12.5625 2.4375 13.125 3.125 13.125H11.875C12.5625 13.125 13.125 12.5625 13.125 11.875V6.14375C13.125 5.8125 12.9937 5.49375 12.7562 5.2625L9.7375 2.24375C9.50625 2.00625 9.1875 1.875 8.85625 1.875ZM4.375 9.375H10.625V10.625H4.375V9.375ZM4.375 6.875H10.625V8.125H4.375V6.875ZM4.375 4.375H8.75V5.625H4.375V4.375Z" fill="#6C757D" />

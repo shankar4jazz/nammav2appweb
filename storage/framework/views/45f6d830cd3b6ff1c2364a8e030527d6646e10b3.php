@@ -2,7 +2,9 @@
 
 <?php echo e(Form::hidden('id')); ?>
 
-<input type="hidden" id="district_name" name="district_name" value="TamilNadu">
+<?php echo e(Form::hidden('page', $page, ['class' => 'form-control'] )); ?>
+
+<input type="hidden" id="district_name" name="district_name" value="AllTamilNadu">
 <div class="row">
     <div class="form-group col-md-12">
         <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
@@ -66,8 +68,10 @@
         } else {
             console.log("No job selected to push notification");
         }
-
         textareaValue(selectedText);
+
+
+        
         $(document).on('change', '#district_id', function() {
             var district = $(this).val();
             var district_name = $(this).find('option:selected').text();

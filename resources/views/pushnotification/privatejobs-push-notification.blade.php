@@ -1,5 +1,6 @@
 {{ Form::model($settings,['method' => 'POST','route'=>'sendPvtJobsPushNotification', 'enctype'=>'multipart/form-data', 'data-toggle'=>"validator" ,'id'=>'push_notification'] ) }}
 {{ Form::hidden('id') }}
+{{ Form::hidden('page', $page, ['class' => 'form-control'] ) }}
 <input type="hidden" id="district_name" name="district_name" value="AllTamilNadu">
 <div class="row">
     <div class="form-group col-md-12">

@@ -27,6 +27,12 @@ Route::get('get-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
 Route::post('jobs-save-payment', [API\JobsPaymentController::class, 'savePayment']);
 Route::post('save-call-activities', [API\JobCallActivitiesController::class, 'saveCallActivities']);
 Route::post('get-call-activities', [API\JobCallActivitiesController::class, 'getCallActivitiesByJobId']);
+
+//jobs-expiry
+Route::get('today-expiry', [API\JobsController::class, 'notifyUsersOfExpiringTodayJobs']);
+Route::get('tmrw-expiry', [API\JobsController::class, 'notifyUsersOfExpiringTmrwJobs']);
+Route::get('jobs-expiry', [API\JobsController::class, 'jobsExpire']);
+
 //jobs-reports
 Route::post('save-reports', [API\JobsReportsController::class, 'saveReports']);
 Route::post('get-reports', [API\JobsReportsController::class, 'getReports']);

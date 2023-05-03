@@ -69,7 +69,7 @@ class JobsController extends Controller
 
         $id = $request->slug;
         $booking = Jobs::with('getJobDistricts.district')->where('id', $id)->where('status', 1)->get();
-        
+
 
         if (!empty($booking)) {
             $view = JobsViews::firstOrCreate(['jobs_id' => $id]);
@@ -424,5 +424,99 @@ class JobsController extends Controller
         // ];
 
         return comman_custom_response($items);
+    }
+
+    public function notifyUsersOfExpiringTodayJobs()
+    {
+        // Get today's date
+        $today = date('Y-m-d');
+
+        // Fetch jobs where 'end_date' is today
+        $expiringJobsToday = Jobs::whereDate('end_date', $today)->get();
+
+        // Check if the collection is empty
+        if ($expiringJobsToday->isEmpty()) {
+            // No jobs found
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No jobs found that are expiring today.'
+            ]);
+        }
+
+        // Loop over the jobs
+        foreach ($expiringJobsToday as $job) {
+            // Retrieve the user related to the job
+            $user = $job->user;
+
+            // Retrieve the user's contact number
+            $contactNumber = $user->contact_number;
+
+            // Send a message to the user
+            // Note: You'll need to replace 'YOUR_MESSAGE_HERE' with the actual message you want to send
+            sendWhatsAppText($job->id, $contactNumber, 'today_expiry');
+        }
+
+        // Return a success response
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Messages sent successfully.'
+        ]);
+    }
+
+
+    public function jobsExpire()
+    {
+        $today = date('Y-m-d');
+        $affectedRows = Jobs::whereDate('end_date', $today)
+            ->update(['status' => '5']);
+        // Return a success response
+        if ($affectedRows > 0) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Jobs expiring today have been marked as expired.'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'No jobs were found expiring today.'
+            ]);
+        }
+    }
+
+    public function notifyUsersOfExpiringTmrwJobs()
+    {
+        // Get tomorrow's date
+        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+
+        // Fetch jobs where 'end_date' is tomorrow
+        $expiringJobsTomorrow = Jobs::whereDate('end_date', $tomorrow)->get();
+
+        // Check if the collection is empty
+        if ($expiringJobsTomorrow->isEmpty()) {
+            // No jobs found
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No jobs found that are expiring tomorrow.'
+            ]);
+        }
+
+        // Loop over the jobs
+        foreach ($expiringJobsTomorrow as $job) {
+            // Retrieve the user related to the job
+            $user = $job->user;
+
+            // Retrieve the user's contact number
+            $contactNumber = $user->contact_number;
+
+            // Send a message to the user
+            // Note: You'll need to replace 'YOUR_MESSAGE_HERE' with the actual message you want to send
+            sendWhatsAppText($job->id, $contactNumber, 'tmrw_expiry');
+        }
+
+        // Return a success response
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Messages sent successfully.'
+        ]);
     }
 }

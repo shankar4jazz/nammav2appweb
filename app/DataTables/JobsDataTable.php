@@ -60,16 +60,15 @@ class JobsDataTable extends DataTable
                 $payment_status = optional($booking->jobsPayment)->payment_status;
                 if ($payment_status == 'failed') {
                     $status = '<span class="badge badge-pay-pending">' . __('messages.failed') . '</span>';
-                } else {
+                } else if ($payment_status == 'paid') {
                     $status = '<span class="badge badge-paid">' . __('messages.paid') . '</span>';
+                }
+                else{
+                    $status = '<span class="badge bg-danger text-light">' . __('messages.pending') . '</span>';
                 }
                 return  $status;
             })
-            ->filterColumn('payment_id', function ($query, $keyword) {
-                $query->whereHas('jobsPayment', function ($q) use ($keyword) {
-                    $q->where('payment_status', 'like', $keyword . '%');
-                });
-            })
+            
             ->editColumn('status', function ($booking) {
                 $payment_status = optional($booking)->status;
                 if ($payment_status == '2') {
@@ -82,6 +81,8 @@ class JobsDataTable extends DataTable
                     $status = '<span class="badge bg-danger text-light">' . __('Suspended') . '</span>';
                 } else if ($payment_status == '4') {
                     $status = '<span class="badge bg-danger text-light">' . __('InActive') . '</span>';
+                }else{
+                    $status ='';
                 }
                 $changeButton = $this->generateChangeButtonHtml($booking->id, $payment_status);
                 return '<div class="text-center">' . $status . ' ' . $changeButton . '</div>';
@@ -102,7 +103,7 @@ class JobsDataTable extends DataTable
             })
            
             ->addIndexColumn()
-            ->rawColumns(['action', 'status', 'is_featured', 'payment_id', 'status_s']);
+            ->rawColumns(['action', 'status', 'is_featured', 'payment_id']);
     }
 
     /**
@@ -153,6 +154,8 @@ class JobsDataTable extends DataTable
 
             Column::make('status')
                 ->title('Jobs Status'),
+
+          
            
             Column::computed('action')
                 ->exportable(false)

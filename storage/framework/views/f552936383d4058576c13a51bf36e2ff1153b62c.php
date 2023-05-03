@@ -45,7 +45,7 @@
                         <div class="row">
 
                             <input type="hidden" id="customer_id" name="user_id" value="<?php echo e($jobsdata->customer_id); ?>">
-                            <input type="hidden" id="city_name" name="city_name" value="">
+                            <input type="hidden" id="city_name" name="city_name" value="<?php echo e($jobsdata->city_name); ?>">
 
                             <div class="form-group col-md-6">
 
@@ -339,16 +339,7 @@
 
                                         <small class="help-block with-errors text-danger"></small>
                                     </div>
-                                    <!-- <div class="form-group col-md-6 mt-5">
-                                        <input type='button' id="convert_slug" value="Convert Slug">
-                                    </div> -->
-                                    <!-- <div class="form-group col-md-6">
-                                        <?php echo e(Form::label('slug',trans('messages.slug').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
-
-                                        <?php echo e(Form::text('slug',old('slug'),['placeholder' => trans('messages.slug'),'class' =>'form-control','required'])); ?>
-
-                                        <small class="help-block with-errors text-danger"></small>
-                                    </div> -->
+                                   
 
                                     <div class="form-group col-md-6">
                                         <?php echo e(Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
@@ -410,6 +401,9 @@
                 var category_id = "<?php echo e(isset($jobsdata->contact_number_data) ? $jobsdata->contact_number_data : ''); ?>";
 
                 getCustomer(category_id);
+
+                let selectedCityName = $("#city_id").find('option:selected').text();
+                $('#city_name').val(selectedCityName);
 
                 var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 101); ?>";
                 var user_id = "<?php echo e(isset($jobsdata->user_id) ? $jobsdata->user_id : 0); ?>";
@@ -620,19 +614,19 @@
                 });
             }
 
-            function textToSlug(text) {
-                return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
-            }
+            // function textToSlug(text) {
+            //     return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+            // }
 
-            var button = document.getElementById("convert_slug");
+            // var button = document.getElementById("convert_slug");
 
-            button.addEventListener("click", function() {
-                const timestamp = Date.now();
-                var textbox = document.getElementById("title");
-                var slug = textToSlug(textbox.value);
-                var textbox = document.getElementById("slug");
-                textbox.value = slug + "-" + timestamp;
-            });
+            // button.addEventListener("click", function() {
+            //     const timestamp = Date.now();
+            //     var textbox = document.getElementById("title");
+            //     var slug = textToSlug(textbox.value);
+            //     var textbox = document.getElementById("slug");
+            //     textbox.value = slug + "-" + timestamp;
+            // });
         })(jQuery);
     </script>
     <?php $__env->stopSection(); ?>

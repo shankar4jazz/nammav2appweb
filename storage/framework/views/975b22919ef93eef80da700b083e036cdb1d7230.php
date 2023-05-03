@@ -2,7 +2,9 @@
 
 <?php echo e(Form::hidden('id')); ?>
 
-<input type="hidden" id="district_name" name="district_name" value="TamilNadu">
+<?php echo e(Form::hidden('page', $page, ['class' => 'form-control'] )); ?>
+
+<input type="hidden" id="district_name" name="district_name" value="AllTamilNadu">
 <div class="row">
     <div class="form-group col-md-12">
         <?php echo e(Form::label('title',trans('messages.title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
@@ -96,7 +98,7 @@
     });
 
     function getJobs(district, state = "") {
-        console.log(district);
+       
 
         var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'push_news','district_id' =>''])); ?>" + district;
         state_route = state_route.replace('amp;', '');

@@ -1552,25 +1552,191 @@ function bookingstatus($status)
     return $html;
 }
 
-function sendWhatsAppText($jobid, $user_id, $status){
+function sendWhatsAppText($jobid, $status)
+{
+    $job = \App\Models\Jobs::find($jobid);
 
+    $user = \App\Models\User::find($job->user_id);
+    $userName = $user->first_name;
+    $mobile_number = $job->contact_number; //$booking->contact_number;
+    $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
     switch ($status) {
         case 'failed':
-            $html = '<span class="badge badge-warning ">' . $status . '</span>';
 
+            $variables = array(
+                '{data}' => "Dear {$userName}, we regret to inform you that your payment for Job ID: {$job->id} has failed. \n\n ```Regards Tamilanjobs```",
+            );
             break;
 
         case 'paid':
-            $html = '<span class="badge badge-primary">' . $status . '</span>';
 
+            $variables = array(
+
+                '{data}' => "Great news, {$userName}! Your payment for the job with ID: {$job->id} was successful.\n\n```May your job posts bring you the best candidates, Regards Tamilanjobs```"
+            );
             break;
-            
+
+        case 'job_post':
+            $mobile_number =
+                $variables = array(
+                    '{data}' => "Dear {$userName}, your job with ID: {$job->id} has been posted successfully. \n\n```We appreciate your trust in Tamilanjobs ```",
+
+                );
+            break;
+
+        case 'active':
+
+            $variables = array(
+                '{data}' => "Congratulations, {$userName}! Your job with ID: {$job->id} is now live on our platform. \n\n```Your success is our success, Regards Tamilanjobs ```"
+            );
+            break;
+
+        case 'rejected':
+
+            $variables = array(
+                '{data}' => "Unfortunately, {$userName}, your job with ID: {$job->id} didn't meet our guidelines and has been rejected. \n\n```We're here to support your job posting needs, Regards Tamilanjobs ```"
+            );
+            break;
+
+        case 'suspended':
+
+            $variables = array(
+
+                '{data}' => "We regret to inform you, {$userName}, that your job with ID: {$job->id} has been temporarily suspended. \n\n```Continued success to you, Regards Tamilanjobs ```"
+            );
+            break;
+
+        case 'inactive':
+
+            $variables = array(
+
+                '{data}' => "Unfortunately, {$userName}, your job with ID: {$job->id} has not been approved.\n\n```We appreciate your trust in Tamilanjobs```"
+            );
+            break;
+
+        case 'expiry':
+
+            $variables = array(
+                '{data}' => "Hello {$userName}, just letting you know that your job post with ID: {$job->id} has now expired."
+            );
+            break;
+
+        case 'today_expiry':
+
+            $variables = array(
+                '{data}' => "Dear *{$userName}*, \nyour job post with ID: *{$job->id}* will expire today.\n\n```Looking forward to serving you again, Regards Tamilanjobs```",
+
+            );
+            break;
+
+        case 'tmrw_expiry':
+
+            $variables = array(
+                '{data}' => "Hello *{$userName}*, \njust a friendly reminder that your job post with ID: {$job->id} is set to expire tomorrow.\n\n ```Continued success to you, Regards Tamilanjobs ```"
+            );
+            break;
+
         default:
-            $html = '<span class="badge badge-danger">' . $status . '</span>';
+            $variables = array(
+                '{data}' => "Hello *{$userName}*, \njust a friendly reminder that your job post with ID: {$job->id} is set to expire tomorrow.\n\n ```Continued success to you, Regards Tamilanjobs ```"
+            );
             break;
     }
-    return $html;
 
 
+
+    $curl = curl_init();
+
+    $postFields = array(
+        'appkey' => '4881561c-3d5e-4370-af32-571773b0bab0',
+        'authkey' => 'FL424q6knyBhVolmNWSzT2jlNCpnzIwpivPtytmyXLOHAIclHA',
+        'to' => '+91' . $mobile_number,
+        'template_id' => $templateId,
+        'variables' => $variables // convert the array into a JSON string
+    );
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>  http_build_query($postFields),
+        CURLOPT_SSL_VERIFYPEER => false,
+    ));
+
+    $response = curl_exec($curl);
+
+    if ($response === false) {
+        echo 'Curl error: ' . curl_error($curl);
+    } else {
+        $response;
+    }
+
+
+    curl_close($curl);
+
+    return $response;
+}
+
+function sendWhatsAppTextToExecutive($jobid, $status)
+{
+    $job = \App\Models\Jobs::find($jobid);
+ 
+    $mobile_number = '9629090020'; //$booking->contact_number;
+    $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
+
+    switch ($status) {
+
+
+        case 'job_post':
+            $mobile_number =
+                $variables = array(
+                    '{data}' => "Dear Job post executive, TH job with ID: {$job->id} has been posted successfully. \n\n```Regards Tamilanjobs ```",
+
+                );
+            break;
+    }
+
+
+
+    $curl = curl_init();
+
+    $postFields = array(
+        'appkey' => '4881561c-3d5e-4370-af32-571773b0bab0',
+        'authkey' => 'FL424q6knyBhVolmNWSzT2jlNCpnzIwpivPtytmyXLOHAIclHA',
+        'to' => '+91' . $mobile_number,
+        'template_id' => $templateId,
+        'variables' => $variables // convert the array into a JSON string
+    );
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>  http_build_query($postFields),
+        CURLOPT_SSL_VERIFYPEER => false,
+    ));
+
+    $response = curl_exec($curl);
+
+    if ($response === false) {
+        echo 'Curl error: ' . curl_error($curl);
+    } else {
+        $response;
+    }
+
+
+    curl_close($curl);
+
+    return $response;
 }

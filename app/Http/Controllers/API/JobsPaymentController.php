@@ -28,14 +28,16 @@ class JobsPaymentController extends Controller
         $status_code = 200;
         if($result->payment_status == 'paid'){
             $message = __('messages.payment_completed');
+            sendWhatsAppText($result->id, $result->user_id, $result->payment_status);
         } else {
             $message = __('messages.payment_message',['status' => __('messages.'.$result->payment_status) ]);
         }
 
         if($result->payment_status == 'failed')
         {
-            $status_code = 400;
-        }
+            $status_code = 200;
+            sendWhatsAppText($result->id, $result->user_id, $result->payment_status);
+        }      
         return comman_message_response($message,$status_code);
     }
 

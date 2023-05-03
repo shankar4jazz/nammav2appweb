@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
         }
 
         $schedule->command('check:postjobrequest')->daily();
+        $schedule->command('jobs:check')->dailyAt('19:08')->sendOutputTo(storage_path('logs/your-command.log'));
     }
 
     /**
