@@ -13,17 +13,13 @@ class JobCallActivitiesController extends Controller
     public function saveCallActivities(Request $request)
     {
         $data = $request->all();
-     
-        $data['datetime'] = isset($request->datetime) ? date('Y-m-d H:i:s', strtotime($request->datetime)) : date('Y-m-d H:i:s');
-        if($data['jobseeker_id'] != ""){
-            JobCallActivities::updateOrCreate(['jobseeker_id' => $data['jobseeker_id']], $data);
-        }
-        else{
-            JobCallActivities::create($data);
 
+        $data['datetime'] = isset($request->datetime) ? date('Y-m-d H:i:s', strtotime($request->datetime)) : date('Y-m-d H:i:s');
+        if ($data['jobseeker_id'] != "" &&  $data['job_id'] != "") {
+            JobCallActivities::updateOrCreate(['jobseeker_id' => $data['jobseeker_id'], 'job_id' => $data['job_id']], $data);
+        } else {
+            JobCallActivities::create($data);
         }
-     
-        
 
         $status_code = 200;
 
@@ -32,20 +28,21 @@ class JobCallActivitiesController extends Controller
         return comman_message_response($message, $status_code);
     }
 
-    public function getCallActivitiesByJobId(Request $request){
+    public function getCallActivitiesByJobId(Request $request)
+    {
 
-        $document = JobCallActivities::where('jobs_id',$request->jobs_id);
-       
+        $document = JobCallActivities::where('jobs_id', $request->jobs_id);
+
         $per_page = config('constant.PER_PAGE_LIMIT');
-        if( $request->has('per_page') && !empty($request->per_page)){
-            if(is_numeric($request->per_page)){
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
             }
-            if($request->per_page === 'all' ){
+            if ($request->per_page === 'all') {
                 $per_page = $document->count();
             }
         }
-        $document = $document->orderBy('created_at','desc')->paginate($per_page);
+        $document = $document->orderBy('updated_at', 'desc')->paginate($per_page);
         $items = JobCallAcitvitiesResource::collection($document);
 
         // $response = [
@@ -61,7 +58,7 @@ class JobCallActivitiesController extends Controller
         //     ],
         //     'data' => $items,
         // ];
-        
+
         return comman_custom_response($items);
     }
 }

@@ -5,16 +5,18 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Jobs;
+use App\Models\JobsCategory;
 use App\Models\JobsViews;
 use App\Http\Resources\API\JobsResource;
 use App\Models\District;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class JobsController extends Controller
 {
     public function getJobsList(Request $request)
     {
-        $booking = Jobs::where('status', 1);
+        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
@@ -146,18 +148,11 @@ class JobsController extends Controller
 
     public function getJobsListByCity(Request $request)
     {
-        if (isset($request->get_type)) {
-            if ($request->get_type == 'shuffle') {
-                $booking = Jobs::inRandomOrder();
-            } else {
-                $booking = Jobs::query();
-            }
-        } else {
-            $booking = Jobs::query();
-        }
+
+        $booking = Jobs::query();
+
         if (isset($request->district_id)) {
             if ($request->district_id == 'jobs-in-all-districts') {
-
                 $booking->where('status', 1);
             } else if ($request->district_id == "null") {
                 $booking->where('status', 1);
@@ -248,9 +243,6 @@ class JobsController extends Controller
             $booking->where('status', 1);
         }
 
-
-
-
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
         $per_page = config('constant.PER_PAGE_LIMIT');
@@ -304,7 +296,91 @@ class JobsController extends Controller
         $booking = Jobs::query();
 
         if (isset($request->district_id)) {
+
+            $cat = JobsCategory::where('slug', $request->jobcategory_id)->get();
             if ($request->district_id == 'jobs-in-all-districts' && $request->jobcategory_id == 'select-categories') {
+
+
+                $booking->where('status', 1);
+            } else if ($request->district_id == 'jobs-in-all-districts') {
+
+                $booking->where('jobcategory_id', $cat->id);
+
+                $booking->where('status', 1);
+            } else if ($request->district_id == "null") {
+
+                $booking->where('status', 1);
+            } else {
+
+                $district =  District::where('slug', $request->district_id)->get();
+                $booking->where('jobcategory_id', $cat->id);
+                $booking->where('status', 1);
+                $booking->whereHas('jobDistricts', function ($a) use ($district) {
+                    $a->where('district_id', $district[0]->id);
+                    $a->orWhere('district_id',  100);
+                });
+            }
+        } else {
+
+            $booking->where('status', 1);
+        }
+
+        //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
+
+        $per_page = config('constant.PER_PAGE_LIMIT');
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
+                $per_page = $request->per_page;
+            }
+            if ($request->per_page === 'all') {
+                $per_page = $booking->count();
+            }
+        }
+
+        $per_page = 25;
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
+        $orderBy = 'desc';
+        if ($request->has('orderby') && !empty($request->orderby)) {
+            $orderBy = $request->orderby;
+        }
+
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
+        $items = JobsResource::collection($booking);
+
+        // $response = [
+        //     'pagination' => [
+        //         'total_items' => $items->total(),
+        //         'per_page' => $items->perPage(),
+        //         'currentPage' => $items->currentPage(),
+        //         'totalPages' => $items->lastPage(),
+        //         'from' => $items->firstItem(),
+        //         'to' => $items->lastItem(),
+        //         'next_page' => $items->nextPageUrl(),
+        //         'previous_page' => $items->previousPageUrl(),
+        //     ],
+        //     'data' => $items,
+        // ];
+
+        return comman_custom_response($items);
+    }
+
+    public function getJobsListByCityAndCategorySlug(Request $request)
+    {
+        $booking = Jobs::query();
+
+        if (isset($request->district_id)) {
+
+
+            if ($request->district_id == 'jobs-in-all-districts' && $request->jobcategory_id == 'all-categories') {
 
 
                 $booking->where('status', 1);
@@ -432,7 +508,7 @@ class JobsController extends Controller
         $today = date('Y-m-d');
 
         // Fetch jobs where 'end_date' is today
-        $expiringJobsToday = Jobs::whereDate('end_date', $today)->get();
+        $expiringJobsToday = Jobs::whereDate('end_date', $today)->where('status', '1')->get();
 
         // Check if the collection is empty
         if ($expiringJobsToday->isEmpty()) {
@@ -453,9 +529,8 @@ class JobsController extends Controller
 
             // Send a message to the user
             // Note: You'll need to replace 'YOUR_MESSAGE_HERE' with the actual message you want to send
-            sendWhatsAppText($job->id, $contactNumber, 'today_expiry');
+            sendWhatsAppText($job->id, 'today_expiry');
         }
-
         // Return a success response
         return response()->json([
             'status' => 'success',
@@ -489,7 +564,7 @@ class JobsController extends Controller
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
         // Fetch jobs where 'end_date' is tomorrow
-        $expiringJobsTomorrow = Jobs::whereDate('end_date', $tomorrow)->get();
+        $expiringJobsTomorrow = Jobs::whereDate('end_date', $tomorrow)->where('status', '1')->get();
 
         // Check if the collection is empty
         if ($expiringJobsTomorrow->isEmpty()) {
@@ -503,14 +578,12 @@ class JobsController extends Controller
         // Loop over the jobs
         foreach ($expiringJobsTomorrow as $job) {
             // Retrieve the user related to the job
-            $user = $job->user;
 
-            // Retrieve the user's contact number
-            $contactNumber = $user->contact_number;
+
 
             // Send a message to the user
             // Note: You'll need to replace 'YOUR_MESSAGE_HERE' with the actual message you want to send
-            sendWhatsAppText($job->id, $contactNumber, 'tmrw_expiry');
+            sendWhatsAppText($job->id,  'tmrw_expiry');
         }
 
         // Return a success response

@@ -195,35 +195,22 @@ class JobsController extends Controller
             $message = trans('messages.save_form', ['form' => trans('messages.jobs')]);
         }
 
-        if($result->status == 1){
-          
+        if ($result->status == 1) {
+
             sendWhatsAppText($result->id,  'active');
-
-        }
-        else if($result->status == 2){
+        } else if ($result->status == 2) {
             sendWhatsAppText($result->id,  'rejected');
-
-        }
-        else if($result->status == 3){
+        } else if ($result->status == 3) {
             sendWhatsAppText($result->id, 'suspended');
-
-        }
-        else if($result->status == 4){
+        } else if ($result->status == 4) {
             sendWhatsAppText($result->id, 'inactive');
-
-        }
-        else if($result->status == 5){
+        } else if ($result->status == 5) {
             sendWhatsAppText($result->id,  'expiry');
-
         }
 
-      
-        
         if ($request->is('api/*')) {
             return comman_message_response($message);
         }
-
-       
 
         return redirect(route('jobs.index'))->withSuccess($message);
     }
@@ -253,8 +240,6 @@ class JobsController extends Controller
 
         $distData =  $request->input('districts');
 
-
-
         if ($request->input('districts') !== null) {
             $distData = json_encode($request->input('districts'));
 
@@ -263,12 +248,9 @@ class JobsController extends Controller
             $dcode = json_decode($decodedJson, true);
 
             foreach ($dcode as $row) {
-
-
                 $result->jobDistricts()->sync($row['id'], []);
             }
         }
-
 
         storeMediaFile($result, $request->jobs_image, 'jobs_image');
 
@@ -281,7 +263,7 @@ class JobsController extends Controller
         if ($request->is('api/*')) {
             return  comman_custom_response($jobs, 200);
         }
-        
+
         return redirect(route('jobs.index'))->withSuccess($jobs);
     }
 
@@ -386,25 +368,16 @@ class JobsController extends Controller
 
         $data = $request->all();
 
-         if($request->status == '1'){
+        if ($request->status == '1') {
             sendWhatsAppText($request->job_id,  'active');
-
-        }
-        else if($request->status == '2'){
+        } else if ($request->status == '2') {
             sendWhatsAppText($request->job_id,  'rejected');
-
-        }
-        else if($request->status == '3'){
+        } else if ($request->status == '3') {
             sendWhatsAppText($request->job_id,  'suspended');
-
-        }
-        else if($request->status == '4'){
+        } else if ($request->status == '4') {
             sendWhatsAppText($request->job_id, 'inactive');
-
-        }
-        else if($request->status == '5'){
+        } else if ($request->status == '5') {
             sendWhatsAppText($request->job_id,  'expiry');
-
         }
 
 

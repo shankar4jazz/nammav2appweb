@@ -37,7 +37,8 @@ class JobsDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('created_at', function ($row) {
-                return Carbon::parse($row->created_at)->format('d-m-Y h:i:s');
+                return Carbon::parse($row->created_at)
+                ->tz('Asia/Kolkata')->format('d-m-Y h:i:s A');
             })
             ->editColumn('user_id', function ($service) {
                 return ($service->user != null && isset($service->user)) ? $service->user->display_name . "(" . $service->user->contact_number . ")" : '';

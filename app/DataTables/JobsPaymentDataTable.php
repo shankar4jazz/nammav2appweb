@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Carbon;
 
 class JobsPaymentDataTable extends DataTable
 {
@@ -38,6 +39,10 @@ class JobsPaymentDataTable extends DataTable
                 $query->whereHas('customer',function ($q) use($keyword){
                     $q->where('display_name','like','%'.$keyword.'%');
                 });
+            })
+            ->editColumn('datetime', function ($row) {
+                return Carbon::parse($row->created_at)
+                ->tz('Asia/Kolkata')->format('d-m-Y h:i:s A');
             })
             ->editColumn('total_amount', function($payment) {
                 return getPriceFormat($payment->total_amount);

@@ -460,13 +460,11 @@ class PushNotificationController extends Controller
         $district_name = str_replace(" ", "", $data['district_name']);
 
         $message = array(
-
             'title'     =>  $_POST['title'],
             'body'      =>  $data['description'],
             //'image'     =>  $_POST['image'],
-
         );
-        exit();
+
         $data = array(
             'pvt_jobid' =>  $_POST['pvt_jobid'],
         );
@@ -479,7 +477,7 @@ class PushNotificationController extends Controller
             $to = '/topics/TN-' . $district_name;
         }
 
-        exit();
+       
         $fields = array(
             'to'               => $to,
             'priority'         => 'high',
@@ -527,8 +525,6 @@ class PushNotificationController extends Controller
             //'image'     =>  $_POST['image'],
 
         );
-
-
 
         $data = array(
             'govt_jobid' =>  $_POST['job_id'],
@@ -659,11 +655,10 @@ class PushNotificationController extends Controller
             //'image'     =>  $_POST['image'],
 
         );
-
+        
         $data = array(
             'page' =>  $_POST['page'],
         );
-
         $to = '/topics/TN-' . $district_name;
 
         $fields = array(

@@ -23,7 +23,7 @@
 
                         <?php echo e(Form::hidden('id')); ?>
 
-                        <input type="text" id="employer_id" name="employer_id" value="<?php echo e($plan->employer_id); ?>">
+                        <input type="hidden" id="employer_id" name="employer_id" value="<?php echo e($plan->employer_id); ?>">
                         <input type="hidden" id="all_total_amount" name="all_total_amount" value="<?php echo e($plan->total_amount); ?>">
                         <input type="hidden" id="trial_period" name="trial_period" value="<?php echo e($plan->trial_period); ?>">
                         <div class="row">

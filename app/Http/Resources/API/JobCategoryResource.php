@@ -14,17 +14,18 @@ class JobCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        $extention = imageExtention(getSingleMedia($this, 'jobs_category_image',null));
+        $extention = imageExtention(getSingleMedia($this, 'jobs_category_image', null));
         return [
             'id'            => $this->id,
             'name'          => $this->name,
             'tamil_name'    => $this->tamil_name,
             'status'        => $this->status,
+            'slug'        => $this->slug,
             'description'   => $this->description,
             'is_featured'   => $this->is_featured,
             'color'         => $this->color,
-            'jobcategory_image'=> getSingleMedia($this, 'jobs_category_image',null),
-            'category_extension' => $extention,            
+            'jobcategory_image' => getSingleMedia($this, 'jobs_category_image', null),
+            'category_extension' => $extention,
             'deleted_at'        => $this->deleted_at,
         ];
     }

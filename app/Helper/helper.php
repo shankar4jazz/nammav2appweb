@@ -1557,15 +1557,24 @@ function sendWhatsAppText($jobid, $status)
     $job = \App\Models\Jobs::find($jobid);
 
     $user = \App\Models\User::find($job->user_id);
-    $userName = $user->first_name;
+
+     if($user && $user->first_name != null){
+		 $userName = $user->first_name; 
+	 }
+	else{
+		$userName = $job->contact_number;
+	}
+	
     $mobile_number = $job->contact_number; //$booking->contact_number;
+	$endDate = date('d-m-Y', strtotime($job->end_date));
     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
-    switch ($status) {
+	 switch ($status) {
         case 'failed':
 
             $variables = array(
-                '{data}' => "Dear {$userName}, we regret to inform you that your payment for Job ID: {$job->id} has failed. \n\n ```Regards Tamilanjobs```",
+                '{data}' => "Dear *{$userName}*,\n\nGreetings from *Tamilanjobs!* 🎉\n\nwe regret to inform you that your payment for Job ID: {$job->id} has failed.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n*Expiry Date:* {$endDate}\n\n```Regards Tamilanjobs```\n\n_Support: 8233823308_"
+
             );
             break;
 
@@ -1573,45 +1582,44 @@ function sendWhatsAppText($jobid, $status)
 
             $variables = array(
 
-                '{data}' => "Great news, {$userName}! Your payment for the job with ID: {$job->id} was successful.\n\n```May your job posts bring you the best candidates, Regards Tamilanjobs```"
+                '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nGreat news, *{$userName}*!\n\nYour payment for the job with ID: {$job->id} was successful.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n*Expiry Date:* {$endDate}\n\n```May your job posts bring you the best candidates, Regards Tamilanjobs```\n\n\_Support: 8233823308_"
             );
             break;
 
         case 'job_post':
-            $mobile_number =
-                $variables = array(
-                    '{data}' => "Dear {$userName}, your job with ID: {$job->id} has been posted successfully. \n\n```We appreciate your trust in Tamilanjobs ```",
 
-                );
+            $variables = array(
+
+                '{data}' => "Greetings from *Tamilanjobs!* 🎉 \n\nDear {$userName}, your job with ID: {$job->id} has been posted successfully. \n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n*Expiry Date:* {$endDate}\n\n```We appreciate your trust in Tamilanjobs ```\n\n_Support: 8233823308_",
+
+            );
             break;
 
         case 'active':
 
             $variables = array(
-                '{data}' => "Congratulations, {$userName}! Your job with ID: {$job->id} is now live on our platform. \n\n```Your success is our success, Regards Tamilanjobs ```"
+                '{data}' => "Greetings from *Tamilanjobs!* 🎉 \n\nCongratulations, *{$userName}*! \n\nYour job with ID: {$job->id} is now live on our platform ✅. \n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n*Expiry Date:* {$endDate}\n\n```Your success is our success, Regards Tamilanjobs ```\n\n_Support: 8233823308_"
             );
             break;
 
-        case 'rejected':
+        case 'rejected':		
 
             $variables = array(
-                '{data}' => "Unfortunately, {$userName}, your job with ID: {$job->id} didn't meet our guidelines and has been rejected. \n\n```We're here to support your job posting needs, Regards Tamilanjobs ```"
+                '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nUnfortunately, *{$userName}*, \nyour job with ID: {$job->id} didn't meet our guidelines and has been rejected ❌.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n```We're here to support your job posting needs, Regards Tamilanjobs ```\n\n_Support: 8233823308_"
             );
             break;
 
         case 'suspended':
-
             $variables = array(
-
-                '{data}' => "We regret to inform you, {$userName}, that your job with ID: {$job->id} has been temporarily suspended. \n\n```Continued success to you, Regards Tamilanjobs ```"
+                '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nWe regret to inform you, *{$userName}*,that your job with ID: {$job->id} has been temporarily suspended ❌.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n```Continued success to you, Regards Tamilanjobs ```\n\n_Support: 8233823308_"
             );
             break;
 
         case 'inactive':
 
             $variables = array(
+                '{data}' => "Hello *{$userName}*,\n\nGreetings from *Tamilanjobs!* 🎉\n\nUnfortunately, your job with ID: {$job->id} has not been approved ❌.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n```We appreciate your trust in Tamilanjobs```\n\n_Support: 8233823308_"
 
-                '{data}' => "Unfortunately, {$userName}, your job with ID: {$job->id} has not been approved.\n\n```We appreciate your trust in Tamilanjobs```"
             );
             break;
 
@@ -1623,17 +1631,14 @@ function sendWhatsAppText($jobid, $status)
             break;
 
         case 'today_expiry':
-
             $variables = array(
-                '{data}' => "Dear *{$userName}*, \nyour job post with ID: *{$job->id}* will expire today.\n\n```Looking forward to serving you again, Regards Tamilanjobs```",
-
+                '{data}' => "Hello *{$userName}*,\n\nGreetings from *Tamilanjobs!* 🎉\n\njust a friendly reminder that your job post with ID: {$job->id} will *expire today* ⏲️.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n*Expiry Date:* {$endDate}\n\n```Looking forward to serving you again, Regards Tamilanjobs ```\n\n_Support: 8233823308_"
             );
             break;
 
         case 'tmrw_expiry':
-
             $variables = array(
-                '{data}' => "Hello *{$userName}*, \njust a friendly reminder that your job post with ID: {$job->id} is set to expire tomorrow.\n\n ```Continued success to you, Regards Tamilanjobs ```"
+                '{data}' => "Hello *{$userName}*,\n\nGreetings from *Tamilanjobs!* 🎉\n\njust a friendly reminder that your job post with ID: {$job->id} is set to *expires tomorrow* ⏲️.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n*Expiry Date:* {$endDate}\n\n```Continued success to you, Regards Tamilanjobs ```\n\n_Support: 8233823308_"
             );
             break;
 
@@ -1687,16 +1692,16 @@ function sendWhatsAppTextToExecutive($jobid, $status)
 {
     $job = \App\Models\Jobs::find($jobid);
  
-    $mobile_number = '9629090020'; //$booking->contact_number;
+    $mobile_number = '8675002943'; //$booking->contact_number;
     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
     switch ($status) {
 
 
         case 'job_post':
-            $mobile_number =
+          
                 $variables = array(
-                    '{data}' => "Dear Job post executive, TH job with ID: {$job->id} has been posted successfully. \n\n```Regards Tamilanjobs ```",
+                   '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nDear Tamilanjobs Admin/Executive, The job with ID: {$job->id} has been posted successfully. \n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n```Your success is our success, Regards Tamilanjobs ```\n\n_Support: 8233823308_",
 
                 );
             break;

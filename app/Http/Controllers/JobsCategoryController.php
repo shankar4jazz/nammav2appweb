@@ -73,6 +73,7 @@ class JobsCategoryController extends Controller
         if($request->has('is_featured')){
 			$data['is_featured'] = 1;
 		}
+        $data['slug'] = $this->convertSlug($data['name']);
        
         $result = JobsCategory::updateOrCreate(['id' => $data['id'] ],$data);
 
@@ -170,6 +171,14 @@ class JobsCategoryController extends Controller
             return comman_message_response($msg);
 		}
         return comman_custom_response(['message'=> $msg , 'status' => true]);
+    }
+    private function convertSlug($text)
+    {
+
+        $text = strtolower($text);
+        $text = preg_replace('/\s+/', '-', $text);
+        $text = preg_replace('/[^\w-]+/', '', $text);
+        return $text;
     }
     
 }

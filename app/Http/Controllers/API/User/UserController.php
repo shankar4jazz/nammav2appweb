@@ -195,6 +195,29 @@ class UserController extends Controller
         return comman_custom_response($response);
     }
 
+    public function jobseekerDetails(Request $request)
+    {
+        $id = $request->id;
+
+
+        $user = User::select('users.id', 'username', 'first_name', 'last_name', 'email',  'contact_number', 'display_name',   'details', 'cities.name as city')
+            ->leftJoin('cities', 'cities.id', '=', 'users.city_id')
+            ->where('users.id', $id)
+            ->first();
+
+        $message = __('messages.detail');
+        if (empty($user)) {
+            $message = __('messages.user_not_found');
+            return comman_message_response($message, 400);
+        }
+
+        $user['profile_image'] = getSingleMedia($user, 'profile_image', null);
+        // $user['en_city_name'] = $user->city->name;
+
+        $response = $user;
+        return comman_custom_response($response, 200);
+    }
+
     public function changePassword(Request $request)
     {
         $user = User::where('id', \Auth::user()->id)->first();
@@ -535,7 +558,7 @@ class UserController extends Controller
         $input = $request->all();
 
         $password = $input['password'];
-    
+
         $input['display_name'] = $input['first_name'] . " " . $input['last_name'];
         $input['user_type'] = isset($input['user_type']) ? $input['user_type'] : 'user';
         $input['password'] = Hash::make($password);
@@ -593,9 +616,8 @@ class UserController extends Controller
         $message = __('messages.updated');
         $user_data['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
         if ($request->user_type == "jobseeker") {
-           
+
             $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
-            
         } else if ($request->user_type == "jobs") {
 
             $user_data['companies'] = $user_data->companies;
@@ -820,14 +842,13 @@ class UserController extends Controller
                         $success['user_role'] = $user_data->getRoleNames();
 
                         if ($request->user_type == "jobseeker") {
-           
+
                             $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
-                            
                         } else if ($request->user_type == "jobs") {
-                
+
                             $user_data['companies'] = $user_data->companies;
                         }
-                       
+
                         $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
                         $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
                         $is_verify_provider = false;
@@ -967,36 +988,36 @@ class UserController extends Controller
         // Account details
 
         #################################################################################################################
-     //   $apiKey = urlencode('NzQ0NDQ2NDk2YTU0Mzc0MTc1MzY0ZDU2NDg1NjU1Mzc=');
+        //   $apiKey = urlencode('NzQ0NDQ2NDk2YTU0Mzc0MTc1MzY0ZDU2NDg1NjU1Mzc=');
 
         // Message details
-     //   $numbers = array($contacts);
-    //    $sender = urlencode('TAMLAN');
+        //   $numbers = array($contacts);
+        //    $sender = urlencode('TAMLAN');
 
 
-     //   $message = rawurlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. xhhw9DtWc9R');
+        //   $message = rawurlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. xhhw9DtWc9R');
 
-       // $numbers = implode(',', $numbers);
+        // $numbers = implode(',', $numbers);
 
         // Prepare data for POST request
-      //  $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+        //  $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
 
         //     // Send the POST request with cURL
-      //  $ch = curl_init('https://api.textlocal.in/send/');
-      //  curl_setopt($ch, CURLOPT_POST, true);
-     //   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-      //  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      //  $response = curl_exec($ch);
-       // curl_close($ch);
-		
-		//var_dump(json_decode($response));
-	//	exit();
-      
-       // return json_decode($response);
-       // exit();
+        //  $ch = curl_init('https://api.textlocal.in/send/');
+        //  curl_setopt($ch, CURLOPT_POST, true);
+        //   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        //  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //  $response = curl_exec($ch);
+        // curl_close($ch);
+
+        //var_dump(json_decode($response));
+        //	exit();
+
+        // return json_decode($response);
+        // exit();
         //----------------------------------------------------sms----------------------------------------------------------- 
 
-          $key = "gIzOiWdbFTqrCWVq";
+        $key = "gIzOiWdbFTqrCWVq";
         $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
         //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
         $message_content = urlencode('' . $otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. xhhw9DtWc9R');
@@ -1006,8 +1027,8 @@ class UserController extends Controller
         $url = "http://app.mydreamstechnology.in/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
 
         $output = file_get_contents($url);    /*default function for push any url*/
-       	
-        return json_decode($output, true);		
+
+        return json_decode($output, true);
         exit();
 
         //return json_decode($output, true);   

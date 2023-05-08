@@ -55,6 +55,7 @@ Route::get('jobs-view/{slug}', [API\JobsController::class, 'getJobsListBySlug'])
 Route::get('jobs/{slug}', [API\JobsController::class, 'getJobsListBySlugUrl']);
 Route::post('citywise-jobs-list', [API\JobsController::class, 'getJobsListByCity']);
 Route::post('category-city-jobs-list', [API\JobsController::class, 'getJobsListByCityAndCategory']);
+Route::post('categories-cities-jobs-list', [API\JobsController::class, 'getJobsListByCityAndCategorySlug']);
 Route::post('user-jobs-list', [API\JobsController::class, 'getJobsListByUser']);
 Route::post('company-list', [API\CompanyController::class, 'getCompanyByUser']);
 
@@ -92,6 +93,7 @@ Route::post('contact-us', [API\User\UserController::class, 'contactUs']);
 Route::get('dashboard-detail', [API\DashboardController::class, 'dashboardDetail']);
 Route::get('service-rating-list', [API\ServiceController::class, 'getServiceRating']);
 Route::get('user-detail', [API\User\UserController::class, 'userDetail']);
+Route::get('jobseeker-detail/{id}', [API\User\UserController::class, 'jobseekerDetails']);
 Route::post('service-detail', [API\ServiceController::class, 'getServiceDetail']);
 Route::get('user-list', [API\User\UserController::class, 'userList']);
 Route::get('booking-status', [API\BookingController::class, 'bookingStatus']);

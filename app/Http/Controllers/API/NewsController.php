@@ -80,7 +80,7 @@ class NewsController extends Controller
             }
         }
 
-        $per_page = 10;
+        $per_page = 50;
         $page = $request->page;
 
         $start = ($page - 1) * $per_page;
