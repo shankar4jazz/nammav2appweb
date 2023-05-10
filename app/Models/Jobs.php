@@ -105,6 +105,13 @@ class Jobs extends Model implements HasMedia
     {
         return $this->belongsTo(JobsPayment::class, 'payment_id', 'id');
     }
+    public function jobsActivity()
+    {
+       // return $this->hasMany(JobCallActivities::class, 'jobs_id', 'id');
+       // return $this->belongsTo(JobCallActivities::class, 'jobs_id', 'id');
+       return $this->hasMany(JobCallActivities::class, 'jobs_id', 'id')
+       ->select(['id', 'jobs_id', 'jobseeker_id', 'activity_type']);
+    }
     public function scopeMyJobs($query)
     {
         $user = auth()->user();

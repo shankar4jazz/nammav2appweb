@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\Jobs;
 use App\Models\JobsCategory;
 use App\Models\JobsViews;
+use App\Models\JobCallActivities;
+use App\Http\Resources\API\JobsViewResource;
 use App\Http\Resources\API\JobsResource;
 use App\Models\District;
 use Carbon\Carbon;
+use FontLib\TrueType\Collection;
 use Illuminate\Support\Facades\DB;
 
 class JobsController extends Controller
@@ -78,7 +81,53 @@ class JobsController extends Controller
             $view->count++;
             $view->save();
         }
-        $items = JobsResource::collection($booking);
+        $items = JobsViewResource::collection($booking);
+        // $response = [
+        //     'pagination' => [
+        //         'total_items' => $items->total(),
+        //         'per_page' => $items->perPage(),
+        //         'currentPage' => $items->currentPage(),
+        //         'totalPages' => $items->lastPage(),
+        //         'from' => $items->firstItem(),
+        //         'to' => $items->lastItem(),
+        //         'next_page' => $items->nextPageUrl(),
+        //         'previous_page' => $items->previousPageUrl(),
+        //     ],
+        //     'data' => $items,
+        // ];
+        return comman_custom_response($items);
+    }
+
+    public function getJobById(Request $request)
+    {
+
+        $id = $request->id;
+
+        $booking = Jobs::with('getJobDistricts.district')->where('id', $id)->where('status', 1)->get();
+
+
+        if (!empty($booking)) {
+            $view = JobsViews::firstOrCreate(['jobs_id' => $id]);
+            $view->count++;
+            $view->save();
+        }
+        // if (!empty($request->user_id)) {
+        //     $hasApplied = JobCallActivities::where('jobs_id', $id)
+        //         ->where('jobseeker_id', $request->user_id)
+        //         ->where('Activity_type', "Apply")
+        //         ->exists();
+        //     //$booking['apply_status'] = $hasApplied;
+
+        //     $hasCalled = JobCallActivities::where('jobs_id', $id)
+        //         ->where('jobseeker_id', $request->user_id)
+        //         ->where('Activity_type', "call")
+        //         ->exists();
+        //     $booking['call_status'] = $hasCalled;
+        // }
+
+
+
+        $items = JobsViewResource::collection($booking);
         // $response = [
         //     'pagination' => [
         //         'total_items' => $items->total(),
@@ -149,7 +198,7 @@ class JobsController extends Controller
     public function getJobsListByCity(Request $request)
     {
 
-        $booking = Jobs::query();
+        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
         if (isset($request->district_id)) {
             if ($request->district_id == 'jobs-in-all-districts') {
@@ -223,7 +272,7 @@ class JobsController extends Controller
     public function getShuffleJobsListByCity(Request $request)
     {
 
-        $booking = Jobs::query();
+        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
         if (isset($request->district_id)) {
             if ($request->district_id == 'jobs-in-all-districts') {
 
@@ -293,18 +342,18 @@ class JobsController extends Controller
 
     public function getJobsListByCityAndCategory(Request $request)
     {
-        $booking = Jobs::query();
+        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
         if (isset($request->district_id)) {
 
-            $cat = JobsCategory::where('slug', $request->jobcategory_id)->get();
-            if ($request->district_id == 'jobs-in-all-districts' && $request->jobcategory_id == 'select-categories') {
+
+            if ($request->district_id == 'jobs-in-all-districts') {
 
 
                 $booking->where('status', 1);
             } else if ($request->district_id == 'jobs-in-all-districts') {
 
-                $booking->where('jobcategory_id', $cat->id);
+                $booking->where('jobcategory_id', $request->jobcategory_id);
 
                 $booking->where('status', 1);
             } else if ($request->district_id == "null") {
@@ -313,7 +362,7 @@ class JobsController extends Controller
             } else {
 
                 $district =  District::where('slug', $request->district_id)->get();
-                $booking->where('jobcategory_id', $cat->id);
+                $booking->where('jobcategory_id', $request->jobcategory_id);
                 $booking->where('status', 1);
                 $booking->whereHas('jobDistricts', function ($a) use ($district) {
                     $a->where('district_id', $district[0]->id);
@@ -375,7 +424,7 @@ class JobsController extends Controller
 
     public function getJobsListByCityAndCategorySlug(Request $request)
     {
-        $booking = Jobs::query();
+        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
         if (isset($request->district_id)) {
 

@@ -24,7 +24,7 @@ class JobsDataTable extends DataTable
     protected function generateChangeButtonHtml($jobId, $status)
     {
 
-      // $html = '<a class="btn-sm btn-primary change_status"  title="Assign Handyman" href="#" data-target="#changeStatusModal" data-job-id="' . $jobId . '"><i class="fa fa-user-plus" aria-hidden="true"></i></a>';
+        // $html = '<a class="btn-sm btn-primary change_status"  title="Assign Handyman" href="#" data-target="#changeStatusModal" data-job-id="' . $jobId . '"><i class="fa fa-user-plus" aria-hidden="true"></i></a>';
         $html = '<button type="button" class="btn btn-primary btn-sm change_status" data-toggle="modal" data-target="#changeStatusModal" data-job-id="' . $jobId . '" data-status="' . $status . '">';
         $html .= '<i class="fa fa-edit" aria-hidden="true"></i>';
         $html .= '</button>';
@@ -38,7 +38,7 @@ class JobsDataTable extends DataTable
             ->eloquent($query)
             ->editColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)
-                ->tz('Asia/Kolkata')->format('d-m-Y h:i:s A');
+                    ->tz('Asia/Kolkata')->format('d-m-Y h:i:s A');
             })
             ->editColumn('user_id', function ($service) {
                 return ($service->user != null && isset($service->user)) ? $service->user->display_name . "(" . $service->user->contact_number . ")" : '';
@@ -63,13 +63,12 @@ class JobsDataTable extends DataTable
                     $status = '<span class="badge badge-pay-pending">' . __('messages.failed') . '</span>';
                 } else if ($payment_status == 'paid') {
                     $status = '<span class="badge badge-paid">' . __('messages.paid') . '</span>';
-                }
-                else{
+                } else {
                     $status = '<span class="badge bg-danger text-light">' . __('messages.pending') . '</span>';
                 }
                 return  $status;
             })
-            
+
             ->editColumn('status', function ($booking) {
                 $payment_status = optional($booking)->status;
                 if ($payment_status == '2') {
@@ -82,12 +81,11 @@ class JobsDataTable extends DataTable
                     $status = '<span class="badge bg-danger text-light">' . __('Suspended') . '</span>';
                 } else if ($payment_status == '4') {
                     $status = '<span class="badge bg-danger text-light">' . __('InActive') . '</span>';
-                }else{
-                    $status ='';
+                } else {
+                    $status = '';
                 }
                 $changeButton = $this->generateChangeButtonHtml($booking->id, $payment_status);
                 return '<div class="text-center">' . $status . ' ' . $changeButton . '</div>';
-                
             })
             // ->editColumn('is_featured', function ($category) {
             //     $disabled = $category->trashed() ? 'disabled' : '';
@@ -102,7 +100,7 @@ class JobsDataTable extends DataTable
             ->addColumn('action', function ($category) {
                 return view('jobs.action', compact('category'))->render();
             })
-           
+
             ->addIndexColumn()
             ->rawColumns(['action', 'status', 'is_featured', 'payment_id']);
     }
@@ -156,8 +154,8 @@ class JobsDataTable extends DataTable
             Column::make('status')
                 ->title('Jobs Status'),
 
-          
-           
+
+
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -189,7 +187,7 @@ class JobsDataTable extends DataTable
 
         ];
     }
- 
+
 
 
     /**

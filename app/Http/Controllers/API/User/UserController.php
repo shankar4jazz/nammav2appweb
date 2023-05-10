@@ -200,7 +200,7 @@ class UserController extends Controller
         $id = $request->id;
 
 
-        $user = User::select('users.id', 'username', 'first_name', 'last_name', 'email',  'contact_number', 'display_name',   'details', 'cities.name as city')
+        $user = User::select('users.id', 'username', 'first_name', 'last_name', 'email',  'contact_number', 'display_name',  'address', 'details', 'cities.name as city')
             ->leftJoin('cities', 'cities.id', '=', 'users.city_id')
             ->where('users.id', $id)
             ->first();
@@ -589,6 +589,7 @@ class UserController extends Controller
 
         $details = [
             'martial_status' => $request->martial_status,
+            'dob' => $request->dob,
             'experience' => $request->experience,
             'education'  => $request->education,
             'gender'     => $request->gender,

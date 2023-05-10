@@ -1,11 +1,21 @@
 <?php
 
 namespace App\Http\Resources\API;
-
+use App\Models\JobCallActivities;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class JobsResource extends JsonResource
+class JobsViewResource extends JsonResource
 {
+
+    protected $userId;
+    protected $jobId;
+
+    public function __construct($resource)
+    {
+        parent::__construct($resource);
+       // $this->userId = $userId;
+        //$this->jobId = $jobId;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -14,6 +24,16 @@ class JobsResource extends JsonResource
      */
     public function toArray($request)
     {
+
+            $hasApplied = JobCallActivities::where('jobs_id', $this->id)
+                ->where('jobseeker_id', $request->user_id)
+                ->where('Activity_type', "Apply")
+                ->exists();
+
+         $hasCalled = JobCallActivities::where('jobs_id', $this->id)
+                ->where('jobseeker_id', $request->user_id)
+                ->where('Activity_type', "call")
+                ->exists();
         $extention = imageExtention(getSingleMedia($this, 'jobs_image', null));
         $user = new UserResource($this->user);
         return [
@@ -65,28 +85,19 @@ class JobsResource extends JsonResource
             'created_at'    => $this->created_at,
             'updated_at'      => $this->updated_at,
             'contact_number'  => $this->contact_number,
-            'job_image'     =>  getSingleMedia($this, 'jobs_image', null),
+           // 'job_image'     =>  getSingleMedia($this, 'jobs_image', null),
             'districts' => $this->getJobDistricts->map(function ($jobDistrict) {
                 return [
-                    'id' => $jobDistrict->district->id?? '',
-                    'name' => $jobDistrict->district->name ?? '',
-                    'dt_name_tamil' => $jobDistrict->district->dt_name_tamil ?? ''
+                    'id' => $jobDistrict->district->id,
+                    'name' => $jobDistrict->district->name,
+                    'dt_name_tamil' => $jobDistrict->district->dt_name_tamil
                     // Add other district fields as needed
                 ];
             }),
             'disclose_salary' => $this->disclose_salary,
             'disclose_company' => $this->disclose_company,
-            // 'apply_list' => $this->jobsActivity->map(function ($jobDistrict) {
-            //     return [
-            //         'jobseeker_id' => $jobDistrict->jobseeker->id?? '',                   
-			// 		'activity_type' => $jobDistrict->jobseeker->activity_type?? '',
-            //         'name' => $jobDistrict->jobseeker->first_name ?? '' 
-                   
-            //         // Add other district fields as needed
-            //     ];
-            // }),
-           
-           // 'apply_status'     => optional($this->jobsActivity)->jobseeker_id,
+            'apply_status' => $hasApplied,
+            'call_status' => $hasCalled,
         ];
     }
 }

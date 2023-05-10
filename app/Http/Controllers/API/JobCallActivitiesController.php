@@ -15,10 +15,32 @@ class JobCallActivitiesController extends Controller
         $data = $request->all();
 
         $data['datetime'] = isset($request->datetime) ? date('Y-m-d H:i:s', strtotime($request->datetime)) : date('Y-m-d H:i:s');
-        if ($data['jobseeker_id'] != "" &&  $data['job_id'] != "") {
-            JobCallActivities::updateOrCreate(['jobseeker_id' => $data['jobseeker_id'], 'job_id' => $data['job_id']], $data);
-        } else {
-            JobCallActivities::create($data);
+
+        if ($data['activity_type'] == 'Call') {
+
+            $count = JobCallActivities::where('jobseeker_id', $data['jobseeker_id'])
+                ->where('jobs_id', $data['jobs_id'])
+                ->where('activity_type', $data['activity_type'])
+                ->count();
+            if ($count == 0) {
+                JobCallActivities::create($data);
+            } else if ($count == 1) {
+                JobCallActivities::updateOrCreate(['jobseeker_id' => $data['jobseeker_id'], 'jobs_id' => $data['jobs_id']], $data);
+            }
+        }
+
+        if ($data['activity_type'] == 'Apply') {
+
+            $count = JobCallActivities::where('jobseeker_id', $data['jobseeker_id'])
+                ->where('jobs_id', $data['jobs_id'])
+                ->where('activity_type', $data['activity_type'])
+                ->count();
+
+            if ($count == 0) {
+                JobCallActivities::create($data);
+            } else if ($count == 1) {
+                JobCallActivities::updateOrCreate(['jobseeker_id' => $data['jobseeker_id'], 'jobs_id' => $data['jobs_id']], $data);
+            }
         }
 
         $status_code = 200;
@@ -42,7 +64,18 @@ class JobCallActivitiesController extends Controller
                 $per_page = $document->count();
             }
         }
-        $document = $document->orderBy('updated_at', 'desc')->paginate($per_page);
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
+        $document = $document->orderBy('updated_at', 'desc')->offset($start)->limit($per_page)->get();
+        // $document = $document->orderBy('updated_at', 'desc')->paginate($per_page);
         $items = JobCallAcitvitiesResource::collection($document);
 
         // $response = [

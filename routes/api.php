@@ -52,6 +52,7 @@ Route::post('add-jobs', [App\Http\Controllers\JobsController::class, 'saveJobPos
 Route::post('create-jobs', [App\Http\Controllers\TamilanJobsController::class, 'store']);
 Route::get('jobs-list', [API\JobsController::class, 'getJobsList']);
 Route::get('jobs-view/{slug}', [API\JobsController::class, 'getJobsListBySlug']);
+Route::get('get-jobs/{id}/{user_id}', [API\JobsController::class, 'getJobById']);
 Route::get('jobs/{slug}', [API\JobsController::class, 'getJobsListBySlugUrl']);
 Route::post('citywise-jobs-list', [API\JobsController::class, 'getJobsListByCity']);
 Route::post('category-city-jobs-list', [API\JobsController::class, 'getJobsListByCityAndCategory']);
