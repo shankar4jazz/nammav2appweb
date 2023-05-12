@@ -264,7 +264,7 @@
 
                             <div class="form-group col-md-6">
                                 {{ Form::label('Apply Mode',trans('Apply Mode').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                {{ Form::select('is_mode',['0' => __('All Mode') , '1' => __('Call Mode'), '2' => __('TamilanJobs App')],old('is_mode'),[ 'id' => 'is_mode' ,'class' =>'form-control select2js']) }}
+                                {{ Form::select('is_mode',['1' => __('All Mode') , '2' => __('Call Mode'), '3' => __('TamilanJobs App'), '4' => __('WhatsApp')],old('is_mode'),[ 'id' => 'is_mode' ,'class' =>'form-control select2js']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
 

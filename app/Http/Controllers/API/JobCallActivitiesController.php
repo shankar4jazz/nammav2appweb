@@ -30,6 +30,7 @@ class JobCallActivitiesController extends Controller
             }
         }
 
+        
         if ($data['activity_type'] == 'Apply') {
 
             $record = JobCallActivities::where('jobseeker_id', $data['jobseeker_id'])
@@ -39,7 +40,7 @@ class JobCallActivitiesController extends Controller
             if ($record) {
                 $record->update($data);
             } else {
-                $data['activity_type'] = 'Call';
+                $data['activity_type'] = 'Apply';
                 JobCallActivities::create($data);
             }
         }

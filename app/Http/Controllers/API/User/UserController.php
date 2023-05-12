@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Password;
 use App\Models\Booking;
 use App\Models\ProviderDocument;
 use App\Models\Documents;
+use App\Models\UserDevices;
 use App\Models\HandymanRating;
 use App\Models\ProviderSubscription;
 use App\Models\BookingHandymanMapping;
@@ -669,25 +670,26 @@ class UserController extends Controller
                 $user = User::create($input);
                 $user->assignRole($input['user_type']);
 
-
                 if (request('player_id') != null) {
                     $user->player_id = request('player_id');
                 }
 
-
                 $fourRandomDigit = rand(1000, 9999);
 
                 $smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
+
                 if ($smsReply['status'] == 'Success') {
 
                     $user->otp = $fourRandomDigit;
                     $user->save();
+                    $device = UserDevices::firstOrCreate(['user_id' => $user->id]);
+                    $device->device_token = $input['device_token'];
+                    $device->save();
                     $otp_response = [
                         'status' => true,
                         'is_user_valid' => true,
                         'sms_sent' => true
                     ];
-
                     return comman_custom_response($otp_response, 200);
                 } else {
 
@@ -707,13 +709,17 @@ class UserController extends Controller
                     $fourRandomDigit = rand(1000, 9999);
                     $user_data->otp = $fourRandomDigit;
 
-                    $smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
-                    if ($smsReply['status'] == 'Success') {
-
+                    //$smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
+                    if ('Success' == 'Success') {
                         $user_data->deleted_at = null;
-                        $user_data->login_attempts = $user_data->login_attempts + 1;
-
+                        //  $user_data->login_attempts = $user_data->login_attempts + 1;
                         $user_data->update();
+
+                        $device = UserDevices::firstOrCreate(['user_id' => $user_data->id]);
+                        $device->device_token = $input['device_token'];
+                        $device->save();
+
+
                         $otp_response = [
                             'status' => true,
                             'is_user_exist' => true,

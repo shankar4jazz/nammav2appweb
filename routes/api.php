@@ -90,6 +90,10 @@ Route::post('forgot-password', [API\User\UserController::class, 'forgotPassword'
 Route::post('social-login', [API\User\UserController::class, 'socialLogin']);
 Route::post('contact-us', [API\User\UserController::class, 'contactUs']);
 
+Route::post('save-devices', [API\UserDevicesController::class, 'saveUserActivies']);
+
+
+
 
 Route::get('dashboard-detail', [API\DashboardController::class, 'dashboardDetail']);
 Route::get('service-rating-list', [API\ServiceController::class, 'getServiceRating']);

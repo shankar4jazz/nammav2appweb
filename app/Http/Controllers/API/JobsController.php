@@ -200,6 +200,10 @@ class JobsController extends Controller
 
         $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
+        if (isset($request->get_type)) {
+            $booking->inRandomOrder();
+        }
+
         if (isset($request->district_id)) {
             if ($request->district_id == 'jobs-in-all-districts') {
                 $booking->where('status', 1);
@@ -224,7 +228,7 @@ class JobsController extends Controller
 
 
         $per_page = 25;
-        $page = $request->page;
+        $page = 1;
 
         if ($request->has('per_page') && !empty($request->per_page)) {
             if (is_numeric($request->per_page)) {
@@ -295,6 +299,8 @@ class JobsController extends Controller
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 
         $per_page = config('constant.PER_PAGE_LIMIT');
+        $per_page = 25;
+        $page = 1;
         if ($request->has('per_page') && !empty($request->per_page)) {
             if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
@@ -304,8 +310,7 @@ class JobsController extends Controller
             }
         }
 
-        $per_page = 25;
-        $page = $request->page;
+       
 
         $start = ($page - 1) * $per_page;
 
