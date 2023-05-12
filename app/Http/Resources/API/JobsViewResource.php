@@ -80,12 +80,14 @@ class JobsViewResource extends JsonResource
             'reason'        => $this->reason,
             'status'        => $this->status,
             'is_featured'   => $this->is_featured,
+            'is_mode'       => $this->is_mode,
             'start_date'    => $this->start_date,
             'end_date'      => $this->end_date,
             'created_at'    => $this->created_at,
             'updated_at'      => $this->updated_at,
+
             'contact_number'  => $this->contact_number,
-           // 'job_image'     =>  getSingleMedia($this, 'jobs_image', null),
+            'job_image'     =>  getSingleMedia($this, 'jobs_image', null),
             'districts' => $this->getJobDistricts->map(function ($jobDistrict) {
                 return [
                     'id' => $jobDistrict->district->id,

@@ -69,7 +69,10 @@ class NewsController extends Controller
         $booking->where('status', 1);
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
+        $per_page = 50;
+        $page = $request->page;
 
+        
         $per_page = config('constant.PER_PAGE_LIMIT');
         if ($request->has('per_page') && !empty($request->per_page)) {
             if (is_numeric($request->per_page)) {
@@ -80,11 +83,8 @@ class NewsController extends Controller
             }
         }
 
-        $per_page = 50;
-        $page = $request->page;
-
+       
         $start = ($page - 1) * $per_page;
-
         if (!empty($request->page)) {
 
             $page = $request->page;

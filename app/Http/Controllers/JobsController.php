@@ -39,8 +39,6 @@ class JobsController extends Controller
      */
     public function create(Request $request)
     {
-
-
         if ($request->is('api/*')) {
 
             dd("hlo");
@@ -152,6 +150,8 @@ class JobsController extends Controller
         if ($request->has('is_featured')) {
             $data['is_featured'] = 1;
         }
+
+       
         $data['disclose_company'] = 0;
         if ($request->has('disclose_company')) {
             $data['disclose_company'] = 1;
@@ -178,8 +178,6 @@ class JobsController extends Controller
         $result = Jobs::updateOrCreate(['id' => $data['id']], $data);
 
         $result->jobDistricts()->detach();
-
-
 
         if ($request->input('districts') !== null) {
             foreach ($request->input('districts') as $row) {

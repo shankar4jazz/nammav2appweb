@@ -39,6 +39,7 @@ class Jobs extends Model implements HasMedia
         'reason',
         'status',
         'is_featured',
+        'is_mode',
         'start_date',
         'end_date',
         'company_name',
@@ -52,6 +53,7 @@ class Jobs extends Model implements HasMedia
     protected $casts = [
         'user_id'   => 'integer',
         'status'    => 'integer',
+        'is_mode'  => 'integer',
         'is_featured'  => 'integer',
         'jobcategory_id'  => 'integer'
     ];

@@ -43,9 +43,9 @@ class PushNotificationController extends Controller
                 $page = 'profile_form';
             }
         }
-       
 
-  
+
+
         return view('pushnotification.index', compact('page', 'pageTitle', 'auth_user'));
     }
 
@@ -53,7 +53,7 @@ class PushNotificationController extends Controller
     public function layoutPage(Request $request)
     {
 
-        $page = $request->page;      
+        $page = $request->page;
         $auth_user = authSession();
         $user_id = $auth_user->id;
         $settings = AppSetting::first();
@@ -471,46 +471,86 @@ class PushNotificationController extends Controller
 
         if ($district_name == 'AllTamilNadu') {
 
-            $to = '/topics/' . $district_name;
+
+            $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
+            $districts = $districts->pluck('name', 'id');
+            foreach ($districts as $key => $value) {
+
+                $district = str_replace(" ", "", $value);
+                if ($district == 'AllTamilNadu') {
+                    $to = '/topics/' . $district;
+                } else {
+                    $to = '/topics/TN-' . $district;
+                }
+
+                $fields = array(
+                    'to'               => $to,
+                    'priority'         => 'high',
+                    'notification'     => $message,
+                    'data'             => $data
+                );
+
+                $fields = json_encode($fields);
+                $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json; charset=utf-8',
+                    "Authorization:$rest_api_key"
+                ));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+                $response = curl_exec($ch);
+
+                curl_close($ch);
+                if ($response) {
+                    $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+                } else {
+                    $message = trans('messages.failed');
+                }
+            }
         } else {
 
             $to = '/topics/TN-' . $district_name;
+            $fields = array(
+                'to'               => $to,
+                'priority'         => 'high',
+                'notification'     => $message,
+                'data'             => $data
+            );
+
+            $fields = json_encode($fields);
+            $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json; charset=utf-8',
+                "Authorization:$rest_api_key"
+            ));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+            $response = curl_exec($ch);
+
+            curl_close($ch);
+            if ($response) {
+                $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+            } else {
+                $message = trans('messages.failed');
+            }
         }
 
-       
-        $fields = array(
-            'to'               => $to,
-            'priority'         => 'high',
-            'notification'     => $message,
-            'data'             => $data
-        );
-
-        $fields = json_encode($fields);
-        $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json; charset=utf-8',
-            "Authorization:$rest_api_key"
-        ));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-        $response = curl_exec($ch);
-
-        curl_close($ch);
-        if ($response) {
-            $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
-        } else {
-            $message = trans('messages.failed');
-        }
         if (request()->is('api/*')) {
             return comman_message_response($message);
         }
-        
+
         return redirect()->route('push-notification.index')->withSuccess($message);
     }
     public function sendGovtJobsPushNotification(Request $request)
@@ -519,11 +559,9 @@ class PushNotificationController extends Controller
         $data = $request->all();
         $district_name = str_replace(" ", "", $data['district_name']);
         $message = array(
-
             'title'     =>  $_POST['title'],
             'body'      =>  $data['description'],
             //'image'     =>  $_POST['image'],
-
         );
 
         $data = array(
@@ -532,46 +570,84 @@ class PushNotificationController extends Controller
 
         if ($district_name == 'AllTamilNadu') {
 
-            $to = '/topics/' . $district_name;
+            $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
+            $districts = $districts->pluck('name', 'id');
+            foreach ($districts as $key => $value) {
+
+                $district = str_replace(" ", "", $value);
+                if ($district == 'AllTamilNadu') {
+                    $to = '/topics/' . $district;
+                } else {
+                    $to = '/topics/TN-' . $district;
+                }
+
+                $fields = array(
+                    'to'               => $to,
+                    'priority'         => 'high',
+                    'notification'     => $message,
+                    'data'             => $data
+                );
+
+                $fields = json_encode($fields);
+                $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json; charset=utf-8',
+                    "Authorization:$rest_api_key"
+                ));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+                $response = curl_exec($ch);
+
+                curl_close($ch);
+                if ($response) {
+                    $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+                } else {
+                    $message = trans('messages.failed');
+                }
+            }
         } else {
 
             $to = '/topics/TN-' . $district_name;
-        }
+            $fields = array(
+                'to'               => $to,
+                'priority'         => 'high',
+                'notification'     => $message,
+                'data'             => $data
+            );
 
-        $fields = array(
-            'to'               => $to,
-            'priority'         => 'high',
-            'notification'     => $message,
-            'data'             => $data
-        );
+            $fields = json_encode($fields);
+            $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json; charset=utf-8',
+                "Authorization:$rest_api_key"
+            ));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
-        $fields = json_encode($fields);
-        $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json; charset=utf-8',
-            "Authorization:$rest_api_key"
-        ));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            $response = curl_exec($ch);
 
-        $response = curl_exec($ch);
-
-
-        curl_close($ch);
-        if ($response) {
-            $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
-        } else {
-            $message = trans('messages.failed');
+            curl_close($ch);
+            if ($response) {
+                $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+            } else {
+                $message = trans('messages.failed');
+            }
         }
         if (request()->is('api/*')) {
             return comman_message_response($message);
         }
-       
+
         return redirect()->route('push-notification.index', ['page' => $page])->withSuccess($message);
     }
 
@@ -580,15 +656,11 @@ class PushNotificationController extends Controller
         $data = $request->all();
         $page = $request->page;
         $district_name = str_replace(" ", "", $data['district_name']);
-
-
         $message = array(
             'title'     =>  $_POST['title'],
             'body'      =>  $data['description'],
             //'image'     =>  $_POST['image'],
         );
-
-
 
         $data = array(
             'news_id' =>  $_POST['news_id'],
@@ -597,48 +669,85 @@ class PushNotificationController extends Controller
 
         if ($district_name == 'AllTamilNadu') {
 
-            $to = '/topics/' . $district_name;
+            $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
+            $districts = $districts->pluck('name', 'id');
+            foreach ($districts as $key => $value) {
+
+                $district = str_replace(" ", "", $value);
+                if ($district == 'AllTamilNadu') {
+                    $to = '/topics/' . $district;
+                } else {
+                    $to = '/topics/TN-' . $district;
+                }
+
+                $fields = array(
+                    'to'               => $to,
+                    'priority'         => 'high',
+                    'notification'     => $message,
+                    'data'             => $data
+                );
+
+                $fields = json_encode($fields);
+                $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json; charset=utf-8',
+                    "Authorization:$rest_api_key"
+                ));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+                $response = curl_exec($ch);
+
+                curl_close($ch);
+                if ($response) {
+                    $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+                } else {
+                    $message = trans('messages.failed');
+                }
+            }
         } else {
 
             $to = '/topics/TN-' . $district_name;
+            $fields = array(
+                'to'               => $to,
+                'priority'         => 'high',
+                'notification'     => $message,
+                'data'             => $data
+            );
+
+            $fields = json_encode($fields);
+            $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json; charset=utf-8',
+                "Authorization:$rest_api_key"
+            ));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+            $response = curl_exec($ch);
+
+            curl_close($ch);
+            if ($response) {
+                $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
+            } else {
+                $message = trans('messages.failed');
+            }
         }
 
-        $fields = array(
-            'to'               => $to,
-            'priority'         => 'high',
-            'notification'     => $message,
-            'data'             => $data
-        );
-
-
-
-        $fields = json_encode($fields);
-        $rest_api_key = "key=AAAAsaL16Ho:APA91bHMF2sE79hZQ6yBY7s898hind9SWoK4zUrASZFucHlV_bsU7aMBJYV4ntBLot2DzOoaYH8hQeTEU6yngW3H1ZHaySKIx4kuJmCyXSs6qeISu0qO8pyjCKhVIvbCKex1O32lwnPH";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json; charset=utf-8',
-            "Authorization:$rest_api_key"
-        ));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-        $response = curl_exec($ch);
-
-
-        curl_close($ch);
-        if ($response) {
-            $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
-        } else {
-            $message = trans('messages.failed');
-        }
         if (request()->is('api/*')) {
             return comman_message_response($message);
         }
-       
+
         return redirect()->route('push-notification.index', ['page' => $page])->withSuccess($message);
     }
 
@@ -655,7 +764,7 @@ class PushNotificationController extends Controller
             //'image'     =>  $_POST['image'],
 
         );
-        
+
         $data = array(
             'page' =>  $_POST['page'],
         );

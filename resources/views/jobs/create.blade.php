@@ -29,7 +29,7 @@
                             <!-- <div class="form-group col-md-1 mt-5">
                                 <input type='button' id="convert_slug" value="Convert Slug">
                             </div> -->
-                          
+
                         </div>
                         @endif
                         <div class="row">
@@ -135,7 +135,7 @@
                                 {{ Form::number('max_salary',old('max_salary'),['placeholder' => trans('messages.max_salary'),'class' =>'form-control']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            
+
                             <div class="form-group col-md-4 mt-5">
                                 <div class="custom-control custom-checkbox custom-control-inline">
                                     <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
@@ -144,7 +144,7 @@
                                     </label>
                                 </div>
                             </div>
-                       
+
                             <div class="form-group col-md-4">
                                 {{ Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
                                 {{ Form::number('vacancy',old('vacancy'),['placeholder' => trans('messages.vacancy'),'class' =>'form-control','required']) }}
@@ -262,6 +262,12 @@
                                 {{ Form::textarea('reject_reason', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.reason') ]) }}
                             </div>
 
+                            <div class="form-group col-md-6">
+                                {{ Form::label('Apply Mode',trans('Apply Mode').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
+                                {{ Form::select('is_mode',['0' => __('All Mode') , '1' => __('Call Mode'), '2' => __('TamilanJobs App')],old('is_mode'),[ 'id' => 'is_mode' ,'class' =>'form-control select2js']) }}
+                                <small class="help-block with-errors text-danger"></small>
+                            </div>
+
                             @else
                             <input type="hidden" name="status" value="0">
                             @endif
@@ -298,7 +304,7 @@
                 var districts = "{{ isset($data) ? $data : [] }}";
                 //console.log(districts);
 
-                let selectedCityName = $("#city_id").find('option:selected').text();                
+                let selectedCityName = $("#city_id").find('option:selected').text();
                 $('#city_name').val(selectedCityName);
 
                 var country_id = "{{ isset($jobsdata->country_id) ? $jobsdata->country_id : 101 }}";
@@ -430,8 +436,8 @@
                         });
                         if (city != null || city != 0) {
                             $("#city_id").val(city).trigger('change');
-                            let selectedCityName = $("select[name='city_id']").find('option:selected').text();			
-                			$('#city_name').val(selectedCityName);
+                            let selectedCityName = $("select[name='city_id']").find('option:selected').text();
+                            $('#city_name').val(selectedCityName);
                         }
                     }
                 });

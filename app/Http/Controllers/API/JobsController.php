@@ -81,7 +81,7 @@ class JobsController extends Controller
             $view->count++;
             $view->save();
         }
-        $items = JobsViewResource::collection($booking);
+        $items = JobsResource::collection($booking);
         // $response = [
         //     'pagination' => [
         //         'total_items' => $items->total(),
@@ -272,7 +272,7 @@ class JobsController extends Controller
     public function getShuffleJobsListByCity(Request $request)
     {
 
-        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
+        $booking = Jobs::where('status', 1)->inRandomOrder()->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
         if (isset($request->district_id)) {
             if ($request->district_id == 'jobs-in-all-districts') {
 
@@ -428,23 +428,30 @@ class JobsController extends Controller
 
         if (isset($request->district_id)) {
 
-
             if ($request->district_id == 'jobs-in-all-districts' && $request->jobcategory_id == 'all-categories') {
-
 
                 $booking->where('status', 1);
             } else if ($request->district_id == 'jobs-in-all-districts') {
 
-                $booking->where('jobcategory_id', $request->jobcategory_id);
-
+                $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
+                $booking->where('jobcategory_id', $cat->id);
                 $booking->where('status', 1);
             } else if ($request->district_id == "null") {
 
                 $booking->where('status', 1);
-            } else {
+            } else if ($request->jobcategory_id == 'all-categories') {
 
                 $district =  District::where('slug', $request->district_id)->get();
-                $booking->where('jobcategory_id', $request->jobcategory_id);
+                $booking->where('status', 1);
+                $booking->whereHas('jobDistricts', function ($a) use ($district) {
+                    $a->where('district_id', $district[0]->id);
+                    $a->orWhere('district_id',  100);
+                });
+            } else {
+
+                $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
+                $district =  District::where('slug', $request->district_id)->get();
+                $booking->where('jobcategory_id', $cat->id);
                 $booking->where('status', 1);
                 $booking->whereHas('jobDistricts', function ($a) use ($district) {
                     $a->where('district_id', $district[0]->id);

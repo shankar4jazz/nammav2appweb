@@ -18,28 +18,29 @@ class JobCallActivitiesController extends Controller
 
         if ($data['activity_type'] == 'Call') {
 
-            $count = JobCallActivities::where('jobseeker_id', $data['jobseeker_id'])
+            $record = JobCallActivities::where('jobseeker_id', $data['jobseeker_id'])
                 ->where('jobs_id', $data['jobs_id'])
-                ->where('activity_type', $data['activity_type'])
-                ->count();
-            if ($count == 0) {
+                ->where('activity_type', 'Call')
+                ->first();
+            if ($record) {
+                $record->update($data);
+            } else {
+                $data['activity_type'] = 'Call';
                 JobCallActivities::create($data);
-            } else if ($count == 1) {
-                JobCallActivities::updateOrCreate(['jobseeker_id' => $data['jobseeker_id'], 'jobs_id' => $data['jobs_id']], $data);
             }
         }
 
         if ($data['activity_type'] == 'Apply') {
 
-            $count = JobCallActivities::where('jobseeker_id', $data['jobseeker_id'])
+            $record = JobCallActivities::where('jobseeker_id', $data['jobseeker_id'])
                 ->where('jobs_id', $data['jobs_id'])
-                ->where('activity_type', $data['activity_type'])
-                ->count();
-
-            if ($count == 0) {
+                ->where('activity_type', 'Apply')
+                ->first();
+            if ($record) {
+                $record->update($data);
+            } else {
+                $data['activity_type'] = 'Call';
                 JobCallActivities::create($data);
-            } else if ($count == 1) {
-                JobCallActivities::updateOrCreate(['jobseeker_id' => $data['jobseeker_id'], 'jobs_id' => $data['jobs_id']], $data);
             }
         }
 

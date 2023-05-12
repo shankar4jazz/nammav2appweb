@@ -278,13 +278,13 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             <div class=" col-md-12" style="margin-bottom: 15px;border: 1px solid #ccc; padding: 25px; background-color:honeydew;">
                                 <h3 class="text-center" style="margin-top: 0; margin-bottom: 10px;color:midnightblue">Application received from following city</h3>
                                 <div class="row">
 
-                                   
+
                                     <div class="form-group col-md-6">
                                         <?php echo e(Form::label('name', __('messages.select_name',[ 'select' => __('districts for jobs') ]),['class'=>'form-control-label'],false)); ?>
 
@@ -298,7 +298,7 @@
 
 
                                     </div>
-                                   
+
                                 </div>
                             </div>
 
@@ -314,7 +314,7 @@
                                         </div>
                                         <span class="selected_file"></span>
                                     </div>
-                                    
+
                                     <?php if(getMediaFileExit($jobsdata, 'jobs_image')): ?>
                                     <div class="col-md-2 mb-2">
                                         <?php
@@ -339,9 +339,9 @@
 
                                         <small class="help-block with-errors text-danger"></small>
                                     </div>
-                                   
 
-                                    <div class="form-group col-md-6">
+
+                                    <div class="form-group col-md-12">
                                         <?php echo e(Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
                                         <?php echo e(Form::select('status',['1' => __('messages.active') , '0' => __('Pending'), '2' => __('messages.rejected') ,'3' => __('Suspended'), '4' => __('InActive')],old('status'),[ 'id' => 'role' ,'class' =>'form-control select2js','required'])); ?>
@@ -353,6 +353,13 @@
 
                                         <?php echo e(Form::textarea('reject_reason', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('messages.reason') ])); ?>
 
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <?php echo e(Form::label('Apply Mode',trans('Apply Mode').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                        <?php echo e(Form::select('is_mode',['0' => __('All Mode') , '1' => __('Call Mode'), '2' => __('TamilanJobs App')],old('is_mode'),[ 'id' => 'role' ,'class' =>'form-control select2js'])); ?>
+
+                                        <small class="help-block with-errors text-danger"></small>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -368,17 +375,10 @@
                                     </div>
                                 </div>
                             </div>
-
                             <?php else: ?>
                             <input type="hidden" name="status" value="0">
                             <?php endif; ?>
-
-
                         </div>
-
-
-
-
                         <?php echo e(Form::submit( trans('messages.save'), ['class'=>'btn btn-md btn-primary float-right'])); ?>
 
                         <?php echo e(Form::close()); ?>
@@ -455,12 +455,12 @@
                 })
 
                 $(document).on('change', '#city_id', function() {
-                    
-                    
+
+
                     let selectedCityName = $(this).find('option:selected').text();
                     $('#city_name').val(selectedCityName);
-                    
-                    
+
+
                 })
 
             })
@@ -596,7 +596,7 @@
 
                         console.log(datas.length);
                         if (datas.length == 0) {
-                              window.location.href = "<?php echo e(route('jobs.quick')); ?>";
+                            window.location.href = "<?php echo e(route('jobs.quick')); ?>";
 
                         } else {
                             if (mobile_no != "") {

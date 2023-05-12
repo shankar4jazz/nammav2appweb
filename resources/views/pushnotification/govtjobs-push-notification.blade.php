@@ -41,12 +41,12 @@
     $(document).ready(function() {
 
     });
-    getJobs(100); 
+    getJobs(100);
 
     $(document).on('change', '#district_id', function() {
-        
+
         var district = $(this).val();
-        var district_name = $(this).find('option:selected').text();       
+        var district_name = $(this).find('option:selected').text();
         $('#district_name').val(district_name)
         $('#job_id').empty();
         getJobs(district);

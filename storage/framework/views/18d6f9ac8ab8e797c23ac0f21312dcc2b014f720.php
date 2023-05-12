@@ -38,7 +38,7 @@
                             <!-- <div class="form-group col-md-1 mt-5">
                                 <input type='button' id="convert_slug" value="Convert Slug">
                             </div> -->
-                          
+
                         </div>
                         <?php endif; ?>
                         <div class="row">
@@ -173,7 +173,7 @@
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
-                            
+
                             <div class="form-group col-md-4 mt-5">
                                 <div class="custom-control custom-checkbox custom-control-inline">
                                     <!-- <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="is_featured"> -->
@@ -184,7 +184,7 @@
                                     </label>
                                 </div>
                             </div>
-                       
+
                             <div class="form-group col-md-4">
                                 <?php echo e(Form::label('vacancy',trans('messages.vacancy').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
@@ -328,6 +328,14 @@
 
                             </div>
 
+                            <div class="form-group col-md-6">
+                                <?php echo e(Form::label('Apply Mode',trans('Apply Mode').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                <?php echo e(Form::select('is_mode',['0' => __('All Mode') , '1' => __('Call Mode'), '2' => __('TamilanJobs App')],old('is_mode'),[ 'id' => 'is_mode' ,'class' =>'form-control select2js'])); ?>
+
+                                <small class="help-block with-errors text-danger"></small>
+                            </div>
+
                             <?php else: ?>
                             <input type="hidden" name="status" value="0">
                             <?php endif; ?>
@@ -368,7 +376,7 @@
                 var districts = "<?php echo e(isset($data) ? $data : []); ?>";
                 //console.log(districts);
 
-                let selectedCityName = $("#city_id").find('option:selected').text();                
+                let selectedCityName = $("#city_id").find('option:selected').text();
                 $('#city_name').val(selectedCityName);
 
                 var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 101); ?>";
@@ -500,8 +508,8 @@
                         });
                         if (city != null || city != 0) {
                             $("#city_id").val(city).trigger('change');
-                            let selectedCityName = $("select[name='city_id']").find('option:selected').text();			
-                			$('#city_name').val(selectedCityName);
+                            let selectedCityName = $("select[name='city_id']").find('option:selected').text();
+                            $('#city_name').val(selectedCityName);
                         }
                     }
                 });
