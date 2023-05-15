@@ -84,6 +84,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [API\User\UserController::class, 'register']);
 Route::post('login', [API\User\UserController::class, 'login']);
+Route::post('truecaller-login', [API\User\UserController::class, 'trueCallerLogin']);
 Route::post('mobile-verification', [API\User\UserController::class, 'mobileLogin']);
 Route::post('otp-validation', [API\User\UserController::class, 'verifyOtp']);
 Route::post('forgot-password', [API\User\UserController::class, 'forgotPassword']);

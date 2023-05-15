@@ -311,6 +311,8 @@ class UserController extends Controller
             : response()->json(['message' => __($response), 'status' => false], 400);
     }
 
+
+
     public function socialLogin(Request $request)
     {
         $input = $request->all();
@@ -633,9 +635,105 @@ class UserController extends Controller
         ];
         return comman_custom_response($response);
     }
+
+    public function trueCallerLogin(Request $request)
+    {
+        $input = $request->all();
+        $user = \Auth::user();
+
+        if (request('contact_number') != '') {
+
+            if ($input['user_type'] === 'user') {
+                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', 'user')->first();
+            }
+            if ($input['user_type'] === 'provider') {
+                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', 'provider')->first();
+            }
+            if ($input['user_type'] === 'jobs') {
+                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', 'jobs')->first();
+            }
+            if ($input['user_type'] == 'jobseeker') {
+                $user_data = User::where('contact_number', $input['contact_number'])->where('user_type', 'jobseeker')->first();
+            }
+
+
+            if ($user_data == null) {
+                $input['username'] = $input['contact_number'];
+                $input['first_name'] = '';
+                $input['password'] = '';
+                $user = User::create($input);
+                $user->assignRole($input['user_type']);
+                $result = $user->save();
+
+                $success = $result;
+
+                $success['user_role'] = $user->getRoleNames();
+
+
+
+                $success['api_token'] = $user->createToken('auth_token')->plainTextToken;
+                $success['profile_image'] = getSingleMedia($user, 'profile_image', null);
+                $is_verify_provider = false;
+
+                $success['is_verify_provider'] = (int) $is_verify_provider;
+                unset($success['media']);
+                unset($user['roles']);
+
+                $otp_response = [
+                    'status' => true,
+                    "otp_status" => true,
+                    "data" => $success
+                ];
+
+                return comman_custom_response($otp_response, 200);
+            }
+            if ($user_data != null) {
+
+
+                $success = $user_data;
+
+                $success['user_role'] = $user_data->getRoleNames();
+
+                if ($request->user_type == "jobseeker") {
+
+                    $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
+                } else if ($request->user_type == "jobs") {
+
+                    $user_data['companies'] = $user_data->companies;
+                }
+
+                $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
+                $success['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
+                $is_verify_provider = false;
+                if ($user_data->user_type == 'provider') {
+                    $is_verify_provider = verify_provider_document($user_data->id);
+                    $success['subscription'] = get_user_active_plan($user_data->id);
+
+                    if (is_any_plan_active($user_data->id) == 0 && $success['is_subscribe'] == 0) {
+                        $success['subscription'] = user_last_plan($user_data->id);
+                    }
+                    $success['is_subscribe'] = is_subscribed_user($user_data->id);
+                }
+                $success['is_verify_provider'] = (int) $is_verify_provider;
+                unset($success['media']);
+                unset($user_data['roles']);
+
+                $otp_response = [
+                    'status' => true,
+                    "otp_status" => true,
+                    "data" => $success
+                ];
+
+                return comman_custom_response($otp_response, 200);
+            }
+        } else {
+            $message = trans('auth.failed');
+
+            return comman_message_response($message, 400);
+        }
+    }
     public function mobileLogin(Request $request)
     {
-
         $input = $request->all();
         if ($input['contact_number'] == '9876543210') {
 
@@ -682,9 +780,11 @@ class UserController extends Controller
 
                     $user->otp = $fourRandomDigit;
                     $user->save();
-                    $device = UserDevices::firstOrCreate(['user_id' => $user->id]);
-                    $device->device_token = $input['device_token'];
-                    $device->save();
+                    if (isset($input['device_token'])) {
+                        $device = UserDevices::firstOrCreate(['user_id' => $user->id]);
+                        $device->device_token = $input['device_token'];
+                        $device->save();
+                    }
                     $otp_response = [
                         'status' => true,
                         'is_user_valid' => true,
@@ -709,15 +809,17 @@ class UserController extends Controller
                     $fourRandomDigit = rand(1000, 9999);
                     $user_data->otp = $fourRandomDigit;
 
-                    //$smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
-                    if ('Success' == 'Success') {
+                    $smsReply = $this->sentSMS($input['contact_number'],  $fourRandomDigit);
+                    if ($smsReply['status'] == 'Success') {
                         $user_data->deleted_at = null;
-                        //  $user_data->login_attempts = $user_data->login_attempts + 1;
+                        $user_data->login_attempts = $user_data->login_attempts + 1;
                         $user_data->update();
 
-                        $device = UserDevices::firstOrCreate(['user_id' => $user_data->id]);
-                        $device->device_token = $input['device_token'];
-                        $device->save();
+                        if (isset($input['device_token'])) {
+                            $device = UserDevices::firstOrCreate(['user_id' => $user_data->id]);
+                            $device->device_token = $input['device_token'];
+                            $device->save();
+                        }
 
 
                         $otp_response = [
@@ -752,6 +854,12 @@ class UserController extends Controller
                         if ($smsReply['status'] == 'Success') {
                             $user_data->login_attempts = 0;
                             $user_data->update();
+
+                            if (isset($input['device_token'])) {
+                                $device = UserDevices::firstOrCreate(['user_id' => $user->id]);
+                                $device->device_token = $input['device_token'];
+                                $device->save();
+                            }
                             $otp_response = [
                                 'status' => true,
                                 'is_user_exist' => true,

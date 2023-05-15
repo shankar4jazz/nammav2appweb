@@ -81,7 +81,7 @@ class JobsController extends Controller
             $view->count++;
             $view->save();
         }
-        $items = JobsResource::collection($booking);
+        $items = JobsViewResource::collection($booking);
         // $response = [
         //     'pagination' => [
         //         'total_items' => $items->total(),
@@ -198,10 +198,14 @@ class JobsController extends Controller
     public function getJobsListByCity(Request $request)
     {
 
-        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
+        $booking = Jobs::where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
         if (isset($request->get_type)) {
             $booking->inRandomOrder();
+        }
+
+        if (isset($request->education)) {
+            $booking->where('education', $request->education);
         }
 
         if (isset($request->district_id)) {
@@ -248,6 +252,7 @@ class JobsController extends Controller
             $start = ($page - 1) * $per_page;
         }
         $orderBy = 'desc';
+
         if ($request->has('orderby') && !empty($request->orderby)) {
             $orderBy = $request->orderby;
         }
@@ -310,7 +315,7 @@ class JobsController extends Controller
             }
         }
 
-       
+
 
         $start = ($page - 1) * $per_page;
 

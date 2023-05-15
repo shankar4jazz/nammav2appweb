@@ -45,14 +45,12 @@ class UserResource extends JsonResource
             'contact_number'    => $this->contact_number,
             'country_id'        => $this->country_id,
             'state_id'          => $this->state_id,
-            'city_id'           => $this->city_id,
-            
+            'city_id'           => $this->city_id,            
             'address'           => $this->address,
             'status'            => $this->status,
             'providertype_id'   => $this->providertype_id,
             'providertype'      => optional($this->providertype)->name,
-            'is_featured'       => $this->is_featured,
-         
+            'is_featured'       => $this->is_featured,         
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'deleted_at'        => $this->deleted_at,
