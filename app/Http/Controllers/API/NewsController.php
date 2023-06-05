@@ -10,6 +10,27 @@ use Carbon\Carbon;
 
 class NewsController extends Controller
 {
+
+    public function saveNews(Request $request)
+    {
+        $data = $request->all();
+
+      
+        $data['description'] = base64_encode($request->description);
+        $result = News::create($data);
+        storeMediaFile($result, $request->news_image, 'news_image');
+        $status_code = 200;
+        if ($result) {
+            $status_code = 200;
+            $message = __('News published');
+        } else {
+            $status_code = 400;
+            $message = __("News not published");
+        }
+
+       
+        return comman_message_response($message, $status_code);
+    }
     public function getNewsList(Request $request)
     {
         $booking = News::withTrashed();
@@ -42,8 +63,8 @@ class NewsController extends Controller
             $orderBy = $request->orderby;
         }
 
-       // $booking = $booking->orderBy('updated_at', 'desc')->get();
-		 $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
+        // $booking = $booking->orderBy('updated_at', 'desc')->get();
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
         $items = NewsResource::collection($booking);
 
         $response = [
@@ -69,7 +90,7 @@ class NewsController extends Controller
         $booking->where('status', 1);
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
-               
+
         $per_page = config('constant.PER_PAGE_LIMIT');
         $per_page = 50;
         $page = $request->page;
@@ -82,7 +103,7 @@ class NewsController extends Controller
             }
         }
 
-       
+
         $start = ($page - 1) * $per_page;
         if (!empty($request->page)) {
 
@@ -137,11 +158,11 @@ class NewsController extends Controller
                 $per_page = $booking->count();
             }
         }
-		  $per_page = 50;
+        $per_page = 50;
         $page = $request->page;
 
         $start = ($page - 1) * $per_page;
-		 if (!empty($request->page)) {
+        if (!empty($request->page)) {
 
             $page = $request->page;
 
@@ -191,11 +212,11 @@ class NewsController extends Controller
                 $per_page = $booking->count();
             }
         }
-		  $per_page = 50;
+        $per_page = 50;
         $page = $request->page;
 
         $start = ($page - 1) * $per_page;
-		 if (!empty($request->page)) {
+        if (!empty($request->page)) {
 
             $page = $request->page;
 
@@ -230,7 +251,7 @@ class NewsController extends Controller
     {
         $booking = News::withTrashed();
 
-        $booking->where('status', 1);
+       
         $booking->whereHas('user', function ($a) use ($request) {
             $a->where('user_id', $request->user_id);
         });

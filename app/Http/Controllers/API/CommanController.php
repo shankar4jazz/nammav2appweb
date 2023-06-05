@@ -54,6 +54,12 @@ class CommanController extends Controller
 
         return response()->json( $list );
     }
+
+    public function getEducationCategory(){
+        $edu_array = degreeArray();
+        return response()->json( $edu_array );
+
+    }
     public function getProviderTax(Request $request){
         $provider_id  = !empty($request->provider_id) ? $request->provider_id : auth()->user()->id;
         $taxes = ProviderTaxMapping::with('taxes')->where('provider_id',$provider_id);

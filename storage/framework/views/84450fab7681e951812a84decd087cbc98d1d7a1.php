@@ -26,6 +26,37 @@
                         <?php echo e(Form::hidden('id')); ?>
 
                         <div class="row">
+                            <?php if(auth()->user()->hasRole(['admin'])): ?>
+                            <div class="form-group col-md-8">
+                                <?php echo e(Form::label('user_id', __('messages.select_name',[ 'select' => __('messages.user') ]).' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
+
+                                <br />
+
+                                <?php
+                                $selectOptions = optional($subcategory->user)->id
+                                ? [optional($subcategory->user)->id => optional($subcategory->user)->contact_number]
+                                : [auth()->user()->id => auth()->user()->first_name];
+                                ?>
+                                <?php echo e(Form::select('user_id', 
+                                                $selectOptions, 
+                                                optional($subcategory->user)->id ?? auth()->user()->id, 
+                                                [
+                                                    'class' => 'select2js form-group user',
+                                                    'required',
+                                                    'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.user') ]),
+                                                    'data-ajax--url' => route('ajax-list', ['type' => 'news_user']),
+                                                ])); ?>
+
+
+                                
+                            </div>
+                            <div class="form-group col-md-4 mt-4">
+                                <?php echo e(optional($subcategory->user)->first_name ?? auth()->user()->first_name); ?>
+
+                            </div>
+                            <?php else: ?>
+                            <input type="hidden" name="user_id" value="<?php echo e($jobsdata->user_id); ?>">
+                            <?php endif; ?>
                             <div class="form-group col-md-4">
                                 <?php echo e(Form::label('title',trans('Enter news title').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false )); ?>
 
@@ -100,7 +131,7 @@
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div> -->
-                          
+
 
                             <div class="form-group col-md-8">
                                 <label class="form-control-label" for="news_video"><?php echo e(__('messages.video')); ?> </label>
@@ -231,7 +262,7 @@
                             <div class="form-group col-md-4">
                                 <?php echo e(Form::label('status',trans('messages.status').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
-                                <?php echo e(Form::select('status',['1' => __('messages.active') , '0' => __('messages.inactive'), '2' => __('messages.pending') ,'3' => __('messages.rejected') ],old('status'),[ 'id' => 'role' ,'class' =>'form-control select2js','required'])); ?>
+                                <?php echo e(Form::select('status',['1' => __('messages.active') , '0' => __('messages.pending'), '2' => __('messages.inactive') ,'3' => __('messages.rejected') ],old('status'),[ 'id' => 'role' ,'class' =>'form-control select2js','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
@@ -408,8 +439,9 @@
                     }
                 });
             }
+
             function textToSlug(text) {
-                
+
                 return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 
             }
@@ -419,7 +451,7 @@
                 var textbox = document.getElementById("title");
                 var slug = textToSlug(textbox.value);
                 var textbox = document.getElementById("link");
-                textbox.value = slug+"-"+timestamp;
+                textbox.value = slug + "-" + timestamp;
 
 
             });

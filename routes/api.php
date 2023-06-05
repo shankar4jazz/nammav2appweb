@@ -37,14 +37,14 @@ Route::get('jobs-expiry', [API\JobsController::class, 'jobsExpire']);
 Route::post('save-reports', [API\JobsReportsController::class, 'saveReports']);
 Route::post('get-reports', [API\JobsReportsController::class, 'getReports']);
 //news
-
+Route::post('news-save', [API\NewsController::class, 'saveNews']);
 Route::get('news-category-list', [API\NewsCategoryController::class, 'getCategoryList']);
 Route::get('news-list', [API\NewsController::class, 'getNewsList']);
 Route::get('get-news-list', [API\NewsController::class, 'getAllNewsList']);
 Route::post('categorynews-list', [API\NewsController::class, 'getNewsListByCategory']);
 Route::get('test-news-list', [API\NewsController::class, 'getNewsListTest']);
 Route::post('city-news-list', [API\JobsController::class, 'getNewsListByCity']);
-Route::post('user-news-list', [API\JobsController::class, 'getNewsListByUser']);
+Route::post('user-news-list', [API\NewsController::class, 'getNewsListByUser']);
 //end news
 Route::get('jobcategory-list', [API\JobCategoryController::class, 'getCategoryList']);
 Route::post('save-jobs', [App\Http\Controllers\JobsController::class, 'store']);
@@ -57,6 +57,9 @@ Route::get('jobs/{slug}', [API\JobsController::class, 'getJobsListBySlugUrl']);
 Route::post('citywise-jobs-list', [API\JobsController::class, 'getJobsListByCity']);
 Route::post('category-city-jobs-list', [API\JobsController::class, 'getJobsListByCityAndCategory']);
 Route::post('categories-cities-jobs-list', [API\JobsController::class, 'getJobsListByCityAndCategorySlug']);
+Route::post('your-jobs-list', [API\JobsController::class, 'jobseerkerJobsForYou']);
+Route::post('city-all-jobs-list', [API\JobsController::class, 'getJobsListAllCities']);
+
 Route::post('user-jobs-list', [API\JobsController::class, 'getJobsListByUser']);
 Route::post('company-list', [API\CompanyController::class, 'getCompanyByUser']);
 
@@ -73,10 +76,12 @@ Route::post('country-list', [API\CommanController::class, 'getCountryList']);
 Route::post('state-list', [API\CommanController::class, 'getStateList']);
 Route::get('district-list', [API\CommanController::class, 'getDistrictList']);
 Route::post('city-list', [API\CommanController::class, 'getCityList']);
+Route::get('education-categories', [API\CommanController::class, 'getEducationCategory']);
 Route::post('getcity-lists', [API\CommanController::class, 'getCityListByDistrictId']);
 Route::get('search-list', [API\CommanController::class, 'getSearchList']);
 Route::get('slider-list', [API\SliderController::class, 'getSliderList']);
 Route::get('top-rated-service', [API\ServiceController::class, 'getTopRatedService']);
+Route::post('provider-leads', [API\ProviderLeadsController::class, 'saveLeads']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -90,11 +95,7 @@ Route::post('otp-validation', [API\User\UserController::class, 'verifyOtp']);
 Route::post('forgot-password', [API\User\UserController::class, 'forgotPassword']);
 Route::post('social-login', [API\User\UserController::class, 'socialLogin']);
 Route::post('contact-us', [API\User\UserController::class, 'contactUs']);
-
 Route::post('save-devices', [API\UserDevicesController::class, 'saveUserActivies']);
-
-
-
 
 Route::get('dashboard-detail', [API\DashboardController::class, 'dashboardDetail']);
 Route::get('service-rating-list', [API\ServiceController::class, 'getServiceRating']);

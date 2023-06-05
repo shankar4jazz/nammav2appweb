@@ -176,7 +176,7 @@ class JobsController extends Controller
         }
 
         $booking = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
-        $items = JobsResource::collection($booking);
+        $items = JobsViewResource::collection($booking);
 
         // $response = [
         //     'pagination' => [
@@ -231,6 +231,80 @@ class JobsController extends Controller
         $per_page = config('constant.PER_PAGE_LIMIT');
 
 
+        $per_page = 25;
+        $page = 1;
+
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
+                $per_page = $request->per_page;
+            }
+            if ($request->per_page === 'all') {
+                $per_page = $booking->count();
+            }
+        }
+
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
+        $orderBy = 'desc';
+
+        if ($request->has('orderby') && !empty($request->orderby)) {
+            $orderBy = $request->orderby;
+        }
+
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
+        $items = JobsResource::collection($booking);
+
+        // $response = [
+        //     'pagination' => [
+        //         'total_items' => $items->total(),
+        //         'per_page' => $items->perPage(),
+        //         'currentPage' => $items->currentPage(),
+        //         'totalPages' => $items->lastPage(),
+        //         'from' => $items->firstItem(),
+        //         'to' => $items->lastItem(),
+        //         'next_page' => $items->nextPageUrl(),
+        //         'previous_page' => $items->previousPageUrl(),
+        //     ],
+        //     'data' => $items,
+        // ];
+
+        return comman_custom_response($items);
+    }
+
+
+    public function getJobsListAllCities(Request $request)
+    {
+
+        $booking = Jobs::where('end_date', '>=', DB::raw('CURRENT_DATE()'));
+
+
+        if (isset($request->district_id)) {
+            if ($request->district_id == 'jobs-in-all-districts') {
+
+                $booking->where('status', 1);
+                $booking->where('district_id',  100);
+            } else {
+
+                $district =  District::where('slug', $request->district_id)->get();
+                $booking->where('status', 1);
+                $booking->whereHas('jobDistricts', function ($a) use ($district) {
+                    $a->where('district_id', $district[0]->id);
+                });
+            }
+        } else {
+
+            $booking->where('status', 1);
+        }
+
+        //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
+
+        $per_page = config('constant.PER_PAGE_LIMIT');
         $per_page = 25;
         $page = 1;
 
@@ -470,6 +544,89 @@ class JobsController extends Controller
             }
         } else {
 
+            $booking->where('status', 1);
+        }
+
+        //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
+
+        $per_page = config('constant.PER_PAGE_LIMIT');
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
+                $per_page = $request->per_page;
+            }
+            if ($request->per_page === 'all') {
+                $per_page = $booking->count();
+            }
+        }
+
+        $per_page = 25;
+        $page = $request->page;
+
+        $start = ($page - 1) * $per_page;
+
+        if (!empty($request->page)) {
+
+            $page = $request->page;
+
+            $start = ($page - 1) * $per_page;
+        }
+        $orderBy = 'desc';
+        if ($request->has('orderby') && !empty($request->orderby)) {
+            $orderBy = $request->orderby;
+        }
+
+        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
+        $items = JobsResource::collection($booking);
+
+        // $response = [
+        //     'pagination' => [
+        //         'total_items' => $items->total(),
+        //         'per_page' => $items->perPage(),
+        //         'currentPage' => $items->currentPage(),
+        //         'totalPages' => $items->lastPage(),
+        //         'from' => $items->firstItem(),
+        //         'to' => $items->lastItem(),
+        //         'next_page' => $items->nextPageUrl(),
+        //         'previous_page' => $items->previousPageUrl(),
+        //     ],
+        //     'data' => $items,
+        // ];
+
+        return comman_custom_response($items);
+    }
+
+
+    public function jobseerkerJobsForYou(Request $request)
+    {
+
+
+        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
+
+        if (isset($request->jobsCategory) || isset($request->districts)) {
+            // Get array of job category ids
+            $jobCategoryIds = collect($request->jobsCategory)->pluck('jobscategory_id')->all();
+            $jobCategories = JobsCategory::whereIn('slug', $jobCategoryIds)->get();
+            $catIds = $jobCategories->pluck('id')->all();
+
+            // Get array of district ids
+            $districtIds = collect($request->districts)->pluck('districts_id')->all();
+            $districts = District::whereIn('slug', $districtIds)->get();
+            $distIds = $districts->pluck('id')->all();
+
+
+
+            if (!empty($catIds)) {
+                $booking->whereIn('jobcategory_id', $catIds);
+            }
+
+            if (!empty($distIds)) {
+                $booking->whereHas('jobDistricts', function ($q) use ($distIds) {
+                    $q->whereIn('district_id', $distIds);
+                });
+            }
+
+            $booking->where('status', 1);
+        } else {
             $booking->where('status', 1);
         }
 

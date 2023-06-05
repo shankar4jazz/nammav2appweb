@@ -74,7 +74,7 @@ class JobsViewResource extends JsonResource
             //'user_id'       => $this->user_id,
             'user_name'     => optional($this->user)->display_name,
             'contact_number'    => optional($this->user)->contact_number,
-            // 'users'         => $user,
+            //'users'         => $user,
             'address'       => $this->address,
             'pincode'       => $this->pincode,
             'reason'        => $this->reason,
@@ -85,7 +85,6 @@ class JobsViewResource extends JsonResource
             'end_date'      => $this->end_date,
             'created_at'    => $this->created_at,
             'updated_at'      => $this->updated_at,
-
             'contact_number'  => $this->contact_number,
             'job_image'     =>  getSingleMedia($this, 'jobs_image', null),
             'districts' => $this->getJobDistricts->map(function ($jobDistrict) {

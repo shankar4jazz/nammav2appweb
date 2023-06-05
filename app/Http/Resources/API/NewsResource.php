@@ -23,11 +23,10 @@ class NewsResource extends JsonResource
             'link'          => $this->link,
             'tamil_title'   => $this->tamil_title,
             'news_category_id'      => $this->news_category_id,
+            'news_category'      =>  optional($this->category)->name,
             'news_subcategory_id'   => $this->news_subcategory_id,
             'news_image' => getSingleMedia($this, 'news_image', null),
             'news_video' => getSingleMedia($this, 'news_video', null),
-			
-
             'user_id'       => $this->user_id,
 			'user_name'    => optional($this->user)->display_name,
             'youtube_url'   => $this->youtube_url,

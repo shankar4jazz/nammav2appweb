@@ -97,13 +97,13 @@ class NewsController extends Controller
         }
 
         $data = $request->all();
-        $loginuser = \Auth::user();
+       
         $data['description'] = base64_encode($request->description);
         $data['is_featured'] = 0;
         if ($request->has('is_featured')) {
             $data['is_featured'] = 1;
         }
-        $data['user_id'] = $loginuser['id'];
+      
         
 
         $result = News::updateOrCreate(['id' => $data['id']], $data);

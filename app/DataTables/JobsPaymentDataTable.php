@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DataTables;
+
 use App\Traits\DataTableTrait;
 
 use App\Models\JobsPayment;
@@ -24,27 +25,27 @@ class JobsPaymentDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('job_id', function($payment) {
-                return $payment->job_id.($payment->job_id != null && isset($payment->booking->title)) ? '['.$payment->job_id.']--'.$payment->booking->title :'-';
+            ->editColumn('job_id', function ($payment) {
+                return $payment->job_id . ($payment->job_id != null && $payment->booking != null && isset($payment->booking->title) ? '[' . $payment->job_id . ']--' . $payment->booking->title : '-');
             })
-            ->filterColumn('job_id',function($query,$keyword){
-                $query->whereHas('booking.service',function ($q) use($keyword){
-                    $q->where('name','like','%'.$keyword.'%');
+            ->filterColumn('job_id', function ($query, $keyword) {
+                $query->whereHas('booking.service', function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%');
                 });
-            })            
-            ->editColumn('employer_id', function($payment) {
-                return ($payment->employer_id != null && isset($payment->customer)) ? $payment->customer->display_name.'-'.$payment->customer->first_name : '';
             })
-            ->filterColumn('employer_id',function($query,$keyword){
-                $query->whereHas('customer',function ($q) use($keyword){
-                    $q->where('display_name','like','%'.$keyword.'%');
+            ->editColumn('employer_id', function ($payment) {
+                return ($payment->employer_id != null && isset($payment->customer)) ? $payment->customer->display_name . '-' . $payment->customer->first_name : '';
+            })
+            ->filterColumn('employer_id', function ($query, $keyword) {
+                $query->whereHas('customer', function ($q) use ($keyword) {
+                    $q->where('display_name', 'like', '%' . $keyword . '%');
                 });
             })
             ->editColumn('datetime', function ($row) {
-                return Carbon::parse($row->created_at)
-                ->tz('Asia/Kolkata')->format('d-m-Y h:i:s A');
+                return Carbon::parse($row->updated_at)
+                    ->tz('Asia/Kolkata')->format('d-m-Y h:i:s A');
             })
-            ->editColumn('total_amount', function($payment) {
+            ->editColumn('total_amount', function ($payment) {
                 return getPriceFormat($payment->total_amount);
             })
             ->addColumn('action', function ($payment) {
@@ -62,16 +63,13 @@ class JobsPaymentDataTable extends DataTable
      */
     public function query(JobsPayment $model)
     {
-       
 
-        
         if (auth()->user()->hasAnyRole(['admin'])) {
-           
-            $model = $model->withTrashed()->orderByDesc('id');
-        }else{
-            
-            return $model->list()->newQuery()->orderByDesc('id');
 
+            $model = $model->withTrashed()->orderByDesc('id');
+        } else {
+
+            return $model->list()->newQuery()->orderByDesc('id');
         }
 
         return $model->newQuery()->myPayment();
@@ -103,12 +101,12 @@ class JobsPaymentDataTable extends DataTable
             Column::make('payment_type'),
             Column::make('payment_status'),
             Column::make('datetime'),
-            Column::make('total_amount'),     
+            Column::make('total_amount'),
             Column::computed('action')
-            ->exportable(false)
-            ->printable(false)
-            ->width(60)
-            ->addClass('text-center'),    
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
         ];
     }
 

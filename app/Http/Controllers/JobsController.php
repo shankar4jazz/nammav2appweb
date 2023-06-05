@@ -151,7 +151,7 @@ class JobsController extends Controller
             $data['is_featured'] = 1;
         }
 
-       
+
         $data['disclose_company'] = 0;
         if ($request->has('disclose_company')) {
             $data['disclose_company'] = 1;
@@ -258,6 +258,8 @@ class JobsController extends Controller
         }
         sendWhatsAppText($result->id, 'job_post');
         sendWhatsAppTextToExecutive($result->id, 'job_post');
+
+
         if ($request->is('api/*')) {
             return  comman_custom_response($jobs, 200);
         }

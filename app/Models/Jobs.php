@@ -117,23 +117,23 @@ class Jobs extends Model implements HasMedia
     public function scopeMyJobs($query)
     {
         $user = auth()->user();
-        // if ($user->hasRole('admin') || $user->hasRole('demo_admin')) {
-        //     return $query;
-        // }
+        if ($user->hasRole('admin') || $user->hasRole('demo_admin')) {
+            return $query;
+        }
 
-        // if ($user->hasRole('provider')) {
-        //     return $query->where('provider_id', $user->id);
-        // }
+        if ($user->hasRole('provider')) {
+            return $query->where('provider_id', $user->id);
+        }
 
-        // if ($user->hasRole('user')) {
-        //     return $query->where('customer_id', $user->id);
-        // }
+        if ($user->hasRole('user')) {
+            return $query->where('customer_id', $user->id);
+        }
 
-        // if ($user->hasRole('handyman')) {
-        //     return $query->whereHas('handymanAdded', function ($q) use ($user) {
-        //         $q->where('handyman_id', $user->id);
-        //     });
-        // }
+        if ($user->hasRole('handyman')) {
+            return $query->whereHas('handymanAdded', function ($q) use ($user) {
+                $q->where('handyman_id', $user->id);
+            });
+        }
 
         return $query;
     }

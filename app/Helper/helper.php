@@ -186,7 +186,7 @@ function storeMediaFile($model, $file, $name)
                 $resizedPath = $originalDirectory . '/' . $resizedFilename;
 
                 // Resize the image to a specific size and save it to the new path
-                $img->resize(300, 175)->save($resizedPath, 60);
+                $img->resize(300, 215)->save($resizedPath, 90);
                 // Check the file size and reduce the quality further if needed
                 // while (filesize($file->getPathname()) > 10240) {
                 //     $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
@@ -214,7 +214,7 @@ function storeMediaFile($model, $file, $name)
             $resizedPath = $originalDirectory . '/' . $resizedFilename;
 
             // Resize the image to a specific size and save it to the new path
-            $img->resize(300, 175)->save($resizedPath, 60);
+            $img->resize(300, 215)->save($resizedPath, 90);
             // Check the file size and reduce the quality further if needed
             // while (filesize($file->getPathname()) > 10240) {
             //     $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
@@ -618,6 +618,17 @@ function handymanNames($collection)
     return $collection->mapWithKeys(function ($item) {
         return [$item->handyman_id => optional($item->handyman)->display_name];
     })->values()->implode(',');
+}
+
+function degreeArray()
+{
+    $degree = [
+        ['name' => 'Below 10th', 'id' => '0', 'slug'=>'below-10th-jobs'],
+        ['name' => '10th/12th', 'id' => '1', 'slug'=>'10th-12th-jobs'],
+        ['name' => 'ITI/Diploma', 'id' => '2', 'slug'=>'iti-dipoloma-jobs'],
+        ['name' => 'Degree', 'id' => '3', 'slug'=>'degree-jobs']
+    ];
+    return $degree;
 }
 
 function languagesArray($ids = [])
@@ -1558,18 +1569,17 @@ function sendWhatsAppText($jobid, $status)
 
     $user = \App\Models\User::find($job->user_id);
 
-     if($user && $user->first_name != null){
-		 $userName = $user->first_name; 
-	 }
-	else{
-		$userName = $job->contact_number;
-	}
-	
+    if ($user && $user->first_name != null) {
+        $userName = $user->first_name;
+    } else {
+        $userName = $job->contact_number;
+    }
+
     $mobile_number = $job->contact_number; //$booking->contact_number;
-	$endDate = date('d-m-Y', strtotime($job->end_date));
+    $endDate = date('d-m-Y', strtotime($job->end_date));
     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
-	 switch ($status) {
+    switch ($status) {
         case 'failed':
 
             $variables = array(
@@ -1602,7 +1612,7 @@ function sendWhatsAppText($jobid, $status)
             );
             break;
 
-        case 'rejected':		
+        case 'rejected':
 
             $variables = array(
                 '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nUnfortunately, *{$userName}*, \nyour job with ID: {$job->id} didn't meet our guidelines and has been rejected ❌.\n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n```We're here to support your job posting needs, Regards Tamilanjobs ```\n\n_Support: 8233823308_"
@@ -1691,7 +1701,7 @@ function sendWhatsAppText($jobid, $status)
 function sendWhatsAppTextToExecutive($jobid, $status)
 {
     $job = \App\Models\Jobs::find($jobid);
- 
+
     $mobile_number = '8675002943'; //$booking->contact_number;
     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
@@ -1699,11 +1709,11 @@ function sendWhatsAppTextToExecutive($jobid, $status)
 
 
         case 'job_post':
-          
-                $variables = array(
-                   '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nDear Tamilanjobs Admin/Executive, The job with ID: {$job->id} has been posted successfully. \n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n```Your success is our success, Regards Tamilanjobs ```\n\n_Support: 8233823308_",
 
-                );
+            $variables = array(
+                '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nDear Tamilanjobs Admin/Executive, The job with ID: {$job->id} has been posted successfully. \n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n```Your success is our success, Regards Tamilanjobs ```\n\n_Support: 8233823308_",
+
+            );
             break;
     }
 

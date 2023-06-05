@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\User;
@@ -20,6 +21,7 @@ use App\Models\News;
 use App\Models\NewsCategory;
 use App\Models\JobsCategory;
 use App\Models\Jobs;
+use App\Models\JobsPayment;
 use App\Models\JobsPlanCategory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Carbon\Carbon;
@@ -58,6 +60,7 @@ class HomeController extends Controller
         $data['handyman_dashboard_setting']  =   !empty($handyman_setting_data) ? json_decode($handyman_setting_data->value) : [];
 
         $data['dashboard'] = [
+            'count_total_jobs'                  => Jobs::myJobs()->count(),
             'count_total_booking'               => Booking::myBooking()->count(),
             'count_total_service'               => Service::myService()->count(),
             'count_total_provider'              => User::myUsers('get_provider')->count(),
@@ -76,6 +79,7 @@ class HomeController extends Controller
         ];
 
         $total_revenue      = Payment::where('payment_status', 'paid');
+        $jobs_total_revenue      = JobsPayment::where('payment_status', 'paid');
         if (auth()->user()->hasAnyRole(['admin', 'demo_admin', 'executive'])) {
             $data['revenueData']    =  adminEarning();
         }
@@ -99,7 +103,7 @@ class HomeController extends Controller
                 }
             }
         }
-
+        $data['jobs_total_revenue']  =    $jobs_total_revenue->sum('total_amount');
         $data['total_revenue']  =    $total_revenue->sum('total_amount');
         if ($user->hasRole('provider')) {
             $data['total_revenue']  = ProviderPayout::where('provider_id', $user->id)->sum('amount') ?? 0;
@@ -408,10 +412,21 @@ class HomeController extends Controller
                 break;
 
             case 'user':
-                $items = \App\Models\User::select('id', 'contact_number as text')
+                $items = \App\Models\User::select('id', 'contact_number as text', 'first_name')
                     ->where('user_type', 'user')
                     ->where('status', 1);
 
+                if ($value != '') {
+                    $items->where('contact_number', 'LIKE', $value . '%');
+                }
+
+                $items = $items->get();
+                break;
+
+            case 'news_user':
+                $items = \App\Models\User::select('id', DB::raw("CONCAT(contact_number, ' - [', first_name, ']') as text"))
+                    ->where('user_type', 'user')
+                    ->where('status', 1);
                 if ($value != '') {
                     $items->where('contact_number', 'LIKE', $value . '%');
                 }
@@ -659,12 +674,11 @@ class HomeController extends Controller
                 break;
 
             case 'push_pvt_jobs':
-
                 // $district_id = !empty($request->district_id) ? $request->district_id : '';
                 // $items = \App\Models\Jobs::select('id', 'address as text', 'latitude', 'longitude', 'status')->where('provider_id', $district_id)->where('status', 1);
                 // $items = $items->get();
-
                 $items = \App\Models\Jobs::select('id', 'title as text')->withTrashed();
+                $items->where('end_date', '>=', DB::raw('CURRENT_DATE()'))->orderByDesc('id');
                 if (isset($request->district_id)) {
                     if ($request->district_id == '100') {
                         $items->where('status', 1);
@@ -678,7 +692,6 @@ class HomeController extends Controller
                         });
                     }
                 } else {
-
                     $items->where('status', 1);
                 }
                 $items = $items->get();
@@ -733,7 +746,7 @@ class HomeController extends Controller
             case 'get-jobs':
                 $items = \App\Models\Jobs::select('id', 'title as text')
                     ->orderBy('id', 'desc');
-                    
+
                 if (isset($request->job_id)) {
                     $items->where('id', $request->job_id);
                 }
