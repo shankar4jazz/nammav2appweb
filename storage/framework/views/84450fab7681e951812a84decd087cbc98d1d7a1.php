@@ -48,7 +48,7 @@
                                                 ])); ?>
 
 
-                                
+
                             </div>
                             <div class="form-group col-md-4 mt-4">
                                 <?php echo e(optional($subcategory->user)->first_name ?? auth()->user()->first_name); ?>

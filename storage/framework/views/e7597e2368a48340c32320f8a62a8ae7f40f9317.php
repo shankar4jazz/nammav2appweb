@@ -53,6 +53,15 @@ $menu->add('<span>'.__('Push Notification').'</span><span class="custom-tooltip"
 ->data('permission', 'jobs list');
 
 
+$menu->add('<span>'.__('Jobs Payment').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('Jobs Payment').'</span></span>', ['route' => 'jobs-payment.index'])
+->prepend('<svg width="16" height="12" class="sidebar-menu-icon" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 0H2C1.1675 0 0.5075 0.6675 0.5075 1.5L0.5 10.5C0.5 11.3325 1.1675 12 2 12H14C14.8325 12 15.5 11.3325 15.5 10.5V1.5C15.5 0.6675 14.8325 0 14 0ZM14 10.5H2V6H14V10.5ZM14 3H2V1.5H14V3Z" fill="#6C757D" />
+</svg>
+')
+->nickname('payment')
+->data('permission', 'payment list');
+
+
 $menu->add(__('messages.sidebar_form_title',['form' => trans('messages.market_place')]), ['class' => 'category-main'])->data('permission', 'order list');
 
 $menu->add('<span>'.__('messages.orders').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.orders').'</span></span>', ['route' => 'orders.index'])
@@ -385,14 +394,6 @@ $menu->add('<span>'.__('messages.tax').'</span><span class="custom-tooltip"><spa
 
 
 $menu->add('<span>'.__('messages.payment').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.payment').'</span></span>', ['route' => 'payment.index'])
-->prepend('<svg width="16" height="12" class="sidebar-menu-icon" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M14 0H2C1.1675 0 0.5075 0.6675 0.5075 1.5L0.5 10.5C0.5 11.3325 1.1675 12 2 12H14C14.8325 12 15.5 11.3325 15.5 10.5V1.5C15.5 0.6675 14.8325 0 14 0ZM14 10.5H2V6H14V10.5ZM14 3H2V1.5H14V3Z" fill="#6C757D" />
-</svg>
-')
-->nickname('payment')
-->data('permission', 'payment list');
-
-$menu->add('<span>'.__('Jobs Payment').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('Jobs Payment').'</span></span>', ['route' => 'jobs-payment.index'])
 ->prepend('<svg width="16" height="12" class="sidebar-menu-icon" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M14 0H2C1.1675 0 0.5075 0.6675 0.5075 1.5L0.5 10.5C0.5 11.3325 1.1675 12 2 12H14C14.8325 12 15.5 11.3325 15.5 10.5V1.5C15.5 0.6675 14.8325 0 14 0ZM14 10.5H2V6H14V10.5ZM14 3H2V1.5H14V3Z" fill="#6C757D" />
 </svg>

@@ -281,28 +281,51 @@ class JobsController extends Controller
     public function show(JobsPaymentDataTable $dataTable, $id)
     {
         $auth_user = authSession();
-        $providerdata = Jobs::where('id', $id)->first();
+        $providerdata = Jobs::with('jobsPayment')->where('id', $id)->first();
         $views = JobsViews::where("jobs_id", $id)->first();
         $providerdata['total_views'] = '';
-        if($views){           
-        $providerdata['total_views'] = $views->count;
-        }    
+        if ($views) {
+            $providerdata['total_views'] = $views->count;
+        }
         $providerdata['total_applicants'] = JobCallActivities::where('jobs_id', $id)->count();
+
         
 
-      
+        $jobseekerDetails = User::where('id', $providerdata->user_id)->first();
 
 
 
 
 
+
+
+
+
+        
+
+
+        $earningData = [
+            'name' => "First Name: ".$jobseekerDetails->first_name.", Last Name:".$jobseekerDetails->last_name?? '-',
+            'mobile_no' => "Contact No: ".$jobseekerDetails->contact_number,  
+            'job_title' =>  $providerdata->title ?? '-',
+            'payment_type' => $providerdata->jobsPayment->payment_type ?? '-',
+            'total_amount' => $providerdata->jobsPayment->total_amount ?? '-',
+            'payment_status' => $providerdata->jobsPayment->payment_status ?? '-',
+            'job_id' => $providerdata->id ?? '-',
+            'txn_id' =>  $providerdata->jobsPayment->txn_id ?? '-',
+            'order_id' =>  $providerdata->jobsPayment->order_id ?? '-',
+            'date_time' => $providerdata->jobsPayment->updated_at ? $providerdata->jobsPayment->updated_at->format('d-m-Y h:i:s A') : '-'
+
+
+        ];
+     
 
 
 
         $pageTitle = __('messages.view_form_title', ['form' => __('messages.jobs')]);
         return $dataTable
             ->with('id', $id)
-            ->render('jobs.view', compact('pageTitle', 'providerdata', 'auth_user'));
+            ->render('jobs.view', compact('pageTitle', 'providerdata', 'auth_user', 'earningData'));
     }
 
     /**
@@ -340,16 +363,16 @@ class JobsController extends Controller
 
 
         $earningData[] = [
-           
-            'job_title' =>  $providerdata->title,
+
+            'job_title' =>  $providerdata->title ?? '-',
             'payment_type' => $providerdata->jobsPayment->payment_type ?? '-',
             'total_amount' => $providerdata->jobsPayment->total_amount ?? '-',
             'payment_status' => $providerdata->jobsPayment->payment_status ?? '-',
-            'job_id' => $providerdata->id,
+            'job_id' => $providerdata->id ?? '-',
             'txn_id' =>  $providerdata->jobsPayment->txn_id ?? '-',
             'order_id' =>  $providerdata->jobsPayment->order_id ?? '-',
-            'date_time' => $providerdata->jobsPayment->updated_at ?$providerdata->jobsPayment->updated_at->format('d-m-Y h:i:s A') : '-',
-          
+            'date_time' => $providerdata->jobsPayment->updated_at ? $providerdata->jobsPayment->updated_at->format('d-m-Y h:i:s A') : '-',
+
 
         ];
 
@@ -367,8 +390,12 @@ class JobsController extends Controller
                     $payment_status = $row['payment_status'];
                     if ($payment_status == 'pending') {
                         $status = '<span class="badge badge-danger">' . __('messages.pending') . '</span>';
-                    } else {
+                    } else if ($payment_status == 'paid') {
                         $status = '<span class="badge badge-success">' . __('messages.paid') . '</span>';
+                    } else if ($payment_status == 'failed') {
+                        $status = '<span class="badge badge-danger">' . __('failed') . '</span>';
+                    } else {
+                        $status = '<span class="badge badge-danger">' . __('Payment not Init') . '</span>';
                     }
                     return  $status;
                 })
@@ -404,28 +431,28 @@ class JobsController extends Controller
                 ->where('user_type', 'jobseeker')
                 ->first();
 
-      
 
 
-          
+
+
             $earningData[] = [
                 'type' => $booking->activity_type ?? '-',
                 'message' => $booking->activity_message ?? '-',
                 'datetime' => $booking->updated_at ? $booking->updated_at->format('d-m-Y h:i:s A') : '-',
                 'job_id' => $providerdata->id ?? '-',
                 'jobseeker_name' => $jobseekerDetails->first_name ?? '-'
-           
+
 
             ];
         }
-       
+
 
         if ($request->ajax()) {
             return Datatables::of($earningData)
                 ->addIndexColumn()
-                
-               
-               
+
+
+
                 ->make(true);
         }
         if (empty($providerdata)) {

@@ -88,8 +88,7 @@
                 {
                     data: 'order_id',
                     name: 'order_id'
-                },
-                
+                }            
                 
                
             ]
