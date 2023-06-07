@@ -50,6 +50,7 @@ class ProviderController extends Controller
         $auth_user = authSession();
 
         $providerdata = User::find($id);
+
         $pageTitle = __('messages.update_form_title',['form'=> __('messages.provider')]);
         
         if($providerdata == null){
@@ -165,7 +166,7 @@ class ProviderController extends Controller
             'providerAlreadyWithdrawAmt' => $providerPayout,
             'pendWithdrwan' => $providerTotEarning->provider_booking_sum_total_amount - $providerPayout,
         ];
-
+      
         $pageTitle = __('messages.view_form_title', ['form' => __('messages.provider')]);
         return $dataTable
             ->with('provider_id', $id)

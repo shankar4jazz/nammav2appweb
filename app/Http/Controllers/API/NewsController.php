@@ -33,7 +33,7 @@ class NewsController extends Controller
     }
     public function getNewsList(Request $request)
     {
-        $booking = News::withTrashed();
+        $booking = News::withoutTrashed();
 
         $booking->where('status', 1);
         $per_page = 100;
@@ -85,7 +85,7 @@ class NewsController extends Controller
     }
     public function getNewsListTest(Request $request)
     {
-        $booking = News::withTrashed();
+        $booking = News::withoutTrashed();
 
         $booking->where('status', 1);
 
@@ -139,7 +139,7 @@ class NewsController extends Controller
 
     public function getNewsListByCity(Request $request)
     {
-        $booking = News::withTrashed();
+        $booking = News::withoutTrashed();
 
         $booking->where('status', 1);
         $booking->whereHas('city', function ($a) use ($request) {
@@ -196,7 +196,7 @@ class NewsController extends Controller
     public function getNewsListByCategory(Request $request)
     {
 
-        $booking = News::withTrashed()->where("news_category_id", $request->category_id);
+        $booking = News::withoutTrashed()->where("news_category_id", $request->category_id);
 
         $booking->where('status', 1);
 
@@ -249,7 +249,7 @@ class NewsController extends Controller
 
     public function getNewsListByUser(Request $request)
     {
-        $booking = News::withTrashed();
+        $booking = News::withoutTrashed();
 
        
         $booking->whereHas('user', function ($a) use ($request) {
@@ -295,7 +295,7 @@ class NewsController extends Controller
 
     public function getAllNewsList(Request $request)
     {
-        $booking = News::withTrashed();
+        $booking = News::withoutTrashed();
         $booking->where('status', 1);
 
         if (!empty($request->page)) {

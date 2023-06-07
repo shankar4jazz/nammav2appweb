@@ -9,8 +9,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Jobs;
 use App\Models\Service;
+use Yajra\DataTables\DataTables;
 use App\DataTables\JobsDataTable;
+use App\DataTables\JobsPaymentDataTable;
 use App\Http\Requests\JobsRequest;
+use App\Models\JobCallActivities;
+use App\Models\JobsViews;
+use App\Models\User;
 
 class JobsController extends Controller
 {
@@ -273,9 +278,31 @@ class JobsController extends Controller
      * @param  \App\Models\Jobs  $jobs
      * @return \Illuminate\Http\Response
      */
-    public function show(Jobs $jobs)
+    public function show(JobsPaymentDataTable $dataTable, $id)
     {
-        //
+        $auth_user = authSession();
+        $providerdata = Jobs::where('id', $id)->first();
+        $views = JobsViews::where("jobs_id", $id)->first();
+        $providerdata['total_views'] = '';
+        if($views){           
+        $providerdata['total_views'] = $views->count;
+        }    
+        $providerdata['total_applicants'] = JobCallActivities::where('jobs_id', $id)->count();
+        
+
+      
+
+
+
+
+
+
+
+
+        $pageTitle = __('messages.view_form_title', ['form' => __('messages.jobs')]);
+        return $dataTable
+            ->with('id', $id)
+            ->render('jobs.view', compact('pageTitle', 'providerdata', 'auth_user'));
     }
 
     /**
@@ -299,6 +326,114 @@ class JobsController extends Controller
     public function update(Request $request, Jobs $jobs)
     {
         //
+    }
+
+    public function paymentDetails(Request $request, $id)
+    {
+        $auth_user = authSession();
+        $providerdata = Jobs::with('jobsPayment')->where('id', $id)->first();
+
+
+
+
+        $earningData = array();
+
+
+        $earningData[] = [
+           
+            'job_title' =>  $providerdata->title,
+            'payment_type' => $providerdata->jobsPayment->payment_type ?? '-',
+            'total_amount' => $providerdata->jobsPayment->total_amount ?? '-',
+            'payment_status' => $providerdata->jobsPayment->payment_status ?? '-',
+            'job_id' => $providerdata->id,
+            'txn_id' =>  $providerdata->jobsPayment->txn_id ?? '-',
+            'order_id' =>  $providerdata->jobsPayment->order_id ?? '-',
+            'date_time' => $providerdata->jobsPayment->updated_at ?$providerdata->jobsPayment->updated_at->format('d-m-Y h:i:s A') : '-',
+          
+
+        ];
+
+
+        if ($request->ajax()) {
+            return Datatables::of($earningData)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '-';
+                    $booking_id = $row['job_id'];
+                    $btn = "<a href=" . route('jobs.show', $booking_id) . "><i class='fas fa-eye'></i></a>";
+                    return $btn;
+                })
+                ->editColumn('payment_status', function ($row) {
+                    $payment_status = $row['payment_status'];
+                    if ($payment_status == 'pending') {
+                        $status = '<span class="badge badge-danger">' . __('messages.pending') . '</span>';
+                    } else {
+                        $status = '<span class="badge badge-success">' . __('messages.paid') . '</span>';
+                    }
+                    return  $status;
+                })
+                ->rawColumns(['action', 'payment_status'])
+                ->make(true);
+        }
+        if (empty($providerdata)) {
+            $msg = __('messages.not_found_entry', ['name' => __('messages.provider')]);
+            return redirect(route('provider.index'))->withError($msg);
+        }
+        $pageTitle = __('messages.view_form_title', ['form' => __('messages.provider')]);
+        return view('jobspayment.details', compact('pageTitle', 'earningData', 'auth_user', 'providerdata'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Jobs  $jobs
+     * @return \Illuminate\Http\Response
+     */
+
+
+    public function applicantDetails(Request $request, $id)
+    {
+        $auth_user = authSession();
+        $providerdata = Jobs::with('jobsActivity')->where('id', $id)->first();
+
+        $earningData = array();
+
+        foreach ($providerdata->jobsActivity as $booking) {
+
+            $jobseekerDetails = User::where('id', $booking->jobseeker_id)
+                ->where('user_type', 'jobseeker')
+                ->first();
+
+      
+
+
+          
+            $earningData[] = [
+                'type' => $booking->activity_type ?? '-',
+                'message' => $booking->activity_message ?? '-',
+                'datetime' => $booking->updated_at ? $booking->updated_at->format('d-m-Y h:i:s A') : '-',
+                'job_id' => $providerdata->id ?? '-',
+                'jobseeker_name' => $jobseekerDetails->first_name ?? '-'
+           
+
+            ];
+        }
+       
+
+        if ($request->ajax()) {
+            return Datatables::of($earningData)
+                ->addIndexColumn()
+                
+               
+               
+                ->make(true);
+        }
+        if (empty($providerdata)) {
+            $msg = __('messages.not_found_entry', ['name' => __('messages.provider')]);
+            return redirect(route('provider.index'))->withError($msg);
+        }
+        $pageTitle = __('messages.view_form_title', ['form' => __('messages.provider')]);
+        return view('jobsactivity.details', compact('pageTitle', 'earningData', 'auth_user', 'providerdata'));
     }
 
     /**

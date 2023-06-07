@@ -242,11 +242,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::resource('jobs', JobsController::class);
     Route::put('/jobs/{id}/change-status', [JobsController::class, 'changeStatus'])->name('jobs.change_status');
-    
+
     Route::post('jobs-action', [JobsController::class, 'action'])->name('jobs.action');
     Route::get('jobs/quick/process', [JobsController::class, 'quickJob'])->name('jobs.quick');
     Route::get('jobs/quick/add', [JobsController::class, 'quickJobAdd'])->name('jobs.jobadd');
     Route::get('jobs/quick/store', [JobsController::class, 'quickStoreJob'])->name('jobs.storequick');
+    Route::get('paymentdetails/{id}', [JobsController::class, 'paymentDetails'])->name('payment.details');
+    Route::get('applicant-details/{id}', [JobsController::class, 'applicantDetails'])->name('applicant.details');
 });
 Route::get('/ajax-list', [HomeController::class, 'getAjaxList'])->name('ajax-list');
 Route::get('clear_cache', function () {

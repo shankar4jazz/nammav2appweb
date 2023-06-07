@@ -8,6 +8,7 @@
         @if($auth_user->can('jobs edit'))
         <a class="mr-2" href="{{ route('jobs.create',['id' => $category->id]) }}" title="{{ __('messages.update_form_title',['form' => __('messages.jobs') ]) }}"><i class="fas fa-pen text-primary"></i></a>
         @endif
+        <a class="mr-2" href="{{ route('jobs.show', $category->id) }}"><i class="far fa-eye text-secondary"></i></a>
 
         @if($auth_user->can('jobs delete'))
         <a class="mr-2" href="javascript:void(0)" data--submit="category{{$category->id}}" 

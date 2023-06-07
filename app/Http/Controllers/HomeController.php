@@ -61,6 +61,9 @@ class HomeController extends Controller
 
         $data['dashboard'] = [
             'count_total_jobs'                  => Jobs::myJobs()->count(),
+            // Get today's total jobs count
+            'today_total_jobs' => Jobs::myJobs()->whereDate('updated_at', Carbon::today())->count(),
+            'yesterday_total_jobs' => Jobs::myJobs()->whereDate('created_at', Carbon::yesterday())->count(),
             'count_total_booking'               => Booking::myBooking()->count(),
             'count_total_service'               => Service::myService()->count(),
             'count_total_provider'              => User::myUsers('get_provider')->count(),

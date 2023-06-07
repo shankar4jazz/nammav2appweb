@@ -138,7 +138,6 @@ class JobsDataTable extends DataTable
                 ->title(__('messages.no'))
                 ->orderable(false),
             Column::make('id')->visible(true),
-
             Column::make('title'),
             Column::make('job_role'),
             Column::make('user_id')
@@ -146,16 +145,11 @@ class JobsDataTable extends DataTable
             // Column::make('is_featured')
             //     ->title(__('messages.featured')),
             // Column::make('status'),
-
             Column::make('created_at'),
             Column::make('payment_id')
                 ->title(__('messages.payment_status')),
-
             Column::make('status')
                 ->title('Jobs Status'),
-
-
-
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

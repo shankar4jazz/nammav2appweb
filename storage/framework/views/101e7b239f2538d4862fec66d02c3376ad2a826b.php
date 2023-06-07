@@ -126,13 +126,59 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-md-6">
+                        <a href="<?php echo e(route('booking.index')); ?>">
+                            <div class="card total-booking-card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                                                <h4 class="mb-2 booking-text  font-weight-bold"><?php echo e(!empty($data['dashboard']['today_total_jobs']) ? $data['dashboard']['today_total_jobs']: 0); ?> </h4>
+                                            </div>
+                                            <p class="mb-0 booking-text"><?php echo e(__('Today Jobs')); ?></p>
+                                        </div>
+                                        <div class="col-auto d-flex align-items-center flex-column">
+                                            <div class="iq-card-icon iq-card-icon-booking icon-shape  rounded-circle shadow">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M8.52083 14.7917L6.5625 12.8542C6.4375 12.7292 6.375 12.5799 6.375 12.4062C6.375 12.2326 6.4375 12.0764 6.5625 11.9375C6.67361 11.8264 6.82292 11.7708 7.01042 11.7708C7.19792 11.7708 7.35417 11.8264 7.47917 11.9375L9.02083 13.4583L12.3958 10.0625C12.5347 9.93749 12.691 9.87846 12.8646 9.88541C13.0382 9.89235 13.1875 9.95832 13.3125 10.0833C13.4236 10.2222 13.4826 10.3785 13.4896 10.5521C13.4965 10.7257 13.4375 10.875 13.3125 11L9.52083 14.7917C9.38195 14.9305 9.21528 15 9.02083 15C8.82639 15 8.65972 14.9305 8.52083 14.7917ZM3.79167 18.4583C3.41667 18.4583 3.08681 18.316 2.80208 18.0312C2.51736 17.7465 2.375 17.4167 2.375 17.0417V4.20832C2.375 3.81943 2.51736 3.4861 2.80208 3.20832C3.08681 2.93055 3.41667 2.79166 3.79167 2.79166H5.10417V2.24999C5.10417 2.05555 5.17361 1.88888 5.3125 1.74999C5.45139 1.6111 5.61806 1.54166 5.8125 1.54166C6.02083 1.54166 6.19444 1.6111 6.33333 1.74999C6.47222 1.88888 6.54167 2.05555 6.54167 2.24999V2.79166H13.4583V2.24999C13.4583 2.05555 13.5278 1.88888 13.6667 1.74999C13.8056 1.6111 13.9722 1.54166 14.1667 1.54166C14.375 1.54166 14.5486 1.6111 14.6875 1.74999C14.8264 1.88888 14.8958 2.05555 14.8958 2.24999V2.79166H16.2083C16.5972 2.79166 16.9306 2.93055 17.2083 3.20832C17.4861 3.4861 17.625 3.81943 17.625 4.20832V17.0417C17.625 17.4167 17.4861 17.7465 17.2083 18.0312C16.9306 18.316 16.5972 18.4583 16.2083 18.4583H3.79167ZM3.79167 17.0417H16.2083V8.12499H3.79167V17.0417ZM3.79167 6.87499H16.2083V4.20832H3.79167V6.87499ZM3.79167 6.87499V4.20832V6.87499Z" fill="white" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <a href="<?php echo e(route('booking.index')); ?>">
+                            <div class="card total-booking-card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                                                <h4 class="mb-2 booking-text  font-weight-bold"><?php echo e(!empty($data['dashboard']['yesterday_total_jobs']) ? $data['dashboard']['yesterday_total_jobs']: 0); ?> </h4>
+                                            </div>
+                                            <p class="mb-0 booking-text"><?php echo e(__('Yesterday Jobs')); ?></p>
+                                        </div>
+                                        <div class="col-auto d-flex align-items-center flex-column">
+                                            <div class="iq-card-icon iq-card-icon-booking icon-shape  rounded-circle shadow">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M8.52083 14.7917L6.5625 12.8542C6.4375 12.7292 6.375 12.5799 6.375 12.4062C6.375 12.2326 6.4375 12.0764 6.5625 11.9375C6.67361 11.8264 6.82292 11.7708 7.01042 11.7708C7.19792 11.7708 7.35417 11.8264 7.47917 11.9375L9.02083 13.4583L12.3958 10.0625C12.5347 9.93749 12.691 9.87846 12.8646 9.88541C13.0382 9.89235 13.1875 9.95832 13.3125 10.0833C13.4236 10.2222 13.4826 10.3785 13.4896 10.5521C13.4965 10.7257 13.4375 10.875 13.3125 11L9.52083 14.7917C9.38195 14.9305 9.21528 15 9.02083 15C8.82639 15 8.65972 14.9305 8.52083 14.7917ZM3.79167 18.4583C3.41667 18.4583 3.08681 18.316 2.80208 18.0312C2.51736 17.7465 2.375 17.4167 2.375 17.0417V4.20832C2.375 3.81943 2.51736 3.4861 2.80208 3.20832C3.08681 2.93055 3.41667 2.79166 3.79167 2.79166H5.10417V2.24999C5.10417 2.05555 5.17361 1.88888 5.3125 1.74999C5.45139 1.6111 5.61806 1.54166 5.8125 1.54166C6.02083 1.54166 6.19444 1.6111 6.33333 1.74999C6.47222 1.88888 6.54167 2.05555 6.54167 2.24999V2.79166H13.4583V2.24999C13.4583 2.05555 13.5278 1.88888 13.6667 1.74999C13.8056 1.6111 13.9722 1.54166 14.1667 1.54166C14.375 1.54166 14.5486 1.6111 14.6875 1.74999C14.8264 1.88888 14.8958 2.05555 14.8958 2.24999V2.79166H16.2083C16.5972 2.79166 16.9306 2.93055 17.2083 3.20832C17.4861 3.4861 17.625 3.81943 17.625 4.20832V17.0417C17.625 17.4167 17.4861 17.7465 17.2083 18.0312C16.9306 18.316 16.5972 18.4583 16.2083 18.4583H3.79167ZM3.79167 17.0417H16.2083V8.12499H3.79167V17.0417ZM3.79167 6.87499H16.2083V4.20832H3.79167V6.87499ZM3.79167 6.87499V4.20832V6.87499Z" fill="white" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
                         <a href="<?php echo e(route('payment.index')); ?>">
                             <div class="card total-revenue">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
                                             <div class="d-flex flex-wrap justify-content-start align-items-center">
-                                                <h4 class="mb-2 booking-text font-weight-bold"><?php echo e(getPriceFormat(round($data['jobs_total_revenue']))); ?></h4>
+                                                <h4 class="mb-2 booking-text font-weight-bold" style="font-size: 18px;"><?php echo e(getPriceFormat(round($data['jobs_total_revenue']))); ?></h4>
                                                 <p class="mb-0 ml-3 text-danger font-weight-bold"></p>
                                             </div>
                                             <p class="mb-0 booking-text"><?php echo e(__('messages.total_name', ['name' => __('messages.revenue')])); ?></p>

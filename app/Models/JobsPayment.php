@@ -54,6 +54,6 @@ class JobsPayment extends Model
     }
 
     public function jobs(){
-        return $this->belongsTo(Jobs::class,'id', 'payment_id');
+        return $this->hasMany(Jobs::class,'id', 'payment_id');
     }
 }

@@ -9,6 +9,7 @@
         <?php if($auth_user->can('jobs edit')): ?>
         <a class="mr-2" href="<?php echo e(route('jobs.create',['id' => $category->id])); ?>" title="<?php echo e(__('messages.update_form_title',['form' => __('messages.jobs') ])); ?>"><i class="fas fa-pen text-primary"></i></a>
         <?php endif; ?>
+        <a class="mr-2" href="<?php echo e(route('jobs.show', $category->id)); ?>"><i class="far fa-eye text-secondary"></i></a>
 
         <?php if($auth_user->can('jobs delete')): ?>
         <a class="mr-2" href="javascript:void(0)" data--submit="category<?php echo e($category->id); ?>" 
