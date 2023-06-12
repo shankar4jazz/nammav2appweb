@@ -17,6 +17,7 @@ use App\Http\Requests\UserRequest;
 use App\DataTables\ServiceDataTable;
 use App\Models\District;
 use App\Models\Jobs;
+use App\Models\MessageLists;
 use App\Notifications\CommonNotification;
 
 class PushNotificationController extends Controller
@@ -459,15 +460,18 @@ class PushNotificationController extends Controller
         $data = $request->all();
         $district_name = str_replace(" ", "", $data['district_name']);
 
+
         $message = array(
             'title'     =>  $_POST['title'],
             'body'      =>  $data['description'],
             //'image'     =>  $_POST['image'],
         );
 
-        $data = array(
+        $payload_data = array(
             'pvt_jobid' =>  $_POST['pvt_jobid'],
         );
+
+
 
         if ($district_name == 'AllTamilNadu') {
 
@@ -479,15 +483,17 @@ class PushNotificationController extends Controller
                 $district = str_replace(" ", "", $value);
                 if ($district == 'AllTamilNadu') {
                     $to = '/topics/' . $district;
+                    $device_Id = $district;
                 } else {
                     $to = '/topics/TN-' . $district;
+                    $device_Id = 'TN-' . $district;
                 }
 
                 $fields = array(
                     'to'               => $to,
                     'priority'         => 'high',
                     'notification'     => $message,
-                    'data'             => $data
+                    'data'             => $payload_data
                 );
 
                 $fields = json_encode($fields);
@@ -512,15 +518,23 @@ class PushNotificationController extends Controller
                 } else {
                     $message = trans('messages.failed');
                 }
+                $this->saveMessage($_POST['title'], $data['description'], $device_Id);
             }
         } else {
 
             $to = '/topics/TN-' . $district_name;
+
+
+
+
+
+            $device_Id = 'TN_' . $district_name;
+            $this->saveMessage($_POST['title'], $data['description'], $device_Id);
             $fields = array(
                 'to'               => $to,
                 'priority'         => 'high',
                 'notification'     => $message,
-                'data'             => $data
+                'data'             => $payload_data
             );
 
             $fields = json_encode($fields);
@@ -815,6 +829,15 @@ class PushNotificationController extends Controller
             $message = trans('messages.update_form', ['form' => trans('messages.pushnotification_settings')]);
         }
         return redirect()->route('setting.index')->withSuccess($message);
+    }
+    private function saveMessage($title, $des, $to)
+    {
+
+        $message['title'] = $title;
+        $message['description'] = $des;
+        $message['device_id'] = $to;
+
+        MessageLists::updateOrCreate(['id' => ''], $message);
     }
     public function comission(ServiceDataTable $dataTable, $id)
     {

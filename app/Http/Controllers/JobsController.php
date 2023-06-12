@@ -289,24 +289,14 @@ class JobsController extends Controller
         }
         $providerdata['total_applicants'] = JobCallActivities::where('jobs_id', $id)->count();
 
-        
-
         $jobseekerDetails = User::where('id', $providerdata->user_id)->first();
-
-
-
-
-
-
-
-
-
-        
-
-
-        $earningData = [
-            'name' => "First Name: ".$jobseekerDetails->first_name.", Last Name:".$jobseekerDetails->last_name?? '-',
-            'mobile_no' => "Contact No: ".$jobseekerDetails->contact_number,  
+        $firstName = $jobseekerDetails->first_name ?? '-';
+		$lastName = $jobseekerDetails->last_name ?? '-';
+		$contact = $jobseekerDetails->contact_number?? '-';
+		
+        $earningData = [			
+            'name' => "First Name:" . $firstName . ", Last Name: " . $lastName,
+            'mobile_no' => "Contact No: ".$contact,  
             'job_title' =>  $providerdata->title ?? '-',
             'payment_type' => $providerdata->jobsPayment->payment_type ?? '-',
             'total_amount' => $providerdata->jobsPayment->total_amount ?? '-',
@@ -314,11 +304,11 @@ class JobsController extends Controller
             'job_id' => $providerdata->id ?? '-',
             'txn_id' =>  $providerdata->jobsPayment->txn_id ?? '-',
             'order_id' =>  $providerdata->jobsPayment->order_id ?? '-',
-            'date_time' => $providerdata->jobsPayment->updated_at ? $providerdata->jobsPayment->updated_at->format('d-m-Y h:i:s A') : '-'
+            'date_time' => $providerdata->jobsPayment?->updated_at?->tz('Asia/Kolkata')->format('d-m-Y h:i:s A') ?? '-'
 
 
         ];
-     
+
 
 
 
@@ -355,15 +345,8 @@ class JobsController extends Controller
     {
         $auth_user = authSession();
         $providerdata = Jobs::with('jobsPayment')->where('id', $id)->first();
-
-
-
-
         $earningData = array();
-
-
         $earningData[] = [
-
             'job_title' =>  $providerdata->title ?? '-',
             'payment_type' => $providerdata->jobsPayment->payment_type ?? '-',
             'total_amount' => $providerdata->jobsPayment->total_amount ?? '-',
@@ -371,9 +354,7 @@ class JobsController extends Controller
             'job_id' => $providerdata->id ?? '-',
             'txn_id' =>  $providerdata->jobsPayment->txn_id ?? '-',
             'order_id' =>  $providerdata->jobsPayment->order_id ?? '-',
-            'date_time' => $providerdata->jobsPayment->updated_at ? $providerdata->jobsPayment->updated_at->format('d-m-Y h:i:s A') : '-',
-
-
+            'date_time' => $providerdata->jobsPayment->updated_at ? $providerdata->jobsPayment->updated_at->format('d-m-Y h:i:s A') : '-'
         ];
 
 
@@ -431,17 +412,12 @@ class JobsController extends Controller
                 ->where('user_type', 'jobseeker')
                 ->first();
 
-
-
-
-
             $earningData[] = [
                 'type' => $booking->activity_type ?? '-',
                 'message' => $booking->activity_message ?? '-',
-                'datetime' => $booking->updated_at ? $booking->updated_at->format('d-m-Y h:i:s A') : '-',
+                'datetime' => $booking->updated_at?->format('d-m-Y h:i:s A') ?? '-',
                 'job_id' => $providerdata->id ?? '-',
                 'jobseeker_name' => $jobseekerDetails->first_name ?? '-'
-
 
             ];
         }

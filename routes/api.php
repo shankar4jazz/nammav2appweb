@@ -22,6 +22,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 */
 
 require __DIR__ . '/admin-api.php';
+
+Route::post('upload-resume', [API\User\UserController::class, 'uploadResume']);
+Route::get('message-lists', [API\MessageListsController::class, 'messageList']);
+
 Route::get('jobs-plan-list', [API\JobsPlanController::class, 'planLists']);
 Route::get('get-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
 Route::post('jobs-save-payment', [API\JobsPaymentController::class, 'savePayment']);
@@ -70,7 +74,6 @@ Route::get('subcategory-list', [API\SubCategoryController::class, 'getSubCategor
 Route::get('service-list', [API\ServiceController::class, 'getServiceList']);
 Route::get('type-list', [API\CommanController::class, 'getTypeList']);
 Route::get('get-payment-config', [API\CommanController::class, 'getPaymentConfig']);
-
 
 Route::post('country-list', [API\CommanController::class, 'getCountryList']);
 Route::post('state-list', [API\CommanController::class, 'getStateList']);

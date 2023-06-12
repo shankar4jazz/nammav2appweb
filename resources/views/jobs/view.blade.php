@@ -14,11 +14,11 @@
                                     @php
                                     $payment_status = $earningData['payment_status'];
                                     if ($payment_status == 'pending') {
-                                    $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Add Payment') . '</a>';
+                                    $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->payment_id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Add Payment') . '</a>';
                                     } else if ($payment_status == 'paid') {
-                                    $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Edit Payment') . '</a>';
+                                    $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->payment_id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Edit Payment') . '</a>';
                                     } else if ($payment_status == 'failed') {
-                                    $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Add Payment') . '</a>';
+                                    $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->payment_id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Add Payment') . '</a>';
                                     } else {
                                     $status = '<a href="' . route('jobs-payment.create') . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Add Payment') . '</a>';
                                     }

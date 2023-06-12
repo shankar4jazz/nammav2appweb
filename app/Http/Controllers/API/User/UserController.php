@@ -24,7 +24,6 @@ use App\Http\Resources\API\HandymanRatingResource;
 
 class UserController extends Controller
 {
-
     public function register(UserRequest $request)
     {
         $input = $request->all();
@@ -53,82 +52,86 @@ class UserController extends Controller
 
     public function login(UserRequest $request)
     {
-		
-		 if ($request->is('api/*')) {
-			 
+
+        if ($request->is('api/*')) {
+
+
+
             $input = $request->all();
-            $user = User::where('email', $input['email'])->first();
-			
-			if ($user && Hash::check($input['password'], $user->password)) {
-				  $success = $user;
-            $success['user_role'] = $user->getRoleNames();
-            $success['api_token'] = $user->createToken('auth_token')->plainTextToken;
-            $success['profile_image'] = getSingleMedia($user, 'profile_image', null);
-            $is_verify_provider = false;
 
-            if ($user->user_type == 'provider') {
-                $is_verify_provider = verify_provider_document($user->id);
-                $success['subscription'] = get_user_active_plan($user->id);
-
-                if (is_any_plan_active($user->id) == 0 && $success['is_subscribe'] == 0) {
-                    $success['subscription'] = user_last_plan($user->id);
-                }
-                $success['is_subscribe'] = is_subscribed_user($user->id);
+            if ($input['user_type'] == 'handyman') {
+                $user = User::where('email', $input['email'])->where('user_type', 'handyman')->first();
+            } else {
+                $user = User::where('email', $input['email'])->where('user_type', 'provider')->first();
             }
-            $success['is_verify_provider'] = (int) $is_verify_provider;
-            unset($success['media']);
-            unset($user['roles']);
 
-            return response()->json(['data' => $success], 200);
-				 
-			}
-			 else{
-				  $message = trans('auth.failed');
+            if ($user && Hash::check($input['password'], $user->password)) {
+                $success = $user;
+                $success['user_role'] = $user->getRoleNames();
+                $success['api_token'] = $user->createToken('auth_token')->plainTextToken;
+                $success['profile_image'] = getSingleMedia($user, 'profile_image', null);
+                $is_verify_provider = false;
 
-						return comman_message_response($message, 400);
-			 }
-          
+                if ($user->user_type == 'provider') {
+                    $is_verify_provider = verify_provider_document($user->id);
+                    $success['subscription'] = get_user_active_plan($user->id);
+
+                    if (is_any_plan_active($user->id) == 0 && $success['is_subscribe'] == 0) {
+                        $success['subscription'] = user_last_plan($user->id);
+                    }
+                    $success['is_subscribe'] = is_subscribed_user($user->id);
+                }
+                $success['is_verify_provider'] = (int) $is_verify_provider;
+                unset($success['media']);
+                unset($user['roles']);
+
+                return response()->json(['data' => $success], 200);
+            } else {
+                $message = trans('auth.failed');
+
+                return comman_message_response($message, 400);
+            }
         } else {
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
 
-            $user = Auth::user();
-            if (request('loginfrom') === 'vue-app') {
-                if ($user->user_type != 'user') {
-                    $message = trans('auth.not_able_login');
-                    return comman_message_response($message, 400);
+                $user = Auth::user();
+                if (request('loginfrom') === 'vue-app') {
+                    if ($user->user_type != 'user') {
+                        $message = trans('auth.not_able_login');
+                        return comman_message_response($message, 400);
+                    }
                 }
-            }
-            if (request('player_id') != null) {
-                $user->player_id = request('player_id');
-            }
-            $user->save();
-
-            $success = $user;
-            $success['user_role'] = $user->getRoleNames();
-            $success['api_token'] = $user->createToken('auth_token')->plainTextToken;
-            $success['profile_image'] = getSingleMedia($user, 'profile_image', null);
-            $is_verify_provider = false;
-
-            if ($user->user_type == 'provider') {
-                $is_verify_provider = verify_provider_document($user->id);
-                $success['subscription'] = get_user_active_plan($user->id);
-
-                if (is_any_plan_active($user->id) == 0 && $success['is_subscribe'] == 0) {
-                    $success['subscription'] = user_last_plan($user->id);
+                if (request('player_id') != null) {
+                    $user->player_id = request('player_id');
                 }
-                $success['is_subscribe'] = is_subscribed_user($user->id);
+                $user->save();
+
+                $success = $user;
+                $success['user_role'] = $user->getRoleNames();
+                $success['api_token'] = $user->createToken('auth_token')->plainTextToken;
+                $success['profile_image'] = getSingleMedia($user, 'profile_image', null);
+                $is_verify_provider = false;
+
+                if ($user->user_type == 'provider') {
+                    $is_verify_provider = verify_provider_document($user->id);
+                    $success['subscription'] = get_user_active_plan($user->id);
+
+                    if (is_any_plan_active($user->id) == 0 && $success['is_subscribe'] == 0) {
+                        $success['subscription'] = user_last_plan($user->id);
+                    }
+                    $success['is_subscribe'] = is_subscribed_user($user->id);
+                }
+                $success['is_verify_provider'] = (int) $is_verify_provider;
+                unset($success['media']);
+                unset($user['roles']);
+
+                return response()->json(['data' => $success], 200);
+            } else {
+                $message = trans('auth.failed');
+
+                return comman_message_response($message, 400);
             }
-            $success['is_verify_provider'] = (int) $is_verify_provider;
-            unset($success['media']);
-            unset($user['roles']);
-
-            return response()->json(['data' => $success], 200);
-        } else {
-            $message = trans('auth.failed');
-
-            return comman_message_response($message, 400);
         }
-		 }
     }
 
     public function userList(Request $request)
@@ -635,6 +638,28 @@ class UserController extends Controller
         ];
         return comman_custom_response($response);
     }
+    public function uploadResume(UserRequest $request)
+    {
+
+        if ($request->has('id') && !empty($request->id)) {
+
+            $user = User::find((int)$request->id);
+        }
+        if ($user == null) {
+            return comman_message_response(__('messages.no_record_found'), 400);
+        }
+
+        $user->fill($request->all())->update();
+        if (isset($request->resume) && $request->resume != null) {
+            $user->clearMediaCollection('resume');
+            $user->addMediaFromRequest('resume')->toMediaCollection('resume');
+        }
+        $response = [
+            'status' => true,
+        ];
+
+        return comman_custom_response($response, 200);
+    }
     public function editUser(UserRequest $request)
     {
         if ($request->has('id') && !empty($request->id)) {
@@ -1130,6 +1155,8 @@ class UserController extends Controller
 
     private function sentSMS($contacts, $otp, $signCode)
     {
+
+
         // $api_key = 'ca2b0f99-5cea-4447-9635-b2d94b0c81a3';
         // $ClientId ="c5aa5dc4-e92f-43de-90a0-3d20807162d8";
         // $id = 'XTTECH';
@@ -1158,48 +1185,48 @@ class UserController extends Controller
         // Account details
 
         #################################################################################################################
-        //   $apiKey = urlencode('NzQ0NDQ2NDk2YTU0Mzc0MTc1MzY0ZDU2NDg1NjU1Mzc=');
+        $apiKey = urlencode('NzQ0NDQ2NDk2YTU0Mzc0MTc1MzY0ZDU2NDg1NjU1Mzc=');
 
         // Message details
-        //   $numbers = array($contacts);
-        //    $sender = urlencode('TAMLAN');
+        $numbers = array($contacts);
+        $sender = urlencode('TAMLAN');
 
 
-        //   $message = rawurlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. xhhw9DtWc9R');
+        $message = rawurlencode($otp . ' is your OTP to verify your mobile number on the Jobs7 app/website.' . $signCode);
 
-        // $numbers = implode(',', $numbers);
+        $numbers = implode(',', $numbers);
 
-        // Prepare data for POST request
-        //  $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+        //  Prepare data for POST request
+        $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
 
-        //     // Send the POST request with cURL
-        //  $ch = curl_init('https://api.textlocal.in/send/');
-        //  curl_setopt($ch, CURLOPT_POST, true);
-        //   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        //  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        //  $response = curl_exec($ch);
-        // curl_close($ch);
+        // Send the POST request with cURL
+        $ch = curl_init('https://api.textlocal.in/send/');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-        //var_dump(json_decode($response));
-        //	exit();
+        var_dump(json_decode($response));
+        exit();
 
-        // return json_decode($response);
-        // exit();
+        return json_decode($response);
+        exit();
         //----------------------------------------------------sms----------------------------------------------------------- 
 
-        $key = "gIzOiWdbFTqrCWVq";
-        $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
-        //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
-        $message_content = urlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. ' . $signCode);
+        // $key = "gIzOiWdbFTqrCWVq";
+        // $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
+        // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
+        // $message_content = urlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. ' . $signCode);
 
-        $senderid = "TAMLAN";
+        // $senderid = "TAMLAN";
 
-        $url = "http://app.mydreamstechnology.in/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
+        // $url = "http://app.mydreamstechnology.in/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
 
-        $output = file_get_contents($url);    /*default function for push any url*/
+        // $output = file_get_contents($url);    /*default function for push any url*/
 
-        return json_decode($output, true);
-        exit();
+        // return json_decode($output, true);
+        // exit();
 
         //return json_decode($output, true);   
         //return [
