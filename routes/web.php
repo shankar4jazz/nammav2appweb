@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ProviderTypeController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\ProviderLeadsController;
 use App\Http\Controllers\HandymanController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\BookingController;
@@ -85,6 +86,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('service', ServiceController::class);
     Route::post('service-action', [ServiceController::class, 'action'])->name('service.action');
     Route::resource('provider', ProviderController::class);
+    Route::resource('providerleads', ProviderLeadsController::class);
     Route::resource('provideraddress', ProviderAddressMappingController::class);
     Route::get('provider/list/{status?}', [ProviderController::class, 'index'])->name('provider.pending');
     Route::post('provider-action', [ProviderController::class, 'action'])->name('provider.action');

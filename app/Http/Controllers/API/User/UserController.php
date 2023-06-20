@@ -50,21 +50,19 @@ class UserController extends Controller
         return comman_custom_response($response);
     }
 
+    
+
     public function login(UserRequest $request)
     {
 
         if ($request->is('api/*')) {
 
-
-
             $input = $request->all();
-
             if ($input['user_type'] == 'handyman') {
                 $user = User::where('email', $input['email'])->where('user_type', 'handyman')->first();
             } else {
                 $user = User::where('email', $input['email'])->where('user_type', 'provider')->first();
             }
-
             if ($user && Hash::check($input['password'], $user->password)) {
                 $success = $user;
                 $success['user_role'] = $user->getRoleNames();
@@ -87,11 +85,13 @@ class UserController extends Controller
 
                 return response()->json(['data' => $success], 200);
             } else {
+                
                 $message = trans('auth.failed');
 
                 return comman_message_response($message, 400);
             }
         } else {
+
             if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
 
                 $user = Auth::user();
@@ -124,9 +124,10 @@ class UserController extends Controller
                 $success['is_verify_provider'] = (int) $is_verify_provider;
                 unset($success['media']);
                 unset($user['roles']);
-
+               
                 return response()->json(['data' => $success], 200);
             } else {
+                
                 $message = trans('auth.failed');
 
                 return comman_message_response($message, 400);
@@ -879,7 +880,7 @@ class UserController extends Controller
                         'sms_sent' => false
                     ];
 
-                    return comman_custom_response($otp_response, 200);
+                    return comman_custom_response($otp_response, 400);
                 }
             }
             if ($user_data != null) {
@@ -1207,10 +1208,16 @@ class UserController extends Controller
         $response = curl_exec($ch);
         curl_close($ch);
 
-        var_dump(json_decode($response));
-        exit();
+        $res = json_decode($response);
 
-        return json_decode($response);
+
+        if ($res->status == 'success') {
+            return $data['status'] = "Success";
+        } else {
+            return $data['status'] = "Failure";
+        }
+
+
         exit();
         //----------------------------------------------------sms----------------------------------------------------------- 
 

@@ -478,15 +478,16 @@ class PushNotificationController extends Controller
 
             $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
             $districts = $districts->pluck('name', 'id');
+            $this->saveMessage($_POST['title'], $data['description'], 'AllTamilNadu', json_encode($payload_data));
             foreach ($districts as $key => $value) {
 
                 $district = str_replace(" ", "", $value);
                 if ($district == 'AllTamilNadu') {
                     $to = '/topics/' . $district;
-                    $device_Id = $district;
+                   
                 } else {
                     $to = '/topics/TN-' . $district;
-                    $device_Id = 'TN-' . $district;
+                    
                 }
 
                 $fields = array(
@@ -518,18 +519,14 @@ class PushNotificationController extends Controller
                 } else {
                     $message = trans('messages.failed');
                 }
-                $this->saveMessage($_POST['title'], $data['description'], $device_Id);
+              
             }
         } else {
 
             $to = '/topics/TN-' . $district_name;
 
-
-
-
-
             $device_Id = 'TN_' . $district_name;
-            $this->saveMessage($_POST['title'], $data['description'], $device_Id);
+            $this->saveMessage($_POST['title'], $data['description'], $device_Id, $payload_data);
             $fields = array(
                 'to'               => $to,
                 'priority'         => 'high',
@@ -830,12 +827,13 @@ class PushNotificationController extends Controller
         }
         return redirect()->route('setting.index')->withSuccess($message);
     }
-    private function saveMessage($title, $des, $to)
+    private function saveMessage($title, $des, $to, $payload_data)
     {
 
         $message['title'] = $title;
         $message['description'] = $des;
         $message['device_id'] = $to;
+        $message['payload'] = $payload_data;
 
         MessageLists::updateOrCreate(['id' => ''], $message);
     }

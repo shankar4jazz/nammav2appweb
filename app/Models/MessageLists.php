@@ -10,7 +10,7 @@ class MessageLists extends Model
     use HasFactory;
     protected $table = 'message_lists';
     protected $fillable = [
-        'title', 'description', 'image', 'device_id'
+        'title', 'description', 'image', 'device_id', 'payload'
     ];
   
 

@@ -301,12 +301,11 @@ class JobsController extends Controller
             'payment_type' => $providerdata->jobsPayment->payment_type ?? '-',
             'total_amount' => $providerdata->jobsPayment->total_amount ?? '-',
             'payment_status' => $providerdata->jobsPayment->payment_status ?? '-',
+            'other_transaction_detail' => $providerdata->jobsPayment->other_transaction_detail ?? '-',
             'job_id' => $providerdata->id ?? '-',
             'txn_id' =>  $providerdata->jobsPayment->txn_id ?? '-',
             'order_id' =>  $providerdata->jobsPayment->order_id ?? '-',
             'date_time' => $providerdata->jobsPayment?->updated_at?->tz('Asia/Kolkata')->format('d-m-Y h:i:s A') ?? '-'
-
-
         ];
 
 

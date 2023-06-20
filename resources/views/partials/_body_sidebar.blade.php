@@ -294,6 +294,13 @@ $menu->provider->add('<span>'.trans('messages.list_form_title',['form' => trans(
 ->data('permission', 'bank list')
 ->link->attr(['class' => '']);
 
+$menu->provider->add('<span>'.trans('messages.list_form_title',['form' => trans('Provider Leads')]).'</span>', ['class' => 'sidebar-layout' ,'route' => 'providerleads.index'])
+->prepend('<svg width="15" height="16" class="sidebar-menu-icon" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3.875 7.5H2.375V12.75H3.875V7.5ZM8.375 7.5H6.875V12.75H8.375V7.5ZM14.75 14.25H0.5V15.75H14.75V14.25ZM12.875 7.5H11.375V12.75H12.875V7.5ZM7.625 2.445L11.5325 4.5H3.7175L7.625 2.445ZM7.625 0.75L0.5 4.5V6H14.75V4.5L7.625 0.75Z" fill="#6C757D" />
+</svg>')
+->data('permission', 'bank list')
+->link->attr(['class' => '']);
+
 $menu->add('<span>'.__('messages.handyman').'</span><span class="custom-tooltip"><span class="tooltip-text">'.__('messages.handyman').'</span></span>', ['class' => ''])
 ->prepend('<svg width="18" height="12" class="sidebar-menu-icon" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M16.5 3.75V2.25H15V3.75H13.5V5.25H15V6.75H16.5V5.25H18V3.75H16.5Z" fill="#6C757D" />

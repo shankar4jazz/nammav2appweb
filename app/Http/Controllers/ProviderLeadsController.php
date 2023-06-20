@@ -7,37 +7,37 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\Service;
-use App\DataTables\ProviderDataTable;
+use App\DataTables\ProviderLeadsDataTable;
 use App\DataTables\ServiceDataTable;
 use App\Http\Requests\UserRequest;
 use App\Models\ProviderPayout;
+use App\Models\ProviderLeads;
 use App\Models\ProviderSubscription;
 use App\Models\PaymentGateway;
 
 use Yajra\DataTables\DataTables;
-class ProviderController extends Controller
+class ProviderLeadsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ProviderDataTable $dataTable, Request $request)
+    public function index(ProviderLeadsDataTable $dataTable, Request $request)
     {
-    
-        $pageTitle = __('messages.list_form_title',['form' => __('messages.provider')] );
+      
+        $pageTitle = __('messages.list_form_title',['form' => __('provider leads')] );
         if($request->status === 'pending'){
-            $pageTitle = __('messages.pending_list_form_title',['form' => __('messages.provider')] );
+            $pageTitle = __('messages.pending_list_form_title',['form' => __('provider leads')] );
         }
-        if($request->status === 'subscribe'){
-            $pageTitle = __('messages.list_form_title',['form' => __('messages.subscribe')] );
-        }
+       
         
         $auth_user = authSession();
         $assets = ['datatable'];
+     
         return $dataTable
                 ->with('list_status',$request->status)
-                ->render('provider.index', compact('pageTitle','auth_user','assets'));
+                ->render('providerleads.index', compact('pageTitle','auth_user','assets'));
     }
 
     /**
@@ -208,7 +208,7 @@ class ProviderController extends Controller
         if(demoUserPermission()){
             return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
-        $provider = User::find($id);
+        $provider = ProviderLeads::find($id);
         $msg= __('messages.msg_fail_to_delete',['name' => __('messages.provider')] );
         
         if($provider != '') { 

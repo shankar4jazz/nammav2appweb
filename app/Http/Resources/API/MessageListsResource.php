@@ -15,11 +15,12 @@ class MessageListsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                => $this->id,
-            'title'             => $this->title,
-            'imageurl'        => $this->image,
-            'payload'            => $this->description,
-            'topics'            => $this->device_id,
+            'id'                 => $this->id,
+            'title'              => $this->title,
+            'imageurl'           => $this->image,
+            'description'        => $this->description,
+            'payload'            => $this->payload,
+            'topics'             => $this->device_id,
                         //'plan_limitation'   => optional($this->planlimit)->plan_limitation
         ];
     }

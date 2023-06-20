@@ -105,8 +105,10 @@
                                                 <i class="fas fa-sort"></i>
                                                 <span class="contact-info-text">{{ $earningData['order_id']  }}</span>
                                             </li>
-
-
+                                            <li>
+                                            <i class="fa-solid fa-address-book"></i>
+                                                <span class="contact-info-text">{{ $earningData['other_transaction_detail']  }}</span>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>

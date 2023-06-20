@@ -912,10 +912,7 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
-    function authLogin()
-    {
-        return view('auth.login');
-    }
+  
     function authRegister()
     {
         return view('auth.register');

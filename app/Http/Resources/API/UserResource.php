@@ -35,9 +35,12 @@ class UserResource extends JsonResource
         }  
         return [
             
-          
+            'id'                => $this->id,
             'username'          => $this->username,
             'provider_id'       => $this->provider_id,
+            'first_name'        => $this->first_name,
+            'last_name'         => $this->last_name,
+            'display_name'      => $this->first_name . $this->last_name,
             'status'            => $this->status,
             'description'       => $this->description,
             'user_type'         => $this->user_type,
@@ -59,14 +62,14 @@ class UserResource extends JsonResource
             'uid'               => $this->uid,
             'login_type'        => $this->login_type,
             'service_address_id'=> $this->service_address_id,
-            'last_notification_seen' => $this->last_notification_seen,
+            'last_notification_seen'   => $this->last_notification_seen,
             'providers_service_rating' => $providers_service_rating,
-            'handyman_rating' => $handyman_rating,
-            'is_verify_provider' => (int) $is_verify_provider,
-            'isHandymanAvailable' =>  $this->is_available,
-            'designation' => $this->designation,
-			'otp'=>$this->otp,
-            'otp_attempt'=>$this->otp_attempt,
+            'handyman_rating'          => $handyman_rating,
+            'is_verify_provider'       => (int) $is_verify_provider,
+            'isHandymanAvailable'      => $this->is_available,
+            'designation'              => $this->designation,
+			'otp'                      =>$this->otp,
+            'otp_attempt'              =>$this->otp_attempt,
             'handymantype_id' => $this->handymantype_id,
             'handymantype' => optional($this->handymantype)->name,
           

@@ -104,6 +104,10 @@ use Lavary\Menu\Menu;
                     ->data('permission', 'provideraddress list')
                     ->prepend('<i class="ri-list-unordered"></i>')
                     ->link->attr(['class' => '']);
+                $menu->provider->add('<span>'.__('messages.list_form_title',['form' => __('provider list')]).'</span>', ['class' => 'sidebar-layout' ,'route' => 'providerleads.index'])
+                    ->data('permission', 'provider list')
+                    ->prepend('<i class="ri-list-unordered"></i>')
+                    ->link->attr(['class' => '']);
                 $menu->provider->add('<span>'.__('messages.list_form_title',['form' => __('messages.wallet')]).'</span>', ['class' => 'sidebar-layout' ,'route' => 'wallet.index'])
                     ->data('permission', 'wallet list')
                     ->prepend('<i class="ri-list-unordered"></i>')
