@@ -103,7 +103,7 @@
                         <li class="nav-item nav-icon dropdown">
                             <a href="#" class="nav-item nav-icon dropdown-toggle pr-0 search-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src="<?php echo e(getSingleMedia(auth()->user(),'profile_image')); ?>" class="img-fluid avatar-rounded bg-light" alt="user">
-                                <span class="mb-0  user-name"><?php echo e(auth()->user()->first_name." ".auth()->user()->last_name); ?></span>
+                                <span class="mb-0  user-name"><?php echo e(auth()->user()?->first_name." ".auth()->user()?->last_name); ?></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right user-dropdown" aria-labelledby="dropdownMenuButton">
                                 <li class="dropdown-item d-flex svg-icon">

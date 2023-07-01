@@ -637,6 +637,8 @@ class BookingController extends Controller
     {
         $data = AppSetting::take(1)->first();
         $bookingdata = Booking::with('handymanAdded', 'payment', 'bookingExtraCharge')->myBooking()->find($id);
+
+        
         $pdf = Pdf::loadView('booking.invoice', ['bookingdata' => $bookingdata, 'data' => $data]);
         return $pdf->download('invoice.pdf');
     }

@@ -1186,40 +1186,40 @@ class UserController extends Controller
         // Account details
 
         #################################################################################################################
-        $apiKey = urlencode('NzQ0NDQ2NDk2YTU0Mzc0MTc1MzY0ZDU2NDg1NjU1Mzc=');
+        // $apiKey = urlencode('NzQ0NDQ2NDk2YTU0Mzc0MTc1MzY0ZDU2NDg1NjU1Mzc=');
 
-        // Message details
-        $numbers = array($contacts);
-        $sender = urlencode('TAMLAN');
-
-
-        $message = rawurlencode($otp . ' is your OTP to verify your mobile number on the Jobs7 app/website.' . $signCode);
-
-        $numbers = implode(',', $numbers);
-
-        //  Prepare data for POST request
-        $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
-
-        // Send the POST request with cURL
-        $ch = curl_init('https://api.textlocal.in/send/');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $res = json_decode($response);
+        // // Message details
+        // $numbers = array($contacts);
+        // $sender = urlencode('TAMLAN');
 
 
-        if ($res->status == 'success') {
-            return $data['status'] = "Success";
-        } else {
-            return $data['status'] = "Failure";
-        }
+        // $message = rawurlencode($otp . ' is your OTP to verify your mobile number on the Jobs7 app/website.' . $signCode);
+
+        // $numbers = implode(',', $numbers);
+
+        // //  Prepare data for POST request
+        // $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+
+        // // Send the POST request with cURL
+        // $ch = curl_init('https://api.textlocal.in/send/');
+        // curl_setopt($ch, CURLOPT_POST, true);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $response = curl_exec($ch);
+        // curl_close($ch);
+
+        // $res = json_decode($response);
 
 
-        exit();
-        //----------------------------------------------------sms----------------------------------------------------------- 
+        // if ($res->status == 'success') {
+        //     return $data['status'] = "Success";
+        // } else {
+        //     return $data['status'] = "Failure";
+        // }
+
+
+        // exit();
+        //----------------------------------------------------sms my dream----------------------------------------------------------- 
 
         // $key = "gIzOiWdbFTqrCWVq";
         // $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
@@ -1241,5 +1241,19 @@ class UserController extends Controller
         // 'message' => 'Please Enter Valid OTP for login'
 
         // ];
+        //----------------------------------------------------sms eagleminds tech----------------------------------------------------------- 
+		$key = "nPD1MSa7HP0NczP0";
+        $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
+       // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
+        $message_content = urlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. ' . $signCode);
+
+        $senderid = "TAMLAN";
+
+        $url = "https://sms.eagleminds.net/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
+
+        $output = file_get_contents($url);    /*default function for push any url*/
+
+        return json_decode($output, true);
+        exit();
     }
 }

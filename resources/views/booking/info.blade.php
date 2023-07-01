@@ -223,6 +223,13 @@ $status = App\Models\BookingStatus::where('status',1)->orderBy('sequence','ASC')
                             <td class="bk-value">{{!empty($tax_amount) ? getPriceFormat($tax_amount) : 0}}</td>
                         </tr>
                         <tr class="grand-sub-total">
+                            <td>{{__('Extra Charges')}}</td>
+                            @php
+                            $sub_total = $bookingdata->amount + $tax_amount;
+                            @endphp
+                            <td class="bk-value">{{!empty($sub_total) ? getPriceFormat($sub_total) : 0}}</td>
+                        </tr>
+                        <tr class="grand-sub-total">
                             <td>{{__('messages.subtotal_vat')}}</td>
                             @php
                             $sub_total = $bookingdata->amount + $tax_amount;

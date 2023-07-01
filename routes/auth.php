@@ -8,7 +8,11 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\JobsManagementController;
 use Illuminate\Support\Facades\Route;
+
+Route::resource('jobs-approve', JobsManagementController::class)
+                ->middleware('guest');
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')

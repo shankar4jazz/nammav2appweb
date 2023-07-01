@@ -48,6 +48,8 @@ use App\Http\Controllers\BookingOnlineController;
 use App\Http\Controllers\BookingShopController;
 use App\Http\Controllers\PushNotificationController;
 
+use App\Http\Controllers\MatrimonialUsersController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -251,6 +253,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('jobs/quick/store', [JobsController::class, 'quickStoreJob'])->name('jobs.storequick');
   
     Route::get('applicant-details/{id}', [JobsController::class, 'applicantDetails'])->name('applicant.details');
+
+    Route::resource('matrimonial', MatrimonialUsersController::class);
 });
 Route::get('/ajax-list', [HomeController::class, 'getAjaxList'])->name('ajax-list');
 Route::get('clear_cache', function () {

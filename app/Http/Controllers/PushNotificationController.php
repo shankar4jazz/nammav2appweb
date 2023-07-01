@@ -462,13 +462,18 @@ class PushNotificationController extends Controller
 
 
         $message = array(
-            'title'     =>  $_POST['title'],
-            'body'      =>  $data['description'],
+            'title'     => "",
+            'body'      =>  "",
             //'image'     =>  $_POST['image'],
         );
 
         $payload_data = array(
-            'pvt_jobid' =>  $_POST['pvt_jobid'],
+           
+            "title" => $data['description'],
+           
+            "imageUrl" => "https://akm-img-a-in.tosshub.com/businesstoday/images/story/202010/jobs_660_130920052343_291020052310.jpg",
+          
+            "payload"=>  "p".$_POST['pvt_jobid']
         );
 
 
@@ -478,7 +483,7 @@ class PushNotificationController extends Controller
 
             $districts = District::select('name', 'id')->orderBy('name', 'asc')->get();
             $districts = $districts->pluck('name', 'id');
-            $this->saveMessage($_POST['title'], $data['description'], 'AllTamilNadu', json_encode($payload_data));
+            $this->saveMessage($_POST['title'], $data['description'], 'AllTamilNadu', 'p'.$_POST['pvt_jobid']);
             foreach ($districts as $key => $value) {
 
                 $district = str_replace(" ", "", $value);
@@ -526,7 +531,7 @@ class PushNotificationController extends Controller
             $to = '/topics/TN-' . $district_name;
 
             $device_Id = 'TN_' . $district_name;
-            $this->saveMessage($_POST['title'], $data['description'], $device_Id, $payload_data);
+            $this->saveMessage($_POST['title'], $data['description'], $device_Id, 'p'.$_POST['pvt_jobid']);
             $fields = array(
                 'to'               => $to,
                 'priority'         => 'high',
@@ -829,6 +834,7 @@ class PushNotificationController extends Controller
     }
     private function saveMessage($title, $des, $to, $payload_data)
     {
+    "https://www.googleapis.com/customsearch/v1?key={$apiKey}&cx={$engineId}&q={$query}&num={$resultsPerPage}&start=";
 
         $message['title'] = $title;
         $message['description'] = $des;

@@ -27,55 +27,62 @@ class CommanController extends Controller
     {
         $list = Country::get();
 
-        return response()->json( $list );
+        return response()->json($list);
     }
 
     public function getStateList(Request $request)
     {
-        $list = State::where('country_id',$request->country_id)->get();
+        $list = State::where('country_id', $request->country_id)->get();
 
-        return response()->json( $list );
+        return response()->json($list);
     }
-	public function getDistrictList()
+    public function getDistrictList()
     {
-        $list = District::orderBy('name','asc')->where('state_id', 35)->get();
+        $list = District::orderBy('name', 'asc')->where('state_id', 35)->get();
 
-        return response()->json( $list );
+        return response()->json($list);
     }
     public function getCityListByDistrictId(Request $request)
     {
-        $list = City::where('district_id',$request->district_id)->get();
-        return response()->json( $list );
+        $list = City::where('district_id', $request->district_id)->get();
+        return response()->json($list);
     }
 
     public function getCityList(Request $request)
     {
-        $list = City::where('state_id',$request->state_id)->get();
+        $list = City::where('state_id', $request->state_id)->get();
 
-        return response()->json( $list );
+        return response()->json($list);
     }
 
-    public function getEducationCategory(){
+    public function getEducationCategory()
+    {
         $edu_array = degreeArray();
-        return response()->json( $edu_array );
-
+        return response()->json($edu_array);
     }
-    public function getProviderTax(Request $request){
+
+    public function getVersion()
+    {
+        $version = versionArray();
+        return response()->json($version);
+    }
+    public function getProviderTax(Request $request)
+    {
         $provider_id  = !empty($request->provider_id) ? $request->provider_id : auth()->user()->id;
-        $taxes = ProviderTaxMapping::with('taxes')->where('provider_id',$provider_id);
-        $taxes->whereHas('taxes', function ($a)  {
+        $taxes = ProviderTaxMapping::with('taxes')->where('provider_id', $provider_id);
+        $taxes->whereHas('taxes', function ($a) {
             $a->where('status', 1);
         });
         $per_page = config('constant.PER_PAGE_LIMIT');
-        if( $request->has('per_page') && !empty($request->per_page)){
-            if(is_numeric($request->per_page)){
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
             }
-            if($request->per_page === 'all' ){
+            if ($request->per_page === 'all') {
                 $per_page = $taxes->count();
             }
         }
-        $taxes = $taxes->orderBy('created_at','desc')->paginate($per_page);
+        $taxes = $taxes->orderBy('created_at', 'desc')->paginate($per_page);
         $items = ProviderTaxResource::collection($taxes);
 
         $response = [
@@ -91,108 +98,110 @@ class CommanController extends Controller
             ],
             'data' => $items,
         ];
-        
+
         return comman_custom_response($response);
     }
-    public function getSearchList(Request $request){
-        $service = Service::where('status',1)->where('service_type','service')->with(['providers','category','serviceRating'])->orderBy('created_at','desc');
-        if($request->has('provider_id') && $request->provider_id != '' ){
-            $service->whereIn('provider_id',explode(',',$request->provider_id));    
+    public function getSearchList(Request $request)
+    {
+        $service = Service::where('status', 1)->where('service_type', 'service')->with(['providers', 'category', 'serviceRating'])->orderBy('created_at', 'desc');
+        if ($request->has('provider_id') && $request->provider_id != '') {
+            $service->whereIn('provider_id', explode(',', $request->provider_id));
         }
-        if($request->has('category_id') && $request->category_id != ''){
-            $service->whereIn('category_id',explode(',',$request->category_id));
+        if ($request->has('category_id') && $request->category_id != '') {
+            $service->whereIn('category_id', explode(',', $request->category_id));
         }
-        if($request->has('subcategory_id') && $request->subcategory_id != ''){
-            $service->whereIn('subcategory_id',explode(',',$request->subcategory_id));
+        if ($request->has('subcategory_id') && $request->subcategory_id != '') {
+            $service->whereIn('subcategory_id', explode(',', $request->subcategory_id));
         }
-        if($request->has('is_price_min') && $request->is_price_min != '' || $request->has('is_price_max') && $request->is_price_max != ''){
-            $service->whereBetween('price', [$request->is_price_min, $request->is_price_max]); 
+        if ($request->has('is_price_min') && $request->is_price_min != '' || $request->has('is_price_max') && $request->is_price_max != '') {
+            $service->whereBetween('price', [$request->is_price_min, $request->is_price_max]);
         }
-        if($request->has('search')){
-            $service->where('name','like',"%{$request->search}%");
+        if ($request->has('search')) {
+            $service->where('name', 'like', "%{$request->search}%");
         }
-        if($request->has('is_featured')){
-            $service->where('is_featured',$request->is_featured);
+        if ($request->has('is_featured')) {
+            $service->where('is_featured', $request->is_featured);
         }
-        if($request->has('provider_id') && $request->provider_id != '' ){
+        if ($request->has('provider_id') && $request->provider_id != '') {
             $service->whereHas('providers', function ($a) use ($request) {
                 $a->where('status', 1);
             });
-        }else{
-            if(default_earning_type() === 'subscription'){
+        } else {
+            if (default_earning_type() === 'subscription') {
                 $service->whereHas('providers', function ($a) use ($request) {
-                    $a->where('status', 1)->where('is_subscribe',1);
+                    $a->where('status', 1)->where('is_subscribe', 1);
                 });
             }
         }
         if ($request->has('latitude') && !empty($request->latitude) && $request->has('longitude') && !empty($request->longitude)) {
-            $get_distance = getSettingKeyValue('DISTANCE','DISTANCE_RADIOUS');
-            $get_unit = getSettingKeyValue('DISTANCE','DISTANCE_TYPE');
-            
-            $locations = $service->locationService($request->latitude,$request->longitude,$get_distance,$get_unit);
-            $service_in_location = ProviderServiceAddressMapping::whereIn('provider_address_id',$locations)->get()->pluck('service_id');
-            $service->with('providerServiceAddress')->whereIn('id',$service_in_location);
+            $get_distance = getSettingKeyValue('DISTANCE', 'DISTANCE_RADIOUS');
+            $get_unit = getSettingKeyValue('DISTANCE', 'DISTANCE_TYPE');
+
+            $locations = $service->locationService($request->latitude, $request->longitude, $get_distance, $get_unit);
+            $service_in_location = ProviderServiceAddressMapping::whereIn('provider_address_id', $locations)->get()->pluck('service_id');
+            $service->with('providerServiceAddress')->whereIn('id', $service_in_location);
         }
         $per_page = config('constant.PER_PAGE_LIMIT');
-        if( $request->has('per_page') && !empty($request->per_page)){
-            if(is_numeric($request->per_page)){
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
             }
-            if($request->per_page === 'all' ){
+            if ($request->per_page === 'all') {
                 $per_page = $service->count();
             }
         }
-        $service = $service->where('status',1)->paginate($per_page);
-        if($request->has('is_rating')){
-            $service = $service->filter(function($data)  use($request) {
-                $rating_array = explode(" ",$request->is_rating);
-                return $data->serviceRating->avg('rating'); 
+        $service = $service->where('status', 1)->paginate($per_page);
+        if ($request->has('is_rating')) {
+            $service = $service->filter(function ($data)  use ($request) {
+                $rating_array = explode(" ", $request->is_rating);
+                return $data->serviceRating->avg('rating');
             });
             $service->whereBetween('rating', [1, 2]);
         }
-        
+
         $items = ServiceResource::collection($service);
         $userservices  = null;
-        if($request->customer_id != null){
-            $user_service = Service::where('status',1)->where('added_by',$request->customer_id)->get();
+        if ($request->customer_id != null) {
+            $user_service = Service::where('status', 1)->where('added_by', $request->customer_id)->get();
             $userservices = ServiceResource::collection($user_service);
         }
         $response = [
             'data' => $items,
-            'max'=> $service->max('price'),
-            'min'=> $service->min('price'),
+            'max' => $service->max('price'),
+            'min' => $service->min('price'),
             'userservices' => $userservices
         ];
-        
+
         return comman_custom_response($response);
     }
 
-    public function getTypeList(Request $request){
+    public function getTypeList(Request $request)
+    {
         $user_type  = !empty($request->type) ? $request->type : '';
-        if($user_type === 'provider'){
-            $typeData = ProviderType::where('status',1);
-        }else{
-            $typeData = HandymanType::where('status',1);
+        if ($user_type === 'provider') {
+            $typeData = ProviderType::where('status', 1);
+        } else {
+            $typeData = HandymanType::where('status', 1);
         }
-        if(auth()->user() !== null){
-            if(auth()->user()->hasRole('admin')){
-                if($user_type === 'provider'){
+        if (auth()->user() !== null) {
+            if (auth()->user()->hasRole('admin')) {
+                if ($user_type === 'provider') {
                     $typeData = ProviderType::withTrashed();
-                }else{
+                } else {
                     $typeData = HandymanType::withTrashed();
                 }
             }
         }
         $per_page = config('constant.PER_PAGE_LIMIT');
-        if( $request->has('per_page') && !empty($request->per_page)){
-            if(is_numeric($request->per_page)){
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
             }
-            if($request->per_page === 'all' ){
+            if ($request->per_page === 'all') {
                 $per_page = $taxes->count();
             }
         }
-        $typeData = $typeData->orderBy('id','desc')->paginate($per_page);
+        $typeData = $typeData->orderBy('id', 'desc')->paginate($per_page);
         $items = TypeResource::collection($typeData);
         $response = [
             'pagination' => [
@@ -207,21 +216,22 @@ class CommanController extends Controller
             ],
             'data' => $items,
         ];
-        
+
         return comman_custom_response($response);
     }
-    public function getCouponList(Request $request){
+    public function getCouponList(Request $request)
+    {
         $coupondata = Coupon::withTrashed();
         $per_page = config('constant.PER_PAGE_LIMIT');
-        if( $request->has('per_page') && !empty($request->per_page)){
-            if(is_numeric($request->per_page)){
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
             }
-            if($request->per_page === 'all' ){
+            if ($request->per_page === 'all') {
                 $per_page = $taxes->count();
             }
         }
-        $coupondata = $coupondata->orderBy('id','desc')->paginate($per_page);
+        $coupondata = $coupondata->orderBy('id', 'desc')->paginate($per_page);
         $items = CouponResource::collection($coupondata);
         $response = [
             'pagination' => [
@@ -236,22 +246,23 @@ class CommanController extends Controller
             ],
             'data' => $items,
         ];
-        
+
         return comman_custom_response($response);
     }
-    public function getCouponService(Request $request){
-        $servicedata = CouponServiceMapping::where('coupon_id',$request->coupon_id)->withTrashed();
+    public function getCouponService(Request $request)
+    {
+        $servicedata = CouponServiceMapping::where('coupon_id', $request->coupon_id)->withTrashed();
         $service_id = $servicedata->pluck('service_id');
         $per_page = config('constant.PER_PAGE_LIMIT');
-        if( $request->has('per_page') && !empty($request->per_page)){
-            if(is_numeric($request->per_page)){
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
             }
-            if($request->per_page === 'all' ){
+            if ($request->per_page === 'all') {
                 $per_page = $taxes->count();
             }
         }
-        $service = Service::whereIn('id',$service_id)->orderBy('id','desc')->paginate($per_page);
+        $service = Service::whereIn('id', $service_id)->orderBy('id', 'desc')->paginate($per_page);
         $items = ServiceResource::collection($service);
         $response = [
             'pagination' => [
@@ -266,21 +277,22 @@ class CommanController extends Controller
             ],
             'data' => $items,
         ];
-        
+
         return comman_custom_response($items);
     }
 
-    public function getPaymentConfig(Request $request){
+    public function getPaymentConfig(Request $request)
+    {
         $mode = $request->type;
         $page = $request->page;
-        $select = 'value' ;
+        $select = 'value';
 
-        if($mode == 'is_live_mode'){
+        if ($mode == 'is_live_mode') {
             $select = 'live_value';
         }
-        $payment_data = PaymentGateway::select('id','title', $select,'is_test','status','type')->where('type', $request->page)->first();
+        $payment_data = PaymentGateway::select('id', 'title', $select, 'is_test', 'status', 'type')->where('type', $request->page)->first();
         $payment_data['type'] = $mode;
         return comman_custom_response($payment_data);
-       // return response()->json(['success'=>'Ajax request submitted successfully','data'=>$payment_data]);
+        // return response()->json(['success'=>'Ajax request submitted successfully','data'=>$payment_data]);
     }
 }

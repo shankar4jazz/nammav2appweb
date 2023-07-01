@@ -28,6 +28,8 @@
                                 {{ Form::text('mobile_no', null, ['class'=>"form-control" , 'rows'=>3  ,  'style'=>'font-size:25px;font-weight:bold', 'id'=>'mobile_no' ]) }}
                                 <div id="wrong-egn" class="text-danger" style='font-size:20px;'>Please provide 10 digit number.</div>
                             </div>
+
+
                         </div>
 
 
@@ -63,21 +65,24 @@
 
             function checkExistCustomer(mobile_no) {
 
-                var get_subcategory_list = "{{ route('ajax-list', [ 'type' => 'existing_customer','mobile_no' =>'']) }}" + mobile_no;
-                get_subcategory_list = get_subcategory_list.replace('amp;', '');
+                var get_subcategory_list = "{{ route('ajax-list', [ 'type' => 'existing_customer', 'user_type'=> 'jobs', 'mobile_no' =>'']) }}" + mobile_no;
+				
+                get_subcategory_list = get_subcategory_list.replace(/amp;/g, '');
+				console.log(get_subcategory_list);
 
                 $.ajax({
                     url: get_subcategory_list,
                     success: function(result) {
                         var data = result.results;
+                       
                         if (data.status_code == 404) {
-                            var url = "{{ route('user.quickcreate', ['type'=>'booking','mobile_no' =>'']) }}" + mobile_no;
+                            var url =  "{{ route('user.quickcreate', ['type'=>'jobs', 'mobile_no' =>'']) }}" + mobile_no;
                             url = url.replace('amp;', '');
                             window.location.href = url;
                         }
                         if (data.status_code == 200) {
 
-                            window.location.href = "{{ route('booking.addquick', ['mobile_no' =>'']) }}" + mobile_no;
+                          window.location.href = "{{ route('jobs.jobadd', ['mobile_no' =>'']) }}" + mobile_no;
                         }
                     }
                 });

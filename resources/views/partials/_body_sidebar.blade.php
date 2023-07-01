@@ -601,7 +601,7 @@ return checkMenuRoleAndPermission($item);
         <a href="{{ route('home') }}" class="header-logo">
             <img src="{{ getSingleMedia(settingSession('get'),'site_logo',null) }}" class="img-fluid rounded-normal light-logo site_logo_preview" alt="logo">
             <img src="{{ getSingleMedia(settingSession('get'),'site_logo',null) }}" class="img-fluid rounded-normal darkmode-logo site_logo_preview" alt="logo">
-            <span class="white-space-no-wrap">{{ ucfirst(str_replace("_"," ",auth()->user()->user_type)) }}</span>
+            <span class="white-space-no-wrap">{{ ucfirst(str_replace("_"," ",auth()->user()?->user_type)) }}</span>
         </a>
         <div class="side-menu-bt-sidebar-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="text-light wrapper-menu" width="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -622,8 +622,8 @@ return checkMenuRoleAndPermission($item);
                 <img class="avatar-50 rounded-circle bg-light" alt="user-icon" src="{{ asset('images/user/user.png') }}">
             </div>
             <div class="user-info">
-                <h5 class="user-email">{{auth()->user()->email}}</h5>
-                <span class="user-name">{{auth()->user()->display_name}}</span>
+                <h5 class="user-email">{{auth()->user()?->email}}</h5>
+                <span class="user-name">{{auth()->user()?->display_name}}</span>
             </div>
         </div>
         <nav class="iq-sidebar-menu">

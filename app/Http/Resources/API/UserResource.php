@@ -40,7 +40,7 @@ class UserResource extends JsonResource
             'provider_id'       => $this->provider_id,
             'first_name'        => $this->first_name,
             'last_name'         => $this->last_name,
-            'display_name'      => $this->first_name . $this->last_name,
+            'display_name'      => $this->first_name .' '. $this->last_name,
             'status'            => $this->status,
             'description'       => $this->description,
             'user_type'         => $this->user_type,

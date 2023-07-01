@@ -15,9 +15,6 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/backend.css') }}">
         <link rel="stylesheet" href="{{ asset('css/fronted-custom.css') }}">
-
-
-
     </head>
     <body class=" " >
 

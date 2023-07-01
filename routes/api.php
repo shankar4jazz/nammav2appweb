@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\API;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,6 +30,7 @@ Route::get('message-lists', [API\MessageListsController::class, 'messageList']);
 Route::get('jobs-plan-list', [API\JobsPlanController::class, 'planLists']);
 Route::get('get-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
 Route::post('jobs-save-payment', [API\JobsPaymentController::class, 'savePayment']);
+Route::post('check-jobs-payment', [API\JobsPaymentController::class, 'checkPayment']);
 Route::post('save-call-activities', [API\JobCallActivitiesController::class, 'saveCallActivities']);
 Route::post('get-call-activities', [API\JobCallActivitiesController::class, 'getCallActivitiesByJobId']);
 
@@ -111,6 +113,28 @@ Route::post('handyman-reviews', [API\User\UserController::class, 'handymanReview
 Route::post('service-reviews', [API\ServiceController::class, 'serviceReviewsList']);
 Route::get('post-job-status', [API\PostJobRequestController::class, 'postRequestStatus']);
 
+Route::get('get-version', [API\CommanController::class, 'getVersion']);
+
+
+
+Route::get('/sse-version', function () {
+    header('Content-Type: text/event-stream');
+    header('Cache-Control: no-cache');
+    
+    $versionData = json_decode(file_get_contents(storage_path('app/version.json')), true);
+    $updatedVersion = $versionData['version']; // Replace with your updated version
+    
+    $response = new StreamedResponse(function () use ($updatedVersion) {
+        // Send the SSE event with the updated version        
+        echo  json_encode(['version' => $updatedVersion]);
+        flush();
+    });
+    
+    return $response;
+
+   
+});
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('service-save', [App\Http\Controllers\ServiceController::class, 'store']);
@@ -155,7 +179,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('provider-document-save', [App\Http\Controllers\ProviderDocumentController::class, 'store']);
     Route::post('provider-document-delete/{id}', [App\Http\Controllers\ProviderDocumentController::class, 'destroy']);
     Route::post('provider-document-action', [App\Http\Controllers\ProviderDocumentController::class, 'action']);
-
+   
     Route::get('tax-list', [API\CommanController::class, 'getProviderTax']);
     Route::get('handyman-dashboard', [API\DashboardController::class, 'handymanDashboard']);
 
