@@ -284,7 +284,36 @@
                             </div>
                         </div>
 
+                        <div class="row featured">
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label" for="jobs_featured">{{ __('Upload featured image') }} </label>
+                                <div class="custom-file">
+                                    <input type="file" name="jobs_featured" class="custom-file-input" accept="image/*">
+                                    <label class="custom-file-label upload-label">{{ __('messages.choose_file',['file' =>  __('messages.image') ]) }}</label>
+                                </div>
+                                <span class="selected_featured"></span>
+                            </div>
+                            @if(getMediaFileExit($jobsdata, 'jobs_featured'))
+                            <div class="col-md-2 mb-2">
+                                @php
+                                $extention = imageExtention(getSingleMedia($jobsdata,'jobs_featured'));
+                                @endphp
+                                <img id="jobs_featured_preview" src="{{getSingleMedia($jobsdata,'jobs_featured')}}" alt="#" class="attachment-image mt-1">
+                                <a class="text-danger remove-file" href="{{ route('remove.file', ['id' => $jobsdata->id, 'type' => 'jobs_featured']) }}" data--submit="confirm_form" data--confirmation='true' data--ajax="true" title='{{ __("messages.remove_file_title" , ["name" =>  __("messages.image") ]) }}' data-title='{{ __("messages.remove_file_title" , ["name" =>  __("messages.image") ]) }}' data-message='{{ __("messages.remove_file_msg") }}'>
+                                    <i class="ri-close-circle-line"></i>
+                                </a>
+                            </div>
+                            @endif
+                        </div>
                         @endif
+
+
+                        <div class="form-group col-md-2">
+                            <input type="button" id="add-question-btn" value="Add Question">
+                        </div>
+
+                        <div id="question-container"></div>
+
                         {{ Form::submit( trans('messages.save'), ['class'=>'btn btn-md btn-primary float-right']) }}
                         {{ Form::close() }}
                     </div>
@@ -294,12 +323,150 @@
     </div>
     @php
     $data = $jobsdata->getJobDistricts->pluck('district_id')->implode(',');
+
+    $crossQuestionJson = $jobsdata->cross_question;
+    $crossQuestionArray = json_decode($crossQuestionJson, true);
+    $questionData = json_encode(isset($crossQuestionArray) ? $crossQuestionArray : []);
+
     @endphp
+
     @section('bottom_script')
+
     <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+
+            var questionContainer = document.getElementById('question-container');
+            var addQuestionBtn = document.getElementById('add-question-btn');
+            var questionCount = 1;
+            // Function to add a new question-answer pair
+            function addQuestion() {
+                var questionRow = document.createElement('div');
+                questionRow.className = 'row';
+
+                var questionField = document.createElement('div');
+                questionField.className = 'form-group col-md-6';
+                var questionLabel = document.createElement('label');
+                questionLabel.className = 'form-control-label';
+                questionLabel.innerHTML = 'Question <span class="text-danger">*</span>';
+                var questionInput = document.createElement('input');
+                questionInput.type = 'text';
+                questionInput.name = 'question[]';
+                questionInput.className = 'form-control';
+                questionInput.placeholder = 'Question';
+                questionInput.required = true;
+                var questionError = document.createElement('small');
+                questionError.className = 'help-block with-errors text-danger';
+
+                questionField.appendChild(questionLabel);
+                questionField.appendChild(questionInput);
+                questionField.appendChild(questionError);
+
+                var radioWrapper1 = document.createElement('div');
+                radioWrapper1.className = 'form-group col-md-2';
+                var radioWrapper2 = document.createElement('div');
+                radioWrapper2.className = 'form-group col-md-2';
+
+                var yesName = 'yes-' + questionCount;
+                var noName = 'no-' + questionCount;
+                var radio1 = createRadio(yesName, 'On', questionCount + '-on');
+                var radioLabel1 = createLabel('On', questionCount + '-on');
+                radioWrapper1.appendChild(radio1);
+                radioWrapper1.appendChild(radioLabel1);
+
+                var radio2 = createRadio(noName, 'Off', questionCount + '-off');
+                var radioLabel2 = createLabel('Off', questionCount + '-off');
+                radioWrapper2.appendChild(radio2);
+                radioWrapper2.appendChild(radioLabel2);
+
+                var removeButtonField = document.createElement('div');
+                removeButtonField.className = 'form-group col-md-2';
+                var removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', function() {
+                    questionContainer.removeChild(questionRow);
+                });
+                removeButtonField.appendChild(removeButton);
+
+                questionRow.appendChild(questionField);
+                questionRow.appendChild(radioWrapper1);
+                questionRow.appendChild(radioWrapper2);
+                questionRow.appendChild(removeButtonField);
+
+                questionContainer.appendChild(questionRow);
+
+                questionCount++;
+            }
+
+            // Helper function to create a radio button input
+            function createRadio(name, label, id) {
+                var radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = name;
+                radio.className = 'custom-control-input';
+                radio.id = id;
+
+                return radio;
+            }
+
+            // Helper function to create a label for a radio button
+            function createLabel(text, forId) {
+                var label = document.createElement('label');
+                label.className = 'custom-control-label';
+                label.innerHTML = text;
+                label.htmlFor = forId;
+
+                return label;
+            }
+
+            // Add question when Add button is clicked
+            addQuestionBtn.addEventListener('click', addQuestion);
+
+            var questionData = @json($crossQuestionArray);
+
+            console.log(questionData.length);
+
+            // Check if the questionData is not empty
+
+            // Populate the question fields
+            questionData.forEach(function(qa, index) {
+                addQuestion();
+                var questionInputs = document.querySelectorAll('input[name="question[]"]');
+                var lastQuestionInput = questionInputs[index];
+                lastQuestionInput.value = qa.question;
+
+                var yesRadio = document.querySelector('input[name="yes-' + (index + 1) + '"]');
+                var noRadio = document.querySelector('input[name="no-' + (index + 1) + '"]');
+
+                if (qa.answer === true) {
+                    yesRadio.checked = true;
+                    noRadio.checked = false;
+                } else if (qa.answer === false) {
+
+                    yesRadio.checked = false;
+                    noRadio.checked = true;
+                } else {
+                    yesRadio.checked = false;
+                    noRadio.checked = false;
+                }
+
+                // Add event listeners to radio buttons for each question
+                yesRadio.addEventListener('change', function() {
+                    noRadio.checked = !this.checked;
+                });
+
+                noRadio.addEventListener('change', function() {
+                    yesRadio.checked = !this.checked;
+                });
+            });
+
+
+        });
         (function($) {
+
             "use strict";
             $(document).ready(function() {
+
                 CKEDITOR.replace('editor');
                 var districts = "{{ isset($data) ? $data : [] }}";
                 //console.log(districts);
@@ -358,6 +525,24 @@
                     $('#service_address_id').empty();
                     //providerAddress(provider_id, service_address_id);
                 })
+
+
+                // Initially hide the featured image
+                $('.featured').hide();
+
+                // Check the "is_featured" checkbox on page load if it was previously checked
+                if ($('#is_featured').is(':checked')) {
+                    $('.featured').show();
+                }
+
+                // Toggle the visibility of the featured image when the checkbox state changes
+                $('#is_featured').change(function() {
+                    if ($(this).is(':checked')) {
+                        $('.featured').show();
+                    } else {
+                        $('.featured').hide();
+                    }
+                });
 
             })
 

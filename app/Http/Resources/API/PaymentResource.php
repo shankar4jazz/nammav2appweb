@@ -23,7 +23,7 @@ class PaymentResource extends JsonResource
             'payment_type'  => $this->payment_type,
             'payment_method'=> $this->payment_type,
             'customer_name' => optional($this->customer)->display_name,
-            'taxes'         => json_decode(optional($this->booking)->tax,true),
+            'taxes'         => json_encode(optional($this->booking)->tax,true),
             'quantity'      => optional($this->booking)->quantity,
             'coupon_data'   =>optional($this->booking)->couponAdded,
             'price'         =>optional($this->booking->service)->price,

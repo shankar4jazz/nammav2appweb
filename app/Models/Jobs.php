@@ -47,7 +47,8 @@ class Jobs extends Model implements HasMedia
         'company_id',
 		'contact_number',
         'disclose_salary',
-        'disclose_company'
+        'disclose_company', 
+        'cross_question'
     ];
 
     protected $casts = [

@@ -22,7 +22,7 @@ class User extends Authenticatable implements HasMedia
      */
     protected $fillable = [
         'username', 'first_name', 'last_name', 'email', 'password', 'user_type', 'address', 'contact_number', 'email_verified_at', 'remember_token',
-        'handymantype_id',
+        'handymantype_id','is_online',
         'player_id', 'country_id', 'state_id', 'district_id', 'city_id', 'address', 'provider_id', 'status',
         'display_name', 'providertype_id', 'is_featured', 'time_zone', 'last_notification_seen', 'login_type', 'service_address_id', 'uid', 'is_subscribe',
         'social_image', 'is_available', 'designation', 'last_online_time'

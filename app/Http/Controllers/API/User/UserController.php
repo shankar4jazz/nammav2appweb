@@ -50,7 +50,7 @@ class UserController extends Controller
         return comman_custom_response($response);
     }
 
-    
+
 
     public function login(UserRequest $request)
     {
@@ -64,6 +64,11 @@ class UserController extends Controller
                 $user = User::where('email', $input['email'])->where('user_type', 'provider')->first();
             }
             if ($user && Hash::check($input['password'], $user->password)) {
+
+                if (request('player_id') != null) {
+                    $user->player_id = request('player_id');
+                    $user->save();
+                }
                 $success = $user;
                 $success['user_role'] = $user->getRoleNames();
                 $success['api_token'] = $user->createToken('auth_token')->plainTextToken;
@@ -85,7 +90,7 @@ class UserController extends Controller
 
                 return response()->json(['data' => $success], 200);
             } else {
-                
+
                 $message = trans('auth.failed');
 
                 return comman_message_response($message, 400);
@@ -124,10 +129,10 @@ class UserController extends Controller
                 $success['is_verify_provider'] = (int) $is_verify_provider;
                 unset($success['media']);
                 unset($user['roles']);
-               
+
                 return response()->json(['data' => $success], 200);
             } else {
-                
+
                 $message = trans('auth.failed');
 
                 return comman_message_response($message, 400);
@@ -495,6 +500,26 @@ class UserController extends Controller
         }
     }
     public function handymanAvailable(Request $request)
+    {
+        $user_id =  $request->id;
+        $user = User::where('id', $user_id)->first();
+
+        if ($user == "") {
+            $message = __('messages.user_not_found');
+            return comman_message_response($message, 400);
+        }
+        $user->is_available = $request->is_available;
+        $user->save();
+
+        $message = __('messages.update_form', ['form' => __('messages.status')]);
+        $response = [
+            'data' => new UserResource($user),
+            'message' => $message
+        ];
+        return comman_custom_response($response);
+    }
+
+    public function jobUserAvailable(Request $request)
     {
         $user_id =  $request->id;
         $user = User::where('id', $user_id)->first();
@@ -1242,9 +1267,9 @@ class UserController extends Controller
 
         // ];
         //----------------------------------------------------sms eagleminds tech----------------------------------------------------------- 
-		$key = "nPD1MSa7HP0NczP0";
+        $key = "nPD1MSa7HP0NczP0";
         $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
-       // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
+        // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
         $message_content = urlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. ' . $signCode);
 
         $senderid = "TAMLAN";

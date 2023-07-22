@@ -135,7 +135,8 @@ class BookingController extends Controller
 
         $data['provider_id'] = !empty($data['provider_id']) ? $data['provider_id'] : $service_data->provider_id;
         if ($request->has('tax') && $request->tax != null) {
-            $data['tax'] = json_encode($request->tax);
+            //$data['tax'] = json_encode($request->tax);
+            $data['tax'] =trim(stripslashes(json_encode($request->tax)), '"'); 
         }
         if ($request->coupon_id != null) {
             $coupons = Coupon::with('serviceAdded')->where('code', $request->coupon_id)
@@ -152,6 +153,7 @@ class BookingController extends Controller
         }
 
         $result = Booking::updateOrCreate(['id' => $request->id], $data);
+        storeAudioFile($result, $request->voice_notes, 'voice_notes');
         storeMediaFile($result, $request->before_service_image, 'before_service_image');
         $activity_data = [
             'activity_type' => 'add_booking',

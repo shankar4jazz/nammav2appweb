@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\API;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use L5Swagger\Http\Controllers\SwaggerController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,6 +23,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 */
 
+/**
+ * @OA\Get(
+ *   path="/api/users",
+ *   tags={"Users"},
+ *   summary="Get all users",
+ *   @OA\Response(response="200", description="Successful operation"),
+ *   @OA\Response(response="401", description="Unauthenticated"),
+ * )
+ */
 require __DIR__ . '/admin-api.php';
 
 Route::post('upload-resume', [API\User\UserController::class, 'uploadResume']);
@@ -54,34 +64,35 @@ Route::post('city-news-list', [API\JobsController::class, 'getNewsListByCity']);
 Route::post('user-news-list', [API\NewsController::class, 'getNewsListByUser']);
 //end news
 Route::get('jobcategory-list', [API\JobCategoryController::class, 'getCategoryList']);
-Route::post('save-jobs', [App\Http\Controllers\JobsController::class, 'store']);
-Route::post('add-jobs', [App\Http\Controllers\JobsController::class, 'saveJobPost']);
-Route::post('create-jobs', [App\Http\Controllers\TamilanJobsController::class, 'store']);
 Route::get('jobs-list', [API\JobsController::class, 'getJobsList']);
+Route::get('featured-joblists', [API\JobsController::class, 'getFeatureJobs']);
 Route::get('jobs-view/{slug}', [API\JobsController::class, 'getJobsListBySlug']);
 Route::get('get-jobs/{id}/{user_id}', [API\JobsController::class, 'getJobById']);
 Route::get('jobs/{slug}', [API\JobsController::class, 'getJobsListBySlugUrl']);
 Route::post('citywise-jobs-list', [API\JobsController::class, 'getJobsListByCity']);
 Route::post('category-city-jobs-list', [API\JobsController::class, 'getJobsListByCityAndCategory']);
 Route::post('categories-cities-jobs-list', [API\JobsController::class, 'getJobsListByCityAndCategorySlug']);
+Route::post('get-filter-district', [API\JobsController::class, 'getJobsListByCities']);
 Route::post('your-jobs-list', [API\JobsController::class, 'jobseerkerJobsForYou']);
 Route::post('city-all-jobs-list', [API\JobsController::class, 'getJobsListAllCities']);
 
 Route::post('user-jobs-list', [API\JobsController::class, 'getJobsListByUser']);
 Route::post('company-list', [API\CompanyController::class, 'getCompanyByUser']);
-
 Route::post('add-company', [API\CompanyController::class, 'addCompany']);
 
 Route::get('category-list', [API\CategoryController::class, 'getCategoryList']);
 Route::get('subcategory-list', [API\SubCategoryController::class, 'getSubCategoryList']);
 Route::get('service-list', [API\ServiceController::class, 'getServiceList']);
+Route::get('featured-service-list', [API\ServiceController::class, 'getServiceList']);
 Route::get('type-list', [API\CommanController::class, 'getTypeList']);
 Route::get('get-payment-config', [API\CommanController::class, 'getPaymentConfig']);
 
 Route::post('country-list', [API\CommanController::class, 'getCountryList']);
 Route::post('state-list', [API\CommanController::class, 'getStateList']);
 Route::get('district-list', [API\CommanController::class, 'getDistrictList']);
-Route::post('city-list', [API\CommanController::class, 'getCityList']);
+Route::post('get-district', [API\CommanController::class, 'getDistrictListByStateId']);
+Route::get('city-list', [API\CommanController::class, 'getCityList']);
+
 Route::get('education-categories', [API\CommanController::class, 'getEducationCategory']);
 Route::post('getcity-lists', [API\CommanController::class, 'getCityListByDistrictId']);
 Route::get('search-list', [API\CommanController::class, 'getSearchList']);
@@ -113,31 +124,30 @@ Route::get('booking-status', [API\BookingController::class, 'bookingStatus']);
 Route::post('handyman-reviews', [API\User\UserController::class, 'handymanReviewsList']);
 Route::post('service-reviews', [API\ServiceController::class, 'serviceReviewsList']);
 Route::get('post-job-status', [API\PostJobRequestController::class, 'postRequestStatus']);
-
 Route::get('get-version', [API\CommanController::class, 'getVersion']);
-
-
 
 Route::get('/sse-version', function () {
     header('Content-Type: text/event-stream');
     header('Cache-Control: no-cache');
-    
+
     $versionData = json_decode(file_get_contents(storage_path('app/version.json')), true);
     $updatedVersion = $versionData['version']; // Replace with your updated version
-    
+
     $response = new StreamedResponse(function () use ($updatedVersion) {
         // Send the SSE event with the updated version        
         echo  json_encode(['version' => $updatedVersion]);
         flush();
     });
-    
-    return $response;
 
-   
+    return $response;
 });
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::post('save-jobs', [App\Http\Controllers\JobsController::class, 'store']);
+    Route::post('add-jobs', [App\Http\Controllers\JobsController::class, 'saveJobPost']);
+    Route::post('create-jobs', [App\Http\Controllers\TamilanJobsController::class, 'store']);
     Route::post('service-save', [App\Http\Controllers\ServiceController::class, 'store']);
     Route::post('service-save', [App\Http\Controllers\ServiceController::class, 'store']);
     Route::post('service-delete/{id}', [App\Http\Controllers\ServiceController::class, 'destroy']);
@@ -149,15 +159,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('booking-detail', [API\BookingController::class, 'getBookingDetail']);
     Route::post('save-booking-rating', [API\BookingController::class, 'saveBookingRating']);
     Route::post('delete-booking-rating', [API\BookingController::class, 'deleteBookingRating']);
-
     Route::post('save-favourite', [API\ServiceController::class, 'saveFavouriteService']);
     Route::post('delete-favourite', [API\ServiceController::class, 'deleteFavouriteService']);
     Route::get('user-favourite-service', [API\ServiceController::class, 'getUserFavouriteService']);
-
     Route::post('booking-action', [API\BookingController::class, 'action']);
-
     Route::post('booking-assigned', [App\Http\Controllers\BookingController::class, 'bookingAssigned']);
-
     Route::post('user-update-status', [API\User\UserController::class, 'userStatusUpdate']);
     Route::post('change-password', [API\User\UserController::class, 'changePassword']);
     Route::post('update-profile', [API\User\UserController::class, 'updateProfile']);
@@ -180,7 +186,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('provider-document-save', [App\Http\Controllers\ProviderDocumentController::class, 'store']);
     Route::post('provider-document-delete/{id}', [App\Http\Controllers\ProviderDocumentController::class, 'destroy']);
     Route::post('provider-document-action', [App\Http\Controllers\ProviderDocumentController::class, 'action']);
-   
+
     Route::get('tax-list', [API\CommanController::class, 'getProviderTax']);
     Route::get('handyman-dashboard', [API\DashboardController::class, 'handymanDashboard']);
 
@@ -200,6 +206,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('save-service-proof', [API\BookingController::class, 'uploadServiceProof']);
     Route::post('handyman-update-available-status', [API\User\UserController::class, 'handymanAvailable']);
+    Route::post('available-status', [API\User\UserController::class, 'jobUserAvailable']);
     Route::post('delete-user-account', [API\User\UserController::class, 'deleteUserAccount']);
     Route::post('delete-account', [API\User\UserController::class, 'deleteAccount']);
     Route::post('delete-jobs-account', [API\User\UserController::class, 'deleteJobsAccount']);
@@ -216,4 +223,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('save-provider-slot', [App\Http\Controllers\ProviderSlotController::class, 'store']);
     Route::get('get-provider-slot', [API\ProviderSlotController::class, 'getProviderSlot']);
+
+    Route::post('get-userdetails', [API\UserDetailsController::class, 'getUserDetailsByUser']);
+
+    Route::post('add-userdetails', [API\UserDetailsController::class, 'addUserDetails']);
 });

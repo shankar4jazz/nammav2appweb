@@ -1,0 +1,258 @@
+[2023-07-22 13:12:40] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:12:40] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:12:56] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(415): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(113): Illuminate\\Foundation\\Http\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#7 C:\\wamp64\\www\\nammav2appweb\\server.php(21): require_once('C:\\\\wamp64\\\\www\\\\n...')
+#8 {main}
+"} 
+[2023-07-22 13:12:56] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(153): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(137): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(111): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#6 C:\\wamp64\\www\\nammav2appweb\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#7 C:\\wamp64\\www\\nammav2appweb\\server.php(21): require_once('C:\\\\wamp64\\\\www\\\\n...')
+#8 {main}
+"} 
+[2023-07-22 13:15:10] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(415): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(113): Illuminate\\Foundation\\Http\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#7 C:\\wamp64\\www\\nammav2appweb\\server.php(21): require_once('C:\\\\wamp64\\\\www\\\\n...')
+#8 {main}
+"} 
+[2023-07-22 13:15:10] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(153): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(137): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(111): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#6 C:\\wamp64\\www\\nammav2appweb\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#7 C:\\wamp64\\www\\nammav2appweb\\server.php(21): require_once('C:\\\\wamp64\\\\www\\\\n...')
+#8 {main}
+"} 
+[2023-07-22 13:16:32] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:16:32] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:39:58] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:39:58] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:40:00] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:40:00] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:40:07] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:40:07] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:40:08] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:40:08] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:40:10] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:40:10] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:40:11] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:40:11] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:40:12] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:40:12] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
+[2023-07-22 13:40:19] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:200)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(112): Illuminate\\Log\\LogManager->get(NULL)
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(590): Illuminate\\Log\\LogManager->driver()
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(252): Illuminate\\Log\\LogManager->error('Class \"L5Swagge...', Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(366): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#5 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(131): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#6 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 {main}
+"} 
+[2023-07-22 13:40:19] laravel.ERROR: Class "L5Swagger\Generator" not found {"exception":"[object] (Error(code: 0): Class \"L5Swagger\\Generator\" not found at C:\\wamp64\\www\\nammav2appweb\\config\\l5-swagger.php:148)
+[stacktrace]
+#0 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(72): require()
+#1 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(39): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#2 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(237): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#3 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(310): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#4 C:\\wamp64\\www\\nammav2appweb\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(127): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#5 C:\\wamp64\\www\\nammav2appweb\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 

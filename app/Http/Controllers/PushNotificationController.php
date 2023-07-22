@@ -460,22 +460,17 @@ class PushNotificationController extends Controller
         $data = $request->all();
         $district_name = str_replace(" ", "", $data['district_name']);
 
-
         $message = array(
-            'title'     => "",
-            'body'      =>  "",
+            'title'     => $data['title'],
+            'body'      =>  $data['description'],
             //'image'     =>  $_POST['image'],
         );
 
-        $payload_data = array(
-           
-            "title" => $data['description'],
-           
-            "imageUrl" => "https://akm-img-a-in.tosshub.com/businesstoday/images/story/202010/jobs_660_130920052343_291020052310.jpg",
-          
-            "payload"=>  "p".$_POST['pvt_jobid']
+        $payload_data = array(           
+            "title" => $data['description'],           
+            "imageUrl" => "https://www.tamilanjobs.in/assets/tamilanjobs1.webp",          
+            "payload"=>  "p{".$_POST['pvt_jobid']."}"
         );
-
 
 
         if ($district_name == 'AllTamilNadu') {
@@ -834,8 +829,8 @@ class PushNotificationController extends Controller
     }
     private function saveMessage($title, $des, $to, $payload_data)
     {
-    "https://www.googleapis.com/customsearch/v1?key={$apiKey}&cx={$engineId}&q={$query}&num={$resultsPerPage}&start=";
-
+    
+        //"https://www.googleapis.com/customsearch/v1?key={$apiKey}&cx={$engineId}&q={$query}&num={$resultsPerPage}&start=";
         $message['title'] = $title;
         $message['description'] = $des;
         $message['device_id'] = $to;

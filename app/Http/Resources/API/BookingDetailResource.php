@@ -28,6 +28,7 @@ class BookingDetailResource extends JsonResource
             'status'             => $this->status,
             'status_label'       => BookingStatus::bookingStatus($this->status),
             'description'        => $this->description,
+            'voice_notes'        => getSingleMedia($this, 'voice_notes', null),
             'reason'             => $this->reason,
             'provider_name'      => optional($this->provider)->display_name,
             'customer_name'      => optional($this->customer)->display_name,

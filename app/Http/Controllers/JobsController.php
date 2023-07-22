@@ -151,6 +151,32 @@ class JobsController extends Controller
         //    return  redirect()->back()->withErrors(trans('messages.permission_denied'));
         // }
         $data = $request->all();
+
+        // Convert question and answer to JSON format
+        $questions = [];
+
+        if ($request->has('question')) {
+            $questionCount = count($request->question);
+
+            for ($i = 0; $i < $questionCount; $i++) {
+                $yesName = 'yes-' . ($i + 1);
+                $noName = 'no-' . ($i + 1);             
+        
+                $answerValue = $request->input($yesName) === 'on' ? true : false;
+                if ($answerValue === false) {
+                    $answerValue = $request->input($noName) === 'on' ? false : null;
+                }              
+                $question = [
+                    'question' => $request->question[$i],
+                    'answer' => $answerValue
+                ];
+                $questions[] = $question;
+            }
+        }
+      
+
+        $data['cross_question'] = json_encode($questions);
+
         $data['is_featured'] = 0;
         if ($request->has('is_featured')) {
             $data['is_featured'] = 1;
@@ -191,7 +217,15 @@ class JobsController extends Controller
             }
         }
 
-        storeMediaFile($result, $request->jobs_image, 'jobs_image');
+        if (isset($request->jobs_image)) {
+            storeMediaFile($result, $request->jobs_image, 'jobs_image');
+        }
+
+        if (isset($request->jobs_featured)) {
+            storeMediaFile($result, $request->jobs_featured, 'jobs_featured');
+        }
+
+
 
         $message = trans('messages.update_form', ['form' => trans('messages.jobs')]);
         if ($result->wasRecentlyCreated) {
@@ -200,7 +234,13 @@ class JobsController extends Controller
 
         if ($result->status == 1) {
 
-            sendWhatsAppText($result->id,  'active');
+            if ($result->is_featured == 1) {
+
+                sendWhatsAppText($result->id,  'featured');
+            } else {
+
+                sendWhatsAppText($result->id,  'active');
+            }
         } else if ($result->status == 2) {
             sendWhatsAppText($result->id,  'rejected');
         } else if ($result->status == 3) {
@@ -291,12 +331,12 @@ class JobsController extends Controller
 
         $jobseekerDetails = User::where('id', $providerdata->user_id)->first();
         $firstName = $jobseekerDetails->first_name ?? '-';
-		$lastName = $jobseekerDetails->last_name ?? '-';
-		$contact = $jobseekerDetails->contact_number?? '-';
-		
-        $earningData = [			
+        $lastName = $jobseekerDetails->last_name ?? '-';
+        $contact = $jobseekerDetails->contact_number ?? '-';
+
+        $earningData = [
             'name' => "First Name:" . $firstName . ", Last Name: " . $lastName,
-            'mobile_no' => "Contact No: ".$contact,  
+            'mobile_no' => "Contact No: " . $contact,
             'job_title' =>  $providerdata->title ?? '-',
             'payment_type' => $providerdata->jobsPayment->payment_type ?? '-',
             'total_amount' => $providerdata->jobsPayment->total_amount ?? '-',

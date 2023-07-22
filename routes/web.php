@@ -49,6 +49,7 @@ use App\Http\Controllers\BookingShopController;
 use App\Http\Controllers\PushNotificationController;
 
 use App\Http\Controllers\MatrimonialUsersController;
+use App\Http\Controllers\JobseekerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,10 +115,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('save-payment', [App\Http\Controllers\API\PaymentController::class, 'savePayment'])->name('payment.save');
     Route::resource('user', CustomerController::class);
 
+
     Route::get('user/create/quick', [CustomerController::class, 'quickCreate'])->name('user.quickcreate');
     Route::post('user/create/store', [CustomerController::class, 'quickStore'])->name('user.quick');
 
     Route::post('user-action', [CustomerController::class, 'action'])->name('user.action');
+
+    Route::resource('jobseeker', JobseekerController::class);
 
     Route::get('booking/booking-assign-form/{id}', [BookingController::class, 'bookingAssignForm'])->name('booking.assign_form');
     Route::post('booking-assigned', [BookingController::class, 'bookingAssigned'])->name('booking.assigned');

@@ -871,6 +871,10 @@ class HomeController extends Controller
                 $data = Jobs::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);
                 break;
+            case 'jobs_featured':
+                $data = Jobs::find($request->id);
+                $message = __('messages.msg_removed', ['name' => __('messages.image')]);
+                break;
             case 'jobs_plans_category_image':
                 $data = JobsPlanCategory::find($request->id);
                 $message = __('messages.msg_removed', ['name' => __('messages.image')]);
@@ -912,7 +916,7 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
-  
+
     function authRegister()
     {
         return view('auth.register');

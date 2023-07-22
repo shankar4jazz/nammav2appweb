@@ -363,6 +363,11 @@ class DashboardController extends Controller
             $value['flag_image'] = file_exists(public_path('/images/flags/' . $value['id'] . '.png')) ? asset('/images/flags/' . $value['id'] . '.png') : asset('/images/language.png');
         }
 
+        $upcomming_booking = Booking::myBooking()->with('customer')->where('status', 'pending')->orderBy('id', 'DESC')->take(5)->get();
+        if(!empty($upcomming_booking)){
+            $upcomming_booking = BookingResource::collection($upcomming_booking);
+        }
+
         $response = [
             'status'                        => true,
             'total_booking'                 => $booking->count(),
@@ -381,7 +386,8 @@ class DashboardController extends Controller
             'term_conditions'               => $term_conditions,
             'language_option'               => $language_array,
             'isHandymanAvailable'           => $handyman->is_available,
-            'completed_booking'             => $completed_booking->count()
+            'completed_booking'             => $completed_booking->count(),
+            'upcomming_booking'             => $upcomming_booking
          ];
          return comman_custom_response($response);
 

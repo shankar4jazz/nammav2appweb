@@ -9,7 +9,11 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\JobsManagementController;
+use App\Http\Controllers\Auth\SmsController;
 use Illuminate\Support\Facades\Route;
+
+Route::resource('send-sms', SmsController::class)
+                ->middleware('guest');
 
 Route::resource('jobs-approve', JobsManagementController::class)
                 ->middleware('guest');
@@ -17,6 +21,9 @@ Route::resource('jobs-approve', JobsManagementController::class)
 Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')
                 ->name('register');
+Route::post('/sent-sms', [SmsController::class, 'sentsms'])
+                ->middleware('guest')
+                ->name('sent');
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest');

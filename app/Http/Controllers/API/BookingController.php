@@ -41,6 +41,7 @@ class BookingController extends Controller
             }
         }
         $orderBy = 'desc';
+        
         if( $request->has('orderby') && !empty($request->orderby)){
             $orderBy = $request->orderby;
         }
@@ -74,14 +75,12 @@ class BookingController extends Controller
             $message = __('messages.booking_not_found');
             return comman_message_response($message,400);  
         }
-        $booking_detail = new BookingDetailResource($booking_data);
-        
+        $booking_detail = new BookingDetailResource($booking_data);        
         $rating_data = BookingRatingResource::collection($booking_detail->bookingRatings);
         $service = new ServiceResource($booking_detail->service);
         $customer = new UserResource($booking_detail->customer);
         $provider_data = new UserResource($booking_detail->provider);
         $handyman_data = HandymanResource::collection($booking_detail->handymanAdded);
-
         $customer_review = null;
         if($request->customer_id != null){
             $customer_review = BookingRating::where('customer_id',$request->customer_id)->where('service_id',$booking_detail->service_id)->where('booking_id',$id)->first();

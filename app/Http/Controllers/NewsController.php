@@ -7,6 +7,8 @@ use App\Models\NewsCategory;
 use App\DataTables\NewsDataTable;
 use App\Http\Requests\NewsRequest;
 use App\Models\News;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 
 class NewsController extends Controller
@@ -24,7 +26,7 @@ class NewsController extends Controller
          *     
          */
         $auth_user = authSession();
-        if (!$auth_user->can('news list') ) {
+        if (!$auth_user->can('news list')) {
             return  redirect()->back()->withErrors(trans('messages.permission_denied'));
         }
         $pageTitle = trans('messages.list_form_title', ['form' => trans('messages.news')]);
@@ -40,7 +42,7 @@ class NewsController extends Controller
      */
     public function create(Request $request)
     {
-        
+
         $auth_user = authSession();
         if (!$auth_user->can('news add')) {
             return  redirect()->back()->withErrors(trans('messages.permission_denied'));
@@ -49,10 +51,10 @@ class NewsController extends Controller
         $subcategory = News::find($id);
         // $subcategory->country_id = '101';
         // $subcategory->state_id = '35';
-      
-        
-      
-       
+
+
+
+
         $pageTitle = trans('messages.update_form_title', ['form' => trans('messages.news')]);
         $decoded_description = '';
         if ($subcategory == null) {
@@ -60,18 +62,16 @@ class NewsController extends Controller
             $subcategory = new News;
             $subcategory->country_id = '101';
             $subcategory->state_id = '35';
-        }
-        else{
+        } else {
             $decoded_description = base64_decode($subcategory->description);
-       
+
             $is_base64_encoded = base64_encode(base64_decode($subcategory->description)) === $subcategory->description;
             if ($is_base64_encoded) {
-    
-                $decoded_description ;
-                
-            } else {           
+
+                $decoded_description;
+            } else {
                 // The string is base64 encoded and has been decoded
-                 $decoded_description = $subcategory->description; // Outputs "Hello World!"
+                $decoded_description = $subcategory->description; // Outputs "Hello World!"
             }
         }
 
@@ -86,7 +86,6 @@ class NewsController extends Controller
      */
     public function store(NewsRequest $request)
     {
-
         if (demoUserPermission()) {
             return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
@@ -97,14 +96,14 @@ class NewsController extends Controller
         }
 
         $data = $request->all();
-       
+
         $data['description'] = base64_encode($request->description);
         $data['is_featured'] = 0;
         if ($request->has('is_featured')) {
             $data['is_featured'] = 1;
         }
-      
-        
+
+
 
         $result = News::updateOrCreate(['id' => $data['id']], $data);
 
@@ -114,11 +113,13 @@ class NewsController extends Controller
         // $resize_image->resize(300, 180);
         //$resize_image->save(public_path('images/'.$fileName));
 
-        
+
+    
 
 
 
-        storeMediaFile($result, $request->news_image, 'news_image');
+
+        storeMediaFile($result, $request->file('news_image'), 'news_image');
 
         if ($request->news_video) {
             storeMediaFile($result, $request->news_video, 'news_video');
@@ -177,7 +178,7 @@ class NewsController extends Controller
     public function destroy($id)
     {
         $auth_user = authSession();
-        if (!$auth_user->can('news delete') ) {
+        if (!$auth_user->can('news delete')) {
             return  redirect()->back()->withErrors(trans('messages.permission_denied'));
         }
         if (demoUserPermission()) {
@@ -199,7 +200,7 @@ class NewsController extends Controller
     public function action(Request $request)
     {
 
-       
+
         $id = $request->id;
 
         $subcategory  = News::withTrashed()->where('id', $id)->first();

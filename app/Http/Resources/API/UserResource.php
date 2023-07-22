@@ -28,6 +28,7 @@ class UserResource extends JsonResource
         {
             $handyman_rating = (isset($this->handymanRating) && count($this->handymanRating) > 0 ) ? (float) number_format(max($this->handymanRating->avg('rating'),0), 2) : 0;
         }
+        $profile_image = "";
         if($this->login_type != null){
             $profile_image = $this->social_image;
         }else{

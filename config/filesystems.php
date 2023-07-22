@@ -42,16 +42,30 @@ return [
             'visibility' => 'public',
         ],
 
+        // 's3' => [
+        //     'driver' => 's3',
+        //     'key' => env('AWS_ACCESS_KEY_ID'),
+        //     'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        //     'region' => env('AWS_DEFAULT_REGION'),
+        //     'bucket' => env('AWS_BUCKET'),
+        //     'url' => env('AWS_URL'),
+        //     'endpoint' => env('AWS_ENDPOINT'),
+        //     'throw' => false,
+        // ],
+
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
+            'bucket' => env('R2_BUCKET_NAME'),
+            'account_id' => env('R2_ACCOUNT_ID'),
+            'key' => env('R2_ACCESS_KEY'),
+            'secret' => env('R2_SECRET_ACCESS_KEY'),
+            'region' => 'auto',
+            'endpoint' => 'https://' . env('R2_ACCOUNT_ID') . '.r2.cloudflarestorage.com',
+            'version' => 'latest',
+            'http' => [
+                'verify' => false
+            ],
         ],
-		
 
     ],
 

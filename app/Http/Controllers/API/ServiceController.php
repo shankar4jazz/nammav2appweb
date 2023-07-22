@@ -22,7 +22,7 @@ use App\Models\ProviderTaxMapping;
 class ServiceController extends Controller
 {
     public function getServiceList(Request $request){
-        
+
         if(auth()->user() !== null){
             if(auth()->user()->hasRole('admin')){
                 $service = Service::withTrashed()->with(['providers','category','serviceRating']);
@@ -78,6 +78,75 @@ class ServiceController extends Controller
                 });
             }
         }
+        if ($request->has('latitude') && !empty($request->latitude) && $request->has('longitude') && !empty($request->longitude)) {
+            $get_distance = getSettingKeyValue('DISTANCE','DISTANCE_RADIOUS');
+            $get_unit = getSettingKeyValue('DISTANCE','DISTANCE_TYPE');
+            
+            $locations = $service->locationService($request->latitude,$request->longitude,$get_distance,$get_unit);
+            $service_in_location = ProviderServiceAddressMapping::whereIn('provider_address_id',$locations)->get()->pluck('service_id');
+            $service->with('providerServiceAddress')->whereIn('id',$service_in_location);
+        }
+
+        if($request->has('search')){
+            $service->where('name','like',"%{$request->search}%");
+        }
+
+        $per_page = config('constant.PER_PAGE_LIMIT');
+        if( $request->has('per_page') && !empty($request->per_page)){
+            if(is_numeric($request->per_page)){
+                $per_page = $request->per_page;
+            }
+            if($request->per_page === 'all' ){
+                $per_page = $service->count();
+            }
+        }
+
+        $service = $service->where('status',1)->orderBy('created_at','desc')->paginate($per_page);
+        $items = ServiceResource::collection($service);
+        $userservices  = null;
+        if($request->customer_id != null){
+            $user_service = Service::where('status',1)->where('added_by',$request->customer_id)->get();
+            $userservices = ServiceResource::collection($user_service);
+        }
+        $response = [
+            'pagination' => [
+                'total_items' => $items->total(),
+                'per_page' => $items->perPage(),
+                'currentPage' => $items->currentPage(),
+                'totalPages' => $items->lastPage(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem(),
+                'next_page' => $items->nextPageUrl(),
+                'previous_page' => $items->previousPageUrl(),
+            ],
+            'data' => $items,
+            'user_services' => $userservices,
+            'max'=> $service->max('price'),
+            'min'=> $service->min('price'),
+        ];
+        
+        return comman_custom_response($response);
+    }
+
+    public function getFeaturedServiceList(Request $request){
+                
+        if(auth()->user() !== null){
+            if(auth()->user()->hasRole('admin')){
+                $service = Service::withTrashed()->with(['providers','category','serviceRating']);
+            }else{
+                $service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
+            }
+        }else{
+            $service = Service::where('service_type','service')->with(['providers','category','serviceRating'])->where('status', '1')->where('is_featured', '1');
+        }
+        
+        if ($request->has('city_id')) {
+            $service->whereHas('providers', function ($a) use ($request) {
+                $a->where('city_id', $request->city_id);
+            });
+        }
+        
+       
         if ($request->has('latitude') && !empty($request->latitude) && $request->has('longitude') && !empty($request->longitude)) {
             $get_distance = getSettingKeyValue('DISTANCE','DISTANCE_RADIOUS');
             $get_unit = getSettingKeyValue('DISTANCE','DISTANCE_TYPE');

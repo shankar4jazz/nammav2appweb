@@ -98,14 +98,14 @@
                     time_24hr: true
                 });
             }
-			 if ($(".end-datetimepicker").length > 0) {
+            if ($(".end-datetimepicker").length > 0) {
                 $(".end-datetimepicker").flatpickr({
                     // dateFormat: "d-m-Y",
                     enableTime: true,
                     minDate: "today",
                     time_24hr: true,
                     dateFormat: "Y-m-d H:i:s",
-                    
+
                 });
             }
 
@@ -197,8 +197,8 @@
                 var key_name = $(this).attr('data-name');
                 var id = $(this).attr('data-id');
                 var type = $(this).attr('data-type');
-				var url = "{{ route('changeStatus') }}";
-				url = url.replace(/^http:/, 'https:');
+                var url = "{{ route('changeStatus') }}";
+                url = url.replace(/^http:/, 'https:');
                 $.ajax({
                     type: "GET",
                     dataType: "json",
@@ -348,7 +348,7 @@
 
             function notificationList(type = '') {
                 var url = "{{ route('notification.list') }}";
-				url = url.replace(/^http:/, 'https:');
+                url = url.replace(/^http:/, 'https:');
                 $.ajax({
                     type: 'get',
                     url: url,
@@ -369,7 +369,7 @@
 
             function getNotificationCounts() {
                 var url = "{{ route('notification.counts') }}";
-				url = url.replace(/^http:/, 'https:');
+                url = url.replace(/^http:/, 'https:');
                 $.ajax({
                     type: 'get',
                     url: url,
@@ -412,6 +412,7 @@
                 readURL(this);
             })
 
+
             function readURL(input) {
                 var target = $(input).attr('data--target');
                 if (input.files && input.files[0]) {
@@ -442,20 +443,25 @@
                         if ($('.selected_file').length > 0) {
                             $('.selected_file').text(input.files[0].name);
                         }
-                    }
-					else  if(jQuery.inArray(field_name, ["news_video"]) !== -1){
-                   
+                    } else if (jQuery.inArray(field_name, ["news_video"]) !== -1) {
+
                         var res = isVideo(input.files[0].name);
                         if ($('.selected_file_video').length > 0) {
                             $('.selected_file_video').text(input.files[0].name);
                         }
-                    }else {
+                    } else if (jQuery.inArray(field_name, ["jobs_featured"]) !== -1) {
+
+                        var res = isImage(input.files[0].name);
+                        if ($('.selected_featured').length > 0) {
+                            $('.selected_featured').text(input.files[0].name);
+                        }
+                    } else {
                         var res = isImage(input.files[0].name);
                         if ($('.selected_file').length > 0) {
                             $('.selected_file').text(input.files[0].name);
-                          
+
                         }
-                        
+
                     }
 
                     if (res == false) {

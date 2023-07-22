@@ -15,7 +15,14 @@
                                     <h5 class="font-weight-bold"><?php echo e($pageTitle ?? trans('messages.jobs')); ?></h5>
                                 </div>
                             </div>
-                           
+                            <div class="col-md-6">
+                                <div class="d-flex justify-content-end align-items-center p-3">
+                                    <?php if($auth_user->can('jobs add')): ?>
+                                    <a href="<?php echo e(route('jobs.quick')); ?>" class="float-right mr-1 btn btn-sm btn-danger"><i class="fa fa-plus-circle"></i> <?php echo e(trans('messages.add_form_title',['form' => trans('messages.quick_jobs')  ])); ?></a>
+                                    <a href="<?php echo e(route('jobs.create')); ?>" class="float-right mr-1 btn btn-sm btn-primary"><i class="fa fa-plus-circle"></i> <?php echo e(trans('messages.add_form_title',['form' => trans('messages.jobs')  ])); ?></a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <?php echo e($dataTable->table(['class' => 'table  w-100'],false)); ?>
@@ -28,15 +35,21 @@
     <?php $__env->startSection('bottom_script'); ?>
     <?php echo e($dataTable->scripts()); ?>
 
+
     <script type="text/javascript">
         $(document).ready(function() {
+
+
+
             $(document).on('change', '#status', function() {
+
                 var status = $(this).val();
                 if (status == '3' || status == '4' || status == '2') {
                     document.getElementById("reason").style.display = "block";
                 } else {
                     document.getElementById("reason").style.display = "none";
                 }
+
             })
 
             console.log('Binding click event to .change_status buttons');

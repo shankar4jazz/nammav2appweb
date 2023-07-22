@@ -1,6 +1,8 @@
 <?php
 
 use \Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
 
 
 function authSession($force = false)
@@ -101,6 +103,8 @@ function UserPermission()
     }
 }
 
+
+
 function getSingleMedia($model, $collection = 'profile_image', $skip = true)
 {
     if (!\Auth::check() && $skip) {
@@ -111,8 +115,21 @@ function getSingleMedia($model, $collection = 'profile_image', $skip = true)
         $media = $model->getFirstMedia($collection);
     }
 
+    if ($media !== null) {
+        // Assuming the media disk is set to 's3'
+        $disk = $media->disk;
+        // Generate the Cloudflare R2 URL based on the disk and path
+        $cloudflareR2Url = getCloudflareR2Url($media);
+        return $cloudflareR2Url;
+    }
+
     if (getFileExistsCheck($media)) {
-        return $media->getFullUrl();
+
+      
+       //d Generate the Cloudflare R2 URL based on the disk and path
+        $cloudflareR2Url = getCloudflareR2Url($media);
+        return $cloudflareR2Url;
+       // return $media->getFullUrl();
     } else {
 
         switch ($collection) {
@@ -165,6 +182,28 @@ function getFileExistsCheck($media)
     return $mediaCondition;
 }
 
+
+
+function storeAudioFile($model, $file, $name)
+{
+    if ($file) {
+        if (!in_array($name, ['voice_notes'])) {
+            $model->clearMediaCollection($name);
+        }
+        if (is_array($file)) {
+            foreach ($file as $key => $value) {
+                $model->addMedia($value)->toMediaCollection($name);
+                
+            }
+        } else {
+            // Remove the image resizing code
+            $model->addMedia($file)->toMediaCollection($name);
+           
+        }
+    }
+    return true;
+}
+
 function storeMediaFile($model, $file, $name)
 {
     if ($file) {
@@ -173,62 +212,147 @@ function storeMediaFile($model, $file, $name)
         }
         if (is_array($file)) {
             foreach ($file as $key => $value) {
+                // $img = \Image::make($value->getPathname());
+                // // Generate a unique filename for the resized image
+                // $resizedFilename = $value->getClientOriginalName();
+                // // Get the directory path of the original image
+                // $originalDirectory = pathinfo($value->getPathname(), PATHINFO_DIRNAME);
+                // // Generate the path for the resized image
+                // $resizedPath = $originalDirectory . '/' . $resizedFilename;
+                // // Resize the image to a specific size and save it to the new path
+                // $img->resize(300, 215)->save($resizedPath, 90);
+                // // Check the file size and reduce the quality further if needed
+                // // while (filesize($file->getPathname()) > 10240) {
+                // //     $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
+                // //    // $img->save($file->getPathname(), $img->getEncodedQuality() - 10);
+                // // }
+                // // Add the resized image to the same media object
+                // $model->addMedia($resizedPath)
+                //     ->usingFileName($resizedFilename)
+                //     ->toMediaCollection($name);
+                // uploadToCloudflareR2Helper($file);
 
-                $img = \Image::make($value->getPathname());
+                $resizedImageData = resizedImage($value); // Call the resizedImage function to get the resized image data
 
-                // Generate a unique filename for the resized image
-                $resizedFilename = $value->getClientOriginalName();
-
-                // Get the directory path of the original image
-                $originalDirectory = pathinfo($value->getPathname(), PATHINFO_DIRNAME);
-
-                // Generate the path for the resized image
-                $resizedPath = $originalDirectory . '/' . $resizedFilename;
-
-                // Resize the image to a specific size and save it to the new path
-                $img->resize(300, 215)->save($resizedPath, 90);
-                // Check the file size and reduce the quality further if needed
-                // while (filesize($file->getPathname()) > 10240) {
-                //     $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
-                //    // $img->save($file->getPathname(), $img->getEncodedQuality() - 10);
-                // }
-                // Add the resized image to the same media object
-                $model->addMedia($resizedPath)
-                    ->usingFileName($resizedFilename)
-                    ->toMediaCollection($name);
+                // Store the resized image in Cloudflare R2
+                //storeInCloudflareR2($resizedImageData['path'], $resizedImageData['filename']);
+    
+                // Delete the temporary file
+    
+    
+                $model->addMedia($resizedImageData['path'])
+                    ->toMediaCollection($name, 's3');
+    
+                File::delete($resizedImageData['path']);
                 //$model->addMedia($value)->toMediaCollection($name);
             }
         } else {
+            // $mediaItem = $model->addMedia($file)->toMediaCollection();
+            // $img = \Image::make($file->getPathname());
+            // // Generate a unique filename for the resized image
+            // $resizedFilename = $file->getClientOriginalName();
+            // // Get the directory path of the original image
+            // $originalDirectory = pathinfo($file->getPathname(), PATHINFO_DIRNAME);
+            // // Generate the path for the resized image
+            // $resizedPath = $originalDirectory . '/' . $resizedFilename;
+            // // Resize the image to a specific size and save it to the new path
+            // $img->resize(300, 215)->save($resizedPath, 90);
+            // // Check the file size and reduce the quality further if needed
+            // // while (filesize($file->getPathname()) > 10240) {
+            // //      $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
+            // //      $img->save($file->getPathname(), $img->getEncodedQuality() - 10);
+            // // }
+            // // Add the resized image to the same media object            
+            // $media = $model->addMedia($resizedPath)->usingFileName($resizedFilename)->toMediaCollection($name);
+            // uploadToCloudflareR2Helper($media);
 
-            //$mediaItem = $model->addMedia($file)->toMediaCollection();
+            // $img = \Image::make($file->getPathname());
+            // $resizedFilename = $file->getClientOriginalName();
+            // $originalDirectory = pathinfo($file->getPathname(), PATHINFO_DIRNAME);
 
-            $img = \Image::make($file->getPathname());
+            // $resizedPath = $originalDirectory . '/' . $resizedFilename;
+            // $img->resize(300, 215)->save($resizedPath, 90);   
 
-            // Generate a unique filename for the resized image
-            $resizedFilename = $file->getClientOriginalName();
+            // $model->addMedia($resizedPath)
+            //     ->usingFileName($resizedFilename)
+            //     ->toMediaCollection($name);
 
-            // Get the directory path of the original image
-            $originalDirectory = pathinfo($file->getPathname(), PATHINFO_DIRNAME);
+            // // Clean up the resized image from the local storage
+            // unlink($resizedPath);
 
-            // Generate the path for the resized image
-            $resizedPath = $originalDirectory . '/' . $resizedFilename;
+            $resizedImageData = resizedImage($file); // Call the resizedImage function to get the resized image data
 
-            // Resize the image to a specific size and save it to the new path
-            $img->resize(300, 215)->save($resizedPath, 90);
-            // Check the file size and reduce the quality further if needed
-            // while (filesize($file->getPathname()) > 10240) {
-            //     $data = $img->encode('jpg', $img->getEncodedQuality() - 10);
-            //    // $img->save($file->getPathname(), $img->getEncodedQuality() - 10);
-            // }
-            // Add the resized image to the same media object
-            $model->addMedia($resizedPath)
-                ->usingFileName($resizedFilename)
-                ->toMediaCollection($name);
+            // Store the resized image in Cloudflare R2
+            //storeInCloudflareR2($resizedImageData['path'], $resizedImageData['filename']);
+
+            // Delete the temporary file
+
+
+            $model->addMedia($resizedImageData['path'])
+                ->toMediaCollection($name, 's3');
+
+            File::delete($resizedImageData['path']);
         }
     }
 
     return true;
 }
+
+// Example function to store the image in Cloudflare R2
+function storeInCloudflareR2($image, $filename)
+{
+    $disk = \Storage::disk('s3');
+
+    $disk->put($filename, $image, 'public');
+    // Return the URL to the image
+
+}
+
+// Example function to get the Cloudflare R2 URL
+function getCloudflareR2Url($model)
+{
+
+    // var_dump($model->id);
+    // exit();
+
+    return env('R2_URL')."/{$model->id}/{$model->file_name}";
+}
+
+function resizedImage($file)
+{
+    $mobileWidth = 800;
+    $mobileHeight = 600;
+
+    $img = \Image::make($file)
+        ->resize($mobileWidth, $mobileHeight, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        })
+        ->encode();
+    // $img = \Image::make($file->getPathname());
+    // $img->resize(800, 600);
+
+    // Generate a unique filename for the resized image with the correct file extension
+    $newFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $file->getClientOriginalExtension();
+
+    // Generate a temporary file path
+    $tempFilePath = sys_get_temp_dir() . '/' . $newFilename;
+
+    // Save the image to the temporary file path
+    $img->save($tempFilePath, 90);
+
+    // Convert the image to WebP format
+    $webpFilename = pathinfo($newFilename, PATHINFO_FILENAME) . '.webp';
+    $webpFilePath = sys_get_temp_dir() . '/' . $webpFilename;
+    $img->save($webpFilePath, 90, 'webp', ['quality' => 90]);
+
+    return [
+        'path' => $webpFilePath,
+        'filename' => $webpFilename,
+    ];
+}
+
+
 
 function getAttachments($attchments)
 {
@@ -381,11 +505,11 @@ function saveBookingActivity($data)
         'message' => $data['activity_message'],
         "ios_badgeType" => "Increase",
         "ios_badgeCount" => 1
-    ];	
-	
+    ];
+
 
     foreach ($sendTo as $to) {
-		
+
         switch ($to) {
             case 'admin':
                 $user = \App\Models\User::getUserByKeyValue('user_type', 'admin');
@@ -626,10 +750,10 @@ function handymanNames($collection)
 function degreeArray()
 {
     $degree = [
-        ['name' => 'Below 10th', 'id' => '0', 'slug'=>'below-10th-jobs'],
-        ['name' => '10th/12th', 'id' => '1', 'slug'=>'10th-12th-jobs'],
-        ['name' => 'ITI/Diploma', 'id' => '2', 'slug'=>'iti-dipoloma-jobs'],
-        ['name' => 'Degree', 'id' => '3', 'slug'=>'degree-jobs']
+        ['name' => 'Below 10th', 'id' => '0', 'slug' => 'below-10th-jobs'],
+        ['name' => '10th/12th', 'id' => '1', 'slug' => '10th-12th-jobs'],
+        ['name' => 'ITI/Diploma', 'id' => '2', 'slug' => 'iti-dipoloma-jobs'],
+        ['name' => 'Degree', 'id' => '3', 'slug' => 'degree-jobs']
     ];
     return $degree;
 }
@@ -912,6 +1036,9 @@ function countUnitvalue($unit)
             break;
     }
 }
+
+
+
 
 function imageExtention($media)
 {
@@ -1313,8 +1440,8 @@ function get_provider_plan_limit($provider_id, $type)
 }
 function sendNotification($type, $user, $data)
 {
-	
-	
+
+
     $app_id = ENV('ONESIGNAL_API_KEY');
     $rest_api_key = ENV('ONESIGNAL_REST_API_KEY');
     if ($type === 'user') {
@@ -1610,6 +1737,14 @@ function sendWhatsAppText($jobid, $status)
             );
             break;
 
+        case 'featured':
+
+            $variables = array(
+                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏, \n\nஉங்கள் வேலை வாய்ப்பு தகவல் தமிழன் ஜாப்ஸ் பிரீமிம் (Featured Jobs)-இல் கொண்டுவரபட்டுள்ளது. 👑. \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n\n```உங்கள் வெற்றி எங்கள் வெற்றி, நன்றி🙏```\n\n_Support: 8233823308_"
+            );
+            break;
+
+
         case 'active':
 
             $variables = array(
@@ -1618,7 +1753,7 @@ function sendWhatsAppText($jobid, $status)
             break;
 
         case 'rejected':
-
+       
             $variables = array(
                 '{data}' => "அன்பார்ந்த, *{$userName}*! வணக்கம் 🙏, \n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு குழுவின் (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது.\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
             );
@@ -1669,8 +1804,8 @@ function sendWhatsAppText($jobid, $status)
     $curl = curl_init();
 
     $postFields = array(
-        'appkey' => '4881561c-3d5e-4370-af32-571773b0bab0',
-        'authkey' => 'FL424q6knyBhVolmNWSzT2jlNCpnzIwpivPtytmyXLOHAIclHA',
+        'appkey' => 'f968d928-adbd-4fb5-895d-21a2c07a4d10',
+        'authkey' => 'vWreQ9PltLOtQmAvDCkbJXWsVomnDnLOMnChOzK9iZENWR6K3o',
         'to' => '+91' . $mobile_number,
         'template_id' => $templateId,
         'variables' => $variables // convert the array into a JSON string
@@ -1708,32 +1843,31 @@ function sendWhatsAppTextToExecutivePay($jobid, $status)
     $user = \App\Models\User::find($job->user_id);
     $payment = \App\Models\JobsPayment::find($job->payment_id);
 
-    if($payment && $payment != null){
-        $amount = $payment->total_amount?? "0";
-    }
-	else{
-        $amount ="0";
+    if ($payment && $payment != null) {
+        $amount = $payment->total_amount ?? "0";
+    } else {
+        $amount = "0";
     }
 
     if ($user && $user->first_name != null) {
-        $userName = $user->first_name.$user->last_name?? '';
+        $userName = $user->first_name . $user->last_name ?? '';
     } else {
-        $userName = $job->contact_number?? '';
+        $userName = $job->contact_number ?? '';
     }
 
     $mobileNumbers = ['8675002943', '9655008990']; //$booking->contact_number;
     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
     switch ($status) {
-       
+
         case 'paid':
             $variables = array(
-                '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nDear Tamilanjobs Admin/Executive, The job with ID: {$job->id} payment has been paid successfully.✅ \n\n *Name:* {$userName}\n\n *Amount:* {$amount}, \n\n *Company:* {$job->company_name}\n *Post Name:* {$job->job_role}\n *Vacancies:* {$job->vacancy}\n *Job ID:* {$job->id}\n\n_Support: 8233823308_",
+                '{data}' => "Payment Paid ✅\n\n, The job with ID: {$job->id} payment has been paid successfully.✅ \n\n *Name:* {$userName}\n\n *Contact Number:* {$job->contact_number}\n *Amount:* {$amount}, \n\n *Company:* {$job->company_name}\n *Post Name:* {$job->job_role}\n *Vacancies:* {$job->vacancy}\n *Job ID:* {$job->id}\n\n_Support: 8233823308_",
             );
             break;
         case 'failed':
             $variables = array(
-                '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nDear Tamilanjobs Admin/Executive, The job with ID: {$job->id} payment has been failed.❌ \n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n_Support: 8233823308_",
+                '{data}' => "Payment Failed ❌\n\n, The job with ID: {$job->id} payment has been failed.❌ \n\n*Contact Number:* {$job->contact_number}\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n_Support: 8233823308_",
             );
             break;
     }
@@ -1775,26 +1909,24 @@ function sendWhatsAppTextToExecutivePay($jobid, $status)
 
     curl_close($curl);
 
-
-    
-
     return $response;
 }
+
+
 
 function sendWhatsAppTextToExecutive($jobid, $status)
 {
     $job = \App\Models\Jobs::find($jobid);
-  
+
     $mobileNumbers = ['8675002943', '9655008990']; //$booking->contact_number;
     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
     switch ($status) {
         case 'job_post':
             $variables = array(
-                '{data}' => "Greetings from *Tamilanjobs!* 🎉\n\nDear Tamilanjobs Admin/Executive, The job with ID: {$job->id} has been posted successfully. \n\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n_Support: 8233823308_",
+                '{data}' => "Job post Received ✅ \n\n, The job with ID: {$job->id} has been posted successfully. \n\n *Company:* {$job->company_name}\n*Contact Number:* {$job->contact_number}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\nco: 8233823308_",
             );
             break;
-    
     }
 
 
@@ -1835,7 +1967,111 @@ function sendWhatsAppTextToExecutive($jobid, $status)
     curl_close($curl);
 
 
-    
+
 
     return $response;
+}
+
+
+function sentSMS($contacts, $text)
+{
+
+
+    // $api_key = 'ca2b0f99-5cea-4447-9635-b2d94b0c81a3';
+    // $ClientId ="c5aa5dc4-e92f-43de-90a0-3d20807162d8";
+    // $id = 'XTTECH';
+    // $sms_text = "Welcome to XTTECH Dear jobs7 your OTP is $otp";
+    // date_default_timezone_set("Asia/Calcutta");
+    // $newtimestamp = strtotime(date('Y-m-d H:i:s').'+1 minute');
+    // $dateTime = date('Y-m-d H:i:s', $newtimestamp);
+
+    // $api_url = str_replace(' ', '+', "https://sms.nettyfish.com/api/v2/SendSMS?ApiKey=$api_key&ClientId=$ClientId&SenderId=$id&Message=$sms_text&MobileNumbers=$contacts&Is_Unicode=true&Is_Flash=true&SchedTime=$dateTime");
+
+    // $curl = curl_init();
+    // curl_setopt_array($curl, array(
+    // CURLOPT_RETURNTRANSFER => 1,
+    // CURLOPT_URL => $api_url
+
+    // ));
+    // $Response = curl_exec($curl);
+    // $retcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    // if ($retcode == 200) {
+    //     return true;
+    // } else {
+    //    return false;
+
+    // }
+    // curl_close($curl);
+    // Account details
+
+    #################################################################################################################
+    // $apiKey = urlencode('NzQ0NDQ2NDk2YTU0Mzc0MTc1MzY0ZDU2NDg1NjU1Mzc=');
+
+    // // Message details
+    // $numbers = array($contacts);
+    // $sender = urlencode('TAMLAN');
+
+
+    // $message = rawurlencode($otp . ' is your OTP to verify your mobile number on the Jobs7 app/website.' . $signCode);
+
+    // $numbers = implode(',', $numbers);
+
+    // //  Prepare data for POST request
+    // $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+
+    // // Send the POST request with cURL
+    // $ch = curl_init('https://api.textlocal.in/send/');
+    // curl_setopt($ch, CURLOPT_POST, true);
+    // curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // $response = curl_exec($ch);
+    // curl_close($ch);
+
+    // $res = json_decode($response);
+
+
+    // if ($res->status == 'success') {
+    //     return $data['status'] = "Success";
+    // } else {
+    //     return $data['status'] = "Failure";
+    // }
+
+
+    // exit();
+    //----------------------------------------------------sms my dream----------------------------------------------------------- 
+
+    // $key = "gIzOiWdbFTqrCWVq";
+    // $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
+    // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
+    // $message_content = urlencode($otp . ' is your verification code for Tamilanjobs - Find Jobs Locally. ' . $signCode);
+
+    // $senderid = "TAMLAN";
+
+    // $url = "http://app.mydreamstechnology.in/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
+
+    // $output = file_get_contents($url);    /*default function for push any url*/
+
+    // return json_decode($output, true);
+    // exit();
+
+    //return json_decode($output, true);   
+    //return [
+    //  'status' => 'Success',
+    // 'message' => 'Please Enter Valid OTP for login'
+
+    // ];
+    //----------------------------------------------------sms eagleminds tech----------------------------------------------------------- 
+    $key = "nPD1MSa7HP0NczP0";
+    $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
+    // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
+    $message_content = urlencode('2122 is your verification code for Tamilanjobs - Find Jobs Locally. 45dfdf7787');
+
+    $senderid = "TAMLAN";
+
+    $url = "https://sms.eagleminds.net/vb/apikey.php?apikey=$key&senderid=$senderid&number=$mbl&message=$message_content";
+
+    $output = file_get_contents($url);    /*default function for push any url*/
+
+    return json_decode($output, true);
+    exit();
 }

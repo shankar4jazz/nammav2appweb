@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
@@ -14,13 +13,12 @@ use App\Http\Controllers\API;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     //$token = csrf_token();
     return $request->user();
 });
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    
     Route::get('admin-dashboard',[ API\DashboardController::class, 'adminDashboard' ]);
     Route::post('category-save', [ App\Http\Controllers\CategoryController::class, 'store' ] );
     Route::post('category-delete/{id}', [ App\Http\Controllers\CategoryController::class, 'destroy' ] );
@@ -52,8 +50,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('providerdocument-delete/{id}', [ App\Http\Controllers\ProviderDocumentController::class, 'destroy' ] );
     Route::post('providerdocument-action',[ App\Http\Controllers\ProviderDocumentController::class, 'action' ]);
 
-    Route::post('providerpayout-save', [ App\Http\Controllers\ProviderPayoutController::class, 'store' ] );
-    
+    Route::post('providerpayout-save', [ App\Http\Controllers\ProviderPayoutController::class, 'store' ] );            
     Route::post('coupon-save', [ App\Http\Controllers\CouponController::class, 'store' ] );
     Route::post('coupon-delete/{id}', [ App\Http\Controllers\CouponController::class, 'destroy' ] );
     Route::post('coupon-action',[ App\Http\Controllers\CouponController::class, 'action' ]);

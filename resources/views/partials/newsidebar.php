@@ -141,7 +141,7 @@ use Lavary\Menu\Menu;
                     ->data('permission', 'handymanpayout list') 
                     ->prepend('<i class="ri-list-unordered"></i>')
                     ->link->attr(['class' => '']);
-           
+         
 
         $menu->add('<span>'.__('messages.users').'</span>', ['route' => 'user.index'])
                 ->prepend('<i class="fa fa-users"></i>')

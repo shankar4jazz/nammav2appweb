@@ -8,10 +8,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class 
-
-
-Company extends Model implements HasMedia
+class Company extends Model implements HasMedia
 {
     use HasFactory,InteractsWithMedia,SoftDeletes;
     protected $table = 'companies';
@@ -23,8 +20,11 @@ Company extends Model implements HasMedia
         'user_id'    => 'integer',
         'status'    => 'integer',
     ];
+
     public function users(){
+
         return $this->belongsTo('App\Models\User','user_id','id')->withTrashed();
+        
     }
 
 

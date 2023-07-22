@@ -17,28 +17,32 @@ class JobsPaymentController extends Controller
         $data['datetime'] = isset($request->datetime) ? date('Y-m-d H:i:s', strtotime($request->datetime)) : date('Y-m-d H:i:s');
         $result = JobsPayment::updateOrCreate(['job_id' => $data['job_id']], $data);
 
-        $startDate = date('Y-m-d'); // use the current date as the start date
-        $endDate = date('Y-m-d', strtotime($startDate . ' + ' . $request->trial_period . ' days')); // add 30 days to the start date to get the end date
 
         $booking = Jobs::find($request->job_id);
         $booking->payment_id = $result->id;
         if (isset($data['status'])) {
             $booking->status = $data['status'];
         }
-        $booking->end_date = $endDate;
+
         $booking->plan_id = $request->plan_id;
-        $booking->save();
+
         $status_code = 200;
         if ($result->payment_status == 'paid') {
+            $startDate = date('Y-m-d'); // use the current date as the start date
+            $endDate = date('Y-m-d', strtotime($startDate . ' + ' . $request->trial_period . ' days')); // add 30 days to the start date to get the end date
+
+            $booking->end_date = $endDate;
+            $booking->save();
             $message = __('messages.payment_completed');
             sendWhatsAppText($booking->id, 'paid');
-            sendWhatsAppTextToExecutive($result->job_id, 'paid');
+            sendWhatsAppTextToExecutivePay($result->job_id, 'paid');
         } else {
             $message = __('messages.payment_message', ['status' => __('messages.' . $result->payment_status)]);
         }
 
         if ($result->payment_status == 'failed') {
             $status_code = 400;
+            $booking->save();
             sendWhatsAppText($booking->id,  'failed');
         }
         return comman_message_response($message, $status_code);
@@ -90,17 +94,15 @@ class JobsPaymentController extends Controller
 
             ];
             return comman_custom_response($otp_response);
-        }
-        else{
+        } else {
 
             $otp_response = [
 
                 'status' => false,
                 'is_payment' => false
-                
+
             ];
             return comman_custom_response($otp_response);
-
         }
     }
 }

@@ -23,6 +23,19 @@ use App\Models\PaymentGateway;
 
 class CommanController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/country-list",
+     *     tags={"Countries"},
+     *     summary="Get all Country for REST API",
+     *     operationId="getCountryList",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     ),
+     * )
+     */
+
     public function getCountryList(Request $request)
     {
         $list = Country::get();
@@ -30,15 +43,57 @@ class CommanController extends Controller
         return response()->json($list);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/state-list",
+     *     tags={"states"},
+     *     summary="Get all State list for REST API",
+     *     operationId="getStateList",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     ),
+     * )
+     */
     public function getStateList(Request $request)
     {
-        $list = State::where('country_id', $request->country_id)->get();
+        $list = State::where('country_id', $request->country_id);
 
-        return response()->json($list);
+        $orderBy = $request->orderby ? $request->orderby : 'asc';
+        
+        $per_page = 50;
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
+                $per_page = $request->per_page;
+            }
+            if ($request->per_page === 'all') {
+                $per_page = $list->count();
+            }
+        }
+        
+        $list = $list->orderBy('id', $orderBy)->paginate($per_page);
+
+        $items = $list->map(function ($state) {
+            return [
+                'id' => $state->id,
+                'name' => $state->name,
+                'country_id' => $state->country_id
+            ];
+        });
+        
+        return response()->json($items);
+
     }
     public function getDistrictList()
     {
         $list = District::orderBy('name', 'asc')->where('state_id', 35)->get();
+
+        return response()->json($list);
+    }
+
+    public function getDistrictListByStateId(Request $request)
+    {
+        $list = District::orderBy('name', 'asc')->where('state_id',  $request->state_id)->get();
 
         return response()->json($list);
     }
@@ -61,11 +116,11 @@ class CommanController extends Controller
         return response()->json($edu_array);
     }
 
-    public function getVersion()
-    {
-        $version = versionArray();
-        return response()->json($version);
-    }
+    // public function getVersion()
+    // {
+    //     $version = versionArray();
+    //     return response()->json($version);
+    // }
     public function getProviderTax(Request $request)
     {
         $provider_id  = !empty($request->provider_id) ? $request->provider_id : auth()->user()->id;

@@ -90,3 +90,4 @@ class JobsResource extends JsonResource
         ];
     }
 }
+ 
