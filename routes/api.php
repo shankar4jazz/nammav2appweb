@@ -38,6 +38,7 @@ Route::post('get-call-activities', [API\JobCallActivitiesController::class, 'get
 Route::get('today-expiry', [API\JobsController::class, 'notifyUsersOfExpiringTodayJobs']);
 Route::get('tmrw-expiry', [API\JobsController::class, 'notifyUsersOfExpiringTmrwJobs']);
 Route::get('jobs-expiry', [API\JobsController::class, 'jobsExpire']);
+Route::get('jobs-expiry-date', [API\JobsController::class, 'jobsExpireData']);
 
 //jobs-reports
 Route::post('save-reports', [API\JobsReportsController::class, 'saveReports']);
