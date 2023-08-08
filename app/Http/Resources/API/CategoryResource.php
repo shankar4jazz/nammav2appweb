@@ -14,7 +14,7 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        $extention = imageExtention(getSingleMedia($this, 'category_image',null));
+        $extention = imageExtention(getSingleMedia($this, 'category_image',null));        
         return [
             'id'            => $this->id,
             'name'          => $this->name,
@@ -26,6 +26,7 @@ class CategoryResource extends JsonResource
             'category_image'=> getSingleMedia($this, 'category_image',null),
             'category_extension' => $extention,
             'services' => $this->services->count(),
+            'location _services'=> $this->location_service,
             'deleted_at'        => $this->deleted_at,
         ];
     }

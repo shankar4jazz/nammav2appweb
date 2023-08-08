@@ -99,6 +99,7 @@ class JobsViewResource extends JsonResource
             'disclose_company' => $this->disclose_company,
             'apply_status' => $hasApplied,
             'call_status' => $hasCalled,
+            'question' => $this->cross_question
         ];
     }
 }

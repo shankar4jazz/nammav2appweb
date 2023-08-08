@@ -606,10 +606,12 @@ class JobsController extends Controller
 
                 $booking->where('status', 1);
             } else if ($request->district_id == 'jobs-in-all-districts') {
+                if (isset($request->jobcategory_id)) {
+                    $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
 
-                $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
-                $booking->where('jobcategory_id', $cat->id);
-                $booking->where('status', 1);
+                    $booking->where('jobcategory_id', $cat->id);
+                    $booking->where('status', 1);
+                }
             } else if ($request->district_id == "null") {
 
                 $booking->where('status', 1);
@@ -623,9 +625,12 @@ class JobsController extends Controller
                 });
             } else {
 
-                $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
+
                 $district =  District::where('slug', $request->district_id)->get();
-                $booking->where('jobcategory_id', $cat->id);
+                if (isset($request->jobcategory_id)) {
+                    $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
+                    $booking->where('jobcategory_id', $cat->id);
+                }
                 $booking->where('status', 1);
                 $booking->whereHas('jobDistricts', function ($a) use ($district) {
                     $a->where('district_id', $district[0]->id);
@@ -735,7 +740,7 @@ class JobsController extends Controller
             }
         }
 
-      
+
 
         $start = ($page - 1) * $per_page;
 

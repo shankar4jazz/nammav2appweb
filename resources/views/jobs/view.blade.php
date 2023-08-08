@@ -16,6 +16,7 @@
                                     if ($payment_status == 'pending') {
                                     $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->payment_id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Add Payment') . '</a>';
                                     } else if ($payment_status == 'paid') {
+                                  
                                     $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->payment_id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Edit Payment') . '</a>';
                                     } else if ($payment_status == 'failed') {
                                     $status = '<a href="' . route('jobs-payment.create', ['id' => $providerdata->payment_id]) . '" class="btn btn--primary text-capitalize btn--lg mw-75">' . __('Add Payment') . '</a>';
@@ -37,6 +38,10 @@
                                 <div class="statistics-card statistics-card__style2 statistics-card__already-withdraw">
                                     <h2>{{$providerdata['total_applicants'] ?? 0}}</h2>
                                     <h3>{{__('Total Application')}}</h3>
+                                </div>
+
+                                <div class="statistics-card statistics-card__style2 statistics-card__already-withdraw">                                
+                                    <a href="{{route('job_invoice_pdf',$providerdata->id)}}" class="btn btn--primary text-capitalize btn--lg mw-75">{{ __('Invoice')}}</a>'
                                 </div>
                             </div>
                         </div>

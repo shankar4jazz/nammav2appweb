@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JobsPayment;
 use App\Models\Jobs;
+use App\Models\JobsPlans;
 use App\Models\JobsPlanCategory;
 
 use App\DataTables\JobsPaymentDataTable;
@@ -31,30 +32,36 @@ class JobsPaymentController extends Controller
     public function create(Request $request)
     {
         $id = $request->id;
+
         $auth_user = authSession();
-        $plan = JobsPayment::find($id);
 
-        $plan_category = JobsPlanCategory::where('status', 1)->get();
+        $plan = JobsPayment::find($id);        
 
-
+        $plan_category = JobsPlanCategory::where('status', 1)->get();       
+     
         $pageTitle = trans('messages.update_form_title', ['form' => trans('messages.plan')]);
+
         $decoded_description = '';
+        $plans = null;
         if ($plan == null) {
             $pageTitle = trans('messages.add_button_form', ['form' => trans('messages.plan')]);
             $plan = new JobsPayment();
-        } else {
+        } 
+        else {
+            $plans = JobsPlans::where('id', $plan->plan_id)->first();
             $decoded_description = base64_decode($plan->description);
             $is_base64_encoded = base64_encode(base64_decode($plan->description)) === $plan->description;
 
             if ($is_base64_encoded) {
-
+                
                 $decoded_description;
             } else {
 
                 $decoded_description = $plan->description; // Outputs "Hello World!"
             }
         }
-        return view('jobspayment.create', compact('pageTitle', 'plan', 'plan_category', 'auth_user', 'decoded_description'));
+      
+        return view('jobspayment.create', compact('pageTitle', 'plan', 'plans', 'plan_category', 'auth_user', 'decoded_description'));
     }
 
 
@@ -91,6 +98,7 @@ class JobsPaymentController extends Controller
         $result = JobsPayment::updateOrCreate(['id' => $requestData['id']], $planData);
         $startDate = date('Y-m-d'); // use the current date as the start date
 
+
         $endDate = date('Y-m-d', strtotime('+' . $requestData['trial_period'] . 'days', strtotime($startDate))); // add 30 days to the start date to get the end date
         //$endDate = date('Y-m-d', strtotime($startDate . ' + ' . $requestData['trial_period'] . ' days')); // add 30 days to the start date to get the end date
 
@@ -106,9 +114,6 @@ class JobsPaymentController extends Controller
         if ($result->payment_status == 'failed') {
             sendWhatsAppText($booking->id, 'failed');
         }
-
-
-
         $message = trans('messages.update_form', ['form' => trans('messages.plan')]);
 
         if ($result->wasRecentlyCreated) {

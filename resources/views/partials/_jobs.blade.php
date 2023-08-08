@@ -11,5 +11,9 @@
         <li class="nav-item {{request()->routeIs('applicant.details') ? 'active' : ''}}">
             <a class="nav-link" href="{{ route('applicant.details',$providerdata->id) }}"> {{__('Application Lists')}}</a>
         </li>
+
+        <li class="nav-item {{request()->routeIs('report.details') ? 'active' : ''}}">
+            <a class="nav-link" href="{{ route('report.details',$providerdata->id) }}"> {{__('Report Lists')}}</a>
+        </li>
     </ul>
 </div>

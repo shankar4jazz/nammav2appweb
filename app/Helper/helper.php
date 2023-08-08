@@ -192,12 +192,12 @@ function storeAudioFile($model, $file, $name)
         }
         if (is_array($file)) {
             foreach ($file as $key => $value) {
-                $model->addMedia($value)->toMediaCollection($name);
+                $model->addMedia($value)->toMediaCollection($name, 's3');
                 
             }
         } else {
             // Remove the image resizing code
-            $model->addMedia($file)->toMediaCollection($name);
+            $model->addMedia($file)->toMediaCollection($name, 's3');
            
         }
     }
@@ -2062,9 +2062,9 @@ function sentSMS($contacts, $text)
     // ];
     //----------------------------------------------------sms eagleminds tech----------------------------------------------------------- 
     $key = "nPD1MSa7HP0NczP0";
-    $mbl = $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
+    $mbl = '91'.$contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
     // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
-    $message_content = urlencode('2122 is your verification code for Tamilanjobs - Find Jobs Locally. 45dfdf7787');
+    $message_content = urlencode('http://bit.ly/3IE6Vue is your verification code for Tamilanjobs - Find Jobs Locally. Nammav2app');
 
     $senderid = "TAMLAN";
 

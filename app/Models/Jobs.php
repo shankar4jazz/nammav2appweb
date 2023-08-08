@@ -113,8 +113,17 @@ class Jobs extends Model implements HasMedia
        // return $this->hasMany(JobCallActivities::class, 'jobs_id', 'id');
        // return $this->belongsTo(JobCallActivities::class, 'jobs_id', 'id');
        return $this->hasMany(JobCallActivities::class, 'jobs_id', 'id')
-       ->select(['id', 'jobs_id', 'jobseeker_id', 'activity_type', 'activity_message', 'updated_at']);
+       ->select(['id', 'jobs_id', 'jobseeker_id', 'activity_type', 'activity_message', 'updated_at', 'apply_status', 'reason', 'datetime']);
     }
+
+    public function jobsReports()
+    {
+       // return $this->hasMany(JobCallActivities::class, 'jobs_id', 'id');
+       // return $this->belongsTo(JobCallActivities::class, 'jobs_id', 'id');
+       return $this->hasMany(JobsReports::class, 'jobs_id', 'id')
+       ->select(['id', 'jobs_id', 'jobseeker_id', 'report_type', 'report_message', 'updated_at']);
+    }
+
     public function scopeMyJobs($query)
     {
         $user = auth()->user();

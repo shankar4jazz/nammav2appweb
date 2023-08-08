@@ -15,13 +15,15 @@ class JobCallAcitvitiesResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
+            'id'              => $this->id,
             'job_id'          => $this->jobs_id,
-            'jobseeker_id'        => $this->jobseeker_id,
-            'jobseeker_name'        =>optional($this->jobseeker)->first_name,
-            'contact_number'        =>optional($this->jobseeker)->contact_number,
+            'jobseeker_id'    => $this->jobseeker_id,
+            'jobseeker_name'  => optional($this->jobseeker)->first_name,
+            'contact_number'  => optional($this->jobseeker)->contact_number,
             'activity_type'   => $this->activity_type,
-            'activity_message'        => $this->activity_message,
+            'activity_message'=> $this->activity_message,
+            'datetime'        => $this->datetime,
+            'apply_status'    => $this->apply_status
         ];
     }
 }

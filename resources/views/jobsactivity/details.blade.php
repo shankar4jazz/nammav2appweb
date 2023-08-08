@@ -19,8 +19,7 @@
                                                         <th scope="col">{{__('name')}}</th>
                                                         <th scope="col">{{__('type')}}</th>
                                                         <th scope="col">{{__('message')}}</th>
-                                                        <th scope="col">{{__('date time')}}</th>                                                      
-                                                      
+                                                        <th scope="col">{{__('date time')}}</th>                                                     
                                                        
                                                     </tr>
                                                 </thead>

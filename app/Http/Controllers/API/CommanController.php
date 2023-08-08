@@ -159,6 +159,7 @@ class CommanController extends Controller
     public function getSearchList(Request $request)
     {
         $service = Service::where('status', 1)->where('service_type', 'service')->with(['providers', 'category', 'serviceRating'])->orderBy('created_at', 'desc');
+        
         if ($request->has('provider_id') && $request->provider_id != '') {
             $service->whereIn('provider_id', explode(',', $request->provider_id));
         }

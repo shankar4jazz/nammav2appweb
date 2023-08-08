@@ -44,6 +44,7 @@ Route::post('check-jobs-payment', [API\JobsPaymentController::class, 'checkPayme
 Route::post('save-call-activities', [API\JobCallActivitiesController::class, 'saveCallActivities']);
 Route::post('get-call-activities', [API\JobCallActivitiesController::class, 'getCallActivitiesByJobId']);
 
+
 //jobs-expiry
 Route::get('today-expiry', [API\JobsController::class, 'notifyUsersOfExpiringTodayJobs']);
 Route::get('tmrw-expiry', [API\JobsController::class, 'notifyUsersOfExpiringTmrwJobs']);
@@ -90,7 +91,7 @@ Route::get('get-payment-config', [API\CommanController::class, 'getPaymentConfig
 Route::post('country-list', [API\CommanController::class, 'getCountryList']);
 Route::post('state-list', [API\CommanController::class, 'getStateList']);
 Route::get('district-list', [API\CommanController::class, 'getDistrictList']);
-Route::post('get-district', [API\CommanController::class, 'getDistrictListByStateId']);
+Route::get('get-district', [API\CommanController::class, 'getDistrictListByStateId']);
 Route::get('city-list', [API\CommanController::class, 'getCityList']);
 
 Route::get('education-categories', [API\CommanController::class, 'getEducationCategory']);
@@ -99,11 +100,13 @@ Route::get('search-list', [API\CommanController::class, 'getSearchList']);
 Route::get('slider-list', [API\SliderController::class, 'getSliderList']);
 Route::get('top-rated-service', [API\ServiceController::class, 'getTopRatedService']);
 Route::post('provider-leads', [API\ProviderLeadsController::class, 'saveLeads']);
+Route::get('qualifications', [API\QualificationController::class, 'getQualificationsList']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::Post('message-sent', [API\SmsController::class, 'sendSms']);
 Route::post('register', [API\User\UserController::class, 'register']);
 Route::post('login', [API\User\UserController::class, 'login']);
 Route::post('truecaller-login', [API\User\UserController::class, 'trueCallerLogin']);
@@ -125,6 +128,7 @@ Route::post('handyman-reviews', [API\User\UserController::class, 'handymanReview
 Route::post('service-reviews', [API\ServiceController::class, 'serviceReviewsList']);
 Route::get('post-job-status', [API\PostJobRequestController::class, 'postRequestStatus']);
 Route::get('get-version', [API\CommanController::class, 'getVersion']);
+Route::get('job-invoice/{id}', [App\Http\Controllers\JobsController::class, 'createPDF']);
 
 Route::get('/sse-version', function () {
     header('Content-Type: text/event-stream');
@@ -142,11 +146,18 @@ Route::get('/sse-version', function () {
     return $response;
 });
 
+Route::post('apply-jobs', [API\JobCallActivitiesController::class, 'getCallActivitiesByJobseekerId']);
+
+Route::get('education-jobseekers', [API\JobseekerController::class, 'getJobseekerDetailsByEducation']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
+    
+    Route::post('apply-status', [API\JobCallActivitiesController::class, 'setStatus']);
+    Route::get('job-invoice/{id}', [App\Http\Controllers\JobsController::class, 'createPDF']);
     Route::post('save-jobs', [App\Http\Controllers\JobsController::class, 'store']);
     Route::post('add-jobs', [App\Http\Controllers\JobsController::class, 'saveJobPost']);
+
+
     Route::post('create-jobs', [App\Http\Controllers\TamilanJobsController::class, 'store']);
     Route::post('service-save', [App\Http\Controllers\ServiceController::class, 'store']);
     Route::post('service-save', [App\Http\Controllers\ServiceController::class, 'store']);

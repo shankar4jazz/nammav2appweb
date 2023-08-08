@@ -18,7 +18,7 @@
                         {{ Form::hidden('id') }}
                         <input type="hidden" id="employer_id" name="employer_id" value="{{$plan->employer_id}}">
                         <input type="hidden" id="all_total_amount" name="all_total_amount" value="{{$plan->total_amount}}">
-                        <input type="hidden" id="trial_period" name="trial_period" value="{{$plan->trial_period}}">
+                        <input type="hidden" id="trial_period" name="trial_period" value="{{$plans->trial_period ?? ''}}">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 {{ Form::label('job_id', __('messages.select_name',[ 'select' => __('Job') ]),['class'=>'form-control-label'],false) }}

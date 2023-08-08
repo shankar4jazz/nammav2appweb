@@ -311,8 +311,9 @@ class UserController extends Controller
         $user->fill($request->all())->update();
 
         if (isset($request->profile_image) && $request->profile_image != null) {
-            $user->clearMediaCollection('profile_image');
-            $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image');
+            //$user->clearMediaCollection('profile_image');
+            storeMediaFile($user, $request->profile_image, 'profile_image');
+            //$user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image', 's3');
         }
 
         $user_data = User::find($user->id);
@@ -665,8 +666,7 @@ class UserController extends Controller
         return comman_custom_response($response);
     }
     public function uploadResume(UserRequest $request)
-    {
-
+    {      
         if ($request->has('id') && !empty($request->id)) {
 
             $user = User::find((int)$request->id);
@@ -677,8 +677,10 @@ class UserController extends Controller
 
         $user->fill($request->all())->update();
         if (isset($request->resume) && $request->resume != null) {
-            $user->clearMediaCollection('resume');
-            $user->addMediaFromRequest('resume')->toMediaCollection('resume');
+            //$user->clearMediaCollection('resume');
+
+            
+            $user->addMediaFromRequest('resume')->toMediaCollection('resume', 's3');
         }
         $response = [
             'status' => true,
@@ -711,13 +713,17 @@ class UserController extends Controller
         $user->fill($request->all())->update();
 
         if (isset($request->profile_image) && $request->profile_image != null) {
-            $user->clearMediaCollection('profile_image');
-            $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image');
+            // $user->clearMediaCollection('profile_image');
+           // $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image', 's3');
+           //storeMediaFile($result, $request->jobs_image, 'jobs_image');
+           storeMediaFile($user, $request->profile_image, 'profile_image');
+
         }
 
         if (isset($request->resume) && $request->resume != null) {
-            $user->clearMediaCollection('resume');
-            $user->addMediaFromRequest('resume')->toMediaCollection('resume');
+            // $user->clearMediaCollection('resume');
+           
+           $user->addMediaFromRequest('resume')->toMediaCollection('resume', 's3');
         }
 
         $user_data = User::find($user->id);

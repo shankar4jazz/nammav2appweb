@@ -68,7 +68,7 @@ class JobsCategoryController extends Controller
             return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
         $data = $request->all();
-       
+               
         $data['is_featured'] = 0;
         if($request->has('is_featured')){
 			$data['is_featured'] = 1;

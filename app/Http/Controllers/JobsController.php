@@ -1,11 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-
-
-
-
 use Illuminate\Http\Request;
 use App\Models\Jobs;
 use App\Models\Service;
@@ -16,6 +11,8 @@ use App\Http\Requests\JobsRequest;
 use App\Models\JobCallActivities;
 use App\Models\JobsViews;
 use App\Models\User;
+use PDF;
+use App\Models\AppSetting;
 
 class JobsController extends Controller
 {
@@ -380,6 +377,16 @@ class JobsController extends Controller
         //
     }
 
+    public function createPDF($id)
+    {
+        $data = AppSetting::take(1)->first();
+        $jobsdata = Jobs::with('jobsPayment','jobsPlans', 'user', 'district', 'city')->find($id);
+
+        
+        $pdf = Pdf::loadView('jobs.invoice', ['bookingdata' => $jobsdata, 'data' => $data]);        
+        return $pdf->download('invoice.pdf');
+    }
+
     public function paymentDetails(Request $request, $id)
     {
         $auth_user = authSession();
@@ -456,18 +463,14 @@ class JobsController extends Controller
                 'message' => $booking->activity_message ?? '-',
                 'datetime' => $booking->updated_at?->format('d-m-Y h:i:s A') ?? '-',
                 'job_id' => $providerdata->id ?? '-',
-                'jobseeker_name' => $jobseekerDetails->first_name ?? '-'
+                'jobseeker_name' => $jobseekerDetails->first_name ?? '-',
+                'apply_status' => $jobseekerDetails->apply_status ?? '-'
 
             ];
         }
-
-
         if ($request->ajax()) {
             return Datatables::of($earningData)
                 ->addIndexColumn()
-
-
-
                 ->make(true);
         }
         if (empty($providerdata)) {
@@ -476,6 +479,45 @@ class JobsController extends Controller
         }
         $pageTitle = __('messages.view_form_title', ['form' => __('messages.provider')]);
         return view('jobsactivity.details', compact('pageTitle', 'earningData', 'auth_user', 'providerdata'));
+    }
+
+    public function reportDetails(Request $request, $id)
+    {
+        $auth_user = authSession();
+   
+        $providerdata = Jobs::with('jobsReports')->where('id', $id)->first();
+
+      
+
+        $earningData = array();
+
+        foreach ($providerdata->jobsReports as $booking) {
+
+            $jobseekerDetails = User::where('id', $booking->jobseeker_id)
+                ->where('user_type', 'jobseeker')
+                ->first();
+
+            $earningData[] = [
+                'type' => $booking->report_type ?? '-',
+                'message' => $booking->report_message ?? '-',
+                'datetime' => $booking->updated_at?->format('d-m-Y h:i:s A') ?? '-',
+                'job_id' => $providerdata->id ?? '-',
+                'jobseeker_name' => $jobseekerDetails->first_name ?? '-',
+                'contact_number' => $jobseekerDetails->contact_number ?? '-'
+
+            ];
+        }   
+        if ($request->ajax()) {
+            return Datatables::of($earningData)
+                ->addIndexColumn()
+                ->make(true);
+        }
+        if (empty($providerdata)) {
+            $msg = __('messages.not_found_entry', ['name' => __('messages.provider')]);
+            return redirect(route('provider.index'))->withError($msg);
+        }
+        $pageTitle = __('messages.view_form_title', ['form' => __('messages.provider')]);
+        return view('jobs-report.details', compact('pageTitle', 'earningData', 'auth_user', 'providerdata'));
     }
 
     /**

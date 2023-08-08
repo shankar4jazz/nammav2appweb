@@ -32,8 +32,9 @@ class SmsController extends Controller
         $mobile_no = $request->mobile_no;
         $text = $request->first_name;
 
-        sentSMS($mobile_no, $text);
-
+       $data =  sentSMS($mobile_no, $text);
+       var_dump($data);
+exit();
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

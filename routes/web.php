@@ -49,6 +49,7 @@ use App\Http\Controllers\BookingShopController;
 use App\Http\Controllers\PushNotificationController;
 
 use App\Http\Controllers\MatrimonialUsersController;
+use App\Http\Controllers\SmsController;
 use App\Http\Controllers\JobseekerController;
 
 /*
@@ -257,8 +258,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('jobs/quick/store', [JobsController::class, 'quickStoreJob'])->name('jobs.storequick');
   
     Route::get('applicant-details/{id}', [JobsController::class, 'applicantDetails'])->name('applicant.details');
+    Route::get('report-details/{id}', [JobsController::class, 'ReportDetails'])->name('report.details');
+    Route::get('/job-invoice/{id}', [JobsController::class, 'createPDF'])->name('job_invoice_pdf');
 
     Route::resource('matrimonial', MatrimonialUsersController::class);
+
+    Route::resource('sms-send',  SmsController::class);
+    Route::post('sms-sent', [SmsController::class, 'sendSms'])->name('send_sms');
 });
 Route::get('/ajax-list', [HomeController::class, 'getAjaxList'])->name('ajax-list');
 Route::get('clear_cache', function () {

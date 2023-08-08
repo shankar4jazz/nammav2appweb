@@ -239,7 +239,7 @@ class BookingController extends Controller
         if (count($auth_user->unreadNotifications) > 0) {
             $auth_user->unreadNotifications->where('data.id', $id)->markAsRead();
         }
-
+ 
         $pageTitle = __('messages.view_form_title', ['form' => __('messages.booking')]);
         return view('booking.view', compact('pageTitle', 'bookingdata', 'auth_user', 'tabpage'));
     }
