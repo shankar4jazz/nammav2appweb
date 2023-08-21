@@ -25,4 +25,8 @@ class Qualification extends Model
     {
         return $this->belongsTo(EducationCategory::class, 'category_id');
     }
+    public function user()
+    {
+        return $this->hasMany(User::class, 'qualification_id');
+    }
 }

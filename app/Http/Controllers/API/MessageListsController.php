@@ -12,6 +12,8 @@ class MessageListsController extends Controller
 {
     public function messageList(Request $request)
     {
+
+        
         $plans = MessageLists::query();
        
         $orderBy = $request->orderby ? $request->orderby: 'asc';
@@ -26,6 +28,7 @@ class MessageListsController extends Controller
             }
         }
 
+       
         $plans = $plans->orderBy('id',$orderBy)->paginate($per_page);
         $items = MessageListsResource::collection($plans);
 

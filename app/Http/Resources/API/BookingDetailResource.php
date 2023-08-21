@@ -50,7 +50,9 @@ class BookingDetailResource extends JsonResource
             'extra_charges'         => BookingChargesResource::collection($this->bookingExtraCharge),
             'booking_type'            => $this->type,
             'post_request_id'            => $this->post_request_id,
-            'booking_slot' => $this->booking_slot
+            'booking_slot' => $this->booking_slot,
+            'long' => optional($this->addressAdded)->longitude,
+            'lat' => optional($this->addressAdded)->longitude,
         ];
     }
 }

@@ -48,7 +48,7 @@ class PaymentController extends Controller
             }
         }
 
-        $payment = $payment->orderBy('id','desc')->paginate($per_page);
+        $payment = $payment->orderBy('id','desc')->paginate($per_page)->get();
         $items = PaymentResource::collection($payment);
 
         $response = [

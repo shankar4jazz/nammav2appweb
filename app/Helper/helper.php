@@ -125,11 +125,11 @@ function getSingleMedia($model, $collection = 'profile_image', $skip = true)
 
     if (getFileExistsCheck($media)) {
 
-      
-       //d Generate the Cloudflare R2 URL based on the disk and path
+
+        //d Generate the Cloudflare R2 URL based on the disk and path
         $cloudflareR2Url = getCloudflareR2Url($media);
         return $cloudflareR2Url;
-       // return $media->getFullUrl();
+        // return $media->getFullUrl();
     } else {
 
         switch ($collection) {
@@ -193,12 +193,10 @@ function storeAudioFile($model, $file, $name)
         if (is_array($file)) {
             foreach ($file as $key => $value) {
                 $model->addMedia($value)->toMediaCollection($name, 's3');
-                
             }
         } else {
             // Remove the image resizing code
             $model->addMedia($file)->toMediaCollection($name, 's3');
-           
         }
     }
     return true;
@@ -236,13 +234,13 @@ function storeMediaFile($model, $file, $name)
 
                 // Store the resized image in Cloudflare R2
                 //storeInCloudflareR2($resizedImageData['path'], $resizedImageData['filename']);
-    
+
                 // Delete the temporary file
-    
-    
+
+
                 $model->addMedia($resizedImageData['path'])
                     ->toMediaCollection($name, 's3');
-    
+
                 File::delete($resizedImageData['path']);
                 //$model->addMedia($value)->toMediaCollection($name);
             }
@@ -315,7 +313,7 @@ function getCloudflareR2Url($model)
     // var_dump($model->id);
     // exit();
 
-    return env('R2_URL')."/{$model->id}/{$model->file_name}";
+    return env('R2_URL') . "/{$model->id}/{$model->file_name}";
 }
 
 function resizedImage($file)
@@ -1696,281 +1694,281 @@ function bookingstatus($status)
     return $html;
 }
 
-function sendWhatsAppText($jobid, $status)
-{
-    $job = \App\Models\Jobs::find($jobid);
+// function sendWhatsAppText($jobid, $status)
+// {
+//     $job = \App\Models\Jobs::find($jobid);
 
-    $user = \App\Models\User::find($job->user_id);
+//     $user = \App\Models\User::find($job->user_id);
 
-    if ($user && $user->first_name != null) {
-        $userName = $user->first_name;
-    } else {
-        $userName = $job->contact_number;
-    }
+//     if ($user && $user->first_name != null) {
+//         $userName = $user->first_name;
+//     } else {
+//         $userName = $job->contact_number;
+//     }
 
-    $mobile_number = $job->contact_number; //$booking->contact_number;
-    $endDate = date('d-m-Y', strtotime($job->end_date));
-    $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
+//     $mobile_number = $job->contact_number; //$booking->contact_number;
+//     $endDate = date('d-m-Y', strtotime($job->end_date));
+//     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
 
-    switch ($status) {
-        case 'failed':
+//     switch ($status) {
+//         case 'failed':
 
-            $variables = array(
-                '{data}' => "அன்பார்ந்த *{$userName}*/, வணக்கம் 🙏\n\n⛔ உங்கள் வேலை வாய்ப்பு  பதிவுக்கான பணம் செலுத்த முடியவில்லை. ❌\n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```Regards Tamilanjobs```\n\nநன்றி 🙏 "
+//             $variables = array(
+//                 '{data}' => "அன்பார்ந்த *{$userName}*/, வணக்கம் 🙏\n\n⛔ உங்கள் வேலை வாய்ப்பு  பதிவுக்கான பணம் செலுத்த முடியவில்லை. ❌\n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```Regards Tamilanjobs```\n\nநன்றி 🙏 "
 
-            );
-            break;
+//             );
+//             break;
 
-        case 'paid':
+//         case 'paid':
 
-            $variables = array(
-                '{data}' => "அன்பார்ந்த *{$userName}* வணக்கம்! 🙏\n\n✅ உங்கள் வேலை வாய்ப்பு  பதிவுக்கான பணம் செலுத்தப்பட்டது. 👍\n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```தமிழன் ஜாப்ஸ் மூலம் நீங்கள் சிறந்த பணியாட்களை பெற வாழ்த்துக்கள் 🙏```\n\n_Support: 8233823308_"
-            );
-            break;
+//             $variables = array(
+//                 '{data}' => "அன்பார்ந்த *{$userName}* வணக்கம்! 🙏\n\n✅ உங்கள் வேலை வாய்ப்பு  பதிவுக்கான பணம் செலுத்தப்பட்டது. 👍\n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```தமிழன் ஜாப்ஸ் மூலம் நீங்கள் சிறந்த பணியாட்களை பெற வாழ்த்துக்கள் 🙏```\n\n_Support: 8233823308_"
+//             );
+//             break;
 
-        case 'job_post':
+//         case 'job_post':
 
-            $variables = array(
+//             $variables = array(
 
-                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,\n\nஉங்கள் வேலைவாய்ப்பு பதிவு வெற்றிகரமாக பதிவிடப்பட்டது.👍\n\nஎங்கள் வாடிக்கையாளர் சேவை அதிகாரி/ நிர்வாகி உங்களை தொடர்பு கொண்டு உங்கள் நிறுவனம் சம்பந்தப்பட்ட சரிபார்ப்புகளை முடித்த பிறகு உங்கள் பதிவு நேரலையில் கொண்டுவரப்படும்.\n\nஅழைப்பு வரும் வரை தயவுசெய்து காத்திருக்கவும். \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```We appreciate your trust in Tamilanjobs ```\n\n_Support: 8233823308_ \n\nநன்றி!🙏",
+//                 '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,\n\nஉங்கள் வேலைவாய்ப்பு பதிவு வெற்றிகரமாக பதிவிடப்பட்டது.👍\n\nஎங்கள் வாடிக்கையாளர் சேவை அதிகாரி/ நிர்வாகி உங்களை தொடர்பு கொண்டு உங்கள் நிறுவனம் சம்பந்தப்பட்ட சரிபார்ப்புகளை முடித்த பிறகு உங்கள் பதிவு நேரலையில் கொண்டுவரப்படும்.\n\nஅழைப்பு வரும் வரை தயவுசெய்து காத்திருக்கவும். \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```We appreciate your trust in Tamilanjobs ```\n\n_Support: 8233823308_ \n\nநன்றி!🙏",
 
-            );
-            break;
+//             );
+//             break;
 
-        case 'featured':
+//         case 'featured':
 
-            $variables = array(
-                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏, \n\nஉங்கள் வேலை வாய்ப்பு தகவல் தமிழன் ஜாப்ஸ் பிரீமிம் (Featured Jobs)-இல் கொண்டுவரபட்டுள்ளது. 👑. \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n\n```உங்கள் வெற்றி எங்கள் வெற்றி, நன்றி🙏```\n\n_Support: 8233823308_"
-            );
-            break;
+//             $variables = array(
+//                 '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏, \n\nஉங்கள் வேலை வாய்ப்பு தகவல் தமிழன் ஜாப்ஸ் பிரீமிம் (Featured Jobs)-இல் கொண்டுவரபட்டுள்ளது. 👑. \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n\n```உங்கள் வெற்றி எங்கள் வெற்றி, நன்றி🙏```\n\n_Support: 8233823308_"
+//             );
+//             break;
 
 
-        case 'active':
+//         case 'active':
 
-            $variables = array(
-                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏, \n\nஉங்கள் வேலை வாய்ப்பு தமிழன் ஜாப்ஸ் நேரலையில் கொண்டுவரப்பட்டது. ✅. \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```உங்கள் வெற்றி எங்கள் வெற்றி, நன்றி🙏```\n\n_Support: 8233823308_"
-            );
-            break;
+//             $variables = array(
+//                 '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏, \n\nஉங்கள் வேலை வாய்ப்பு தமிழன் ஜாப்ஸ் நேரலையில் கொண்டுவரப்பட்டது. ✅. \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```உங்கள் வெற்றி எங்கள் வெற்றி, நன்றி🙏```\n\n_Support: 8233823308_"
+//             );
+//             break;
 
-        case 'rejected':
-       
-            $variables = array(
-                '{data}' => "அன்பார்ந்த, *{$userName}*! வணக்கம் 🙏, \n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு குழுவின் (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது.\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
-            );
-            break;
+//         case 'rejected':
 
-        case 'suspended':
-            $variables = array(
-                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,,\n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
-            );
-            break;
+//             $variables = array(
+//                 '{data}' => "அன்பார்ந்த, *{$userName}*! வணக்கம் 🙏, \n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு குழுவின் (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது.\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
+//             );
+//             break;
 
-        case 'inactive':
-
-            $variables = array(
-                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,\n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
-
-            );
-            break;
-
-        case 'expiry':
+//         case 'suspended':
+//             $variables = array(
+//                 '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,,\n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
+//             );
+//             break;
 
-            $variables = array(
-                '{data}' => "Hello {$userName}, just letting you know that your job post with ID: {$job->id} has now expired."
-            );
-            break;
+//         case 'inactive':
 
-        case 'today_expiry':
-            $variables = array(
-                '{data}' => "வணக்கம் 🙏 \n\nதமிழன் ஜாப்ஸ் நினைவூட்டல் உங்கள் வேலை வாய்ப்பு பதிவு எண் {$job->id} என்ற பதிவு இன்று முற்றுப்பெறவுள்ளது ⏲️.\n\n*நிறுவனம்:* {$job->company_name}\n*வேலையின் பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```நீங்கள் தொடர்ந்து வெற்றியடைய தமிழன் ஜாப்ஸ் எப்போதும் வாழ்த்துகிறது```\n\n_Support: 8233823308_"
-            );
-            break;
-
-        case 'tmrw_expiry':
-            $variables = array(
-                '{data}' => "வணக்கம் 🙏 \n\nதமிழன் ஜாப்ஸ் நினைவூட்டல் உங்கள் வேலை வாய்ப்பு பதிவு எண் {$job->id} என்ற பதிவு நாளை முற்றுப்பெறவுள்ளது ⏲️.\n\n*நிறுவனம்:* {$job->company_name}\n*வேலையின் பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```நீங்கள் தொடர்ந்து வெற்றியடைய தமிழன் ஜாப்ஸ் எப்போதும் வாழ்த்துகிறது```\n\n_Support: 8233823308_"
-            );
-            break;
-
-        default:
-            $variables = array(
-                '{data}' => "Hello *{$userName}*, \njust a friendly reminder that your job post with ID: {$job->id} is set to expire tomorrow.\n\n ```Continued success to you, Regards Tamilanjobs ```"
-            );
-            break;
-    }
-
-
-
-    $curl = curl_init();
-
-    $postFields = array(
-        'appkey' => 'f968d928-adbd-4fb5-895d-21a2c07a4d10',
-        'authkey' => 'vWreQ9PltLOtQmAvDCkbJXWsVomnDnLOMnChOzK9iZENWR6K3o',
-        'to' => '+91' . $mobile_number,
-        'template_id' => $templateId,
-        'variables' => $variables // convert the array into a JSON string
-    );
-
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS =>  http_build_query($postFields),
-        CURLOPT_SSL_VERIFYPEER => false,
-    ));
-
-    $response = curl_exec($curl);
-
-    if ($response === false) {
-        echo 'Curl error: ' . curl_error($curl);
-    } else {
-        $response;
-    }
-
-
-    curl_close($curl);
-
-    return $response;
-}
-function sendWhatsAppTextToExecutivePay($jobid, $status)
-{
-    $job = \App\Models\Jobs::find($jobid);
-    $user = \App\Models\User::find($job->user_id);
-    $payment = \App\Models\JobsPayment::find($job->payment_id);
-
-    if ($payment && $payment != null) {
-        $amount = $payment->total_amount ?? "0";
-    } else {
-        $amount = "0";
-    }
-
-    if ($user && $user->first_name != null) {
-        $userName = $user->first_name . $user->last_name ?? '';
-    } else {
-        $userName = $job->contact_number ?? '';
-    }
-
-    $mobileNumbers = ['8675002943', '9655008990']; //$booking->contact_number;
-    $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
-
-    switch ($status) {
-
-        case 'paid':
-            $variables = array(
-                '{data}' => "Payment Paid ✅\n\n, The job with ID: {$job->id} payment has been paid successfully.✅ \n\n *Name:* {$userName}\n\n *Contact Number:* {$job->contact_number}\n *Amount:* {$amount}, \n\n *Company:* {$job->company_name}\n *Post Name:* {$job->job_role}\n *Vacancies:* {$job->vacancy}\n *Job ID:* {$job->id}\n\n_Support: 8233823308_",
-            );
-            break;
-        case 'failed':
-            $variables = array(
-                '{data}' => "Payment Failed ❌\n\n, The job with ID: {$job->id} payment has been failed.❌ \n\n*Contact Number:* {$job->contact_number}\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n_Support: 8233823308_",
-            );
-            break;
-    }
-
-
-
-    $curl = curl_init();
-
-    foreach ($mobileNumbers as $mobile_number) {
-        $postFields = array(
-            'appkey' => '4881561c-3d5e-4370-af32-571773b0bab0',
-            'authkey' => 'FL424q6knyBhVolmNWSzT2jlNCpnzIwpivPtytmyXLOHAIclHA',
-            'to' => '+91' . $mobile_number,
-            'template_id' => $templateId,
-            'variables' => $variables // convert the array into a JSON string
-        );
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>  http_build_query($postFields),
-            CURLOPT_SSL_VERIFYPEER => false,
-        ));
-
-        $response = curl_exec($curl);
-
-        if ($response === false) {
-            echo 'Curl error: ' . curl_error($curl);
-        } else {
-            $response;
-        }
-    }
-
-    curl_close($curl);
-
-    return $response;
-}
-
-
-
-function sendWhatsAppTextToExecutive($jobid, $status)
-{
-    $job = \App\Models\Jobs::find($jobid);
-
-    $mobileNumbers = ['8675002943', '9655008990']; //$booking->contact_number;
-    $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
-
-    switch ($status) {
-        case 'job_post':
-            $variables = array(
-                '{data}' => "Job post Received ✅ \n\n, The job with ID: {$job->id} has been posted successfully. \n\n *Company:* {$job->company_name}\n*Contact Number:* {$job->contact_number}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\nco: 8233823308_",
-            );
-            break;
-    }
-
-
-
-    $curl = curl_init();
-
-    foreach ($mobileNumbers as $mobile_number) {
-        $postFields = array(
-            'appkey' => '4881561c-3d5e-4370-af32-571773b0bab0',
-            'authkey' => 'FL424q6knyBhVolmNWSzT2jlNCpnzIwpivPtytmyXLOHAIclHA',
-            'to' => '+91' . $mobile_number,
-            'template_id' => $templateId,
-            'variables' => $variables // convert the array into a JSON string
-        );
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>  http_build_query($postFields),
-            CURLOPT_SSL_VERIFYPEER => false,
-        ));
-
-        $response = curl_exec($curl);
-
-        if ($response === false) {
-            echo 'Curl error: ' . curl_error($curl);
-        } else {
-            $response;
-        }
-    }
-
-    curl_close($curl);
-
-
-
-
-    return $response;
-}
+//             $variables = array(
+//                 '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,\n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
+
+//             );
+//             break;
+
+//         case 'expiry':
+
+//             $variables = array(
+//                 '{data}' => "Hello {$userName}, just letting you know that your job post with ID: {$job->id} has now expired."
+//             );
+//             break;
+
+//         case 'today_expiry':
+//             $variables = array(
+//                 '{data}' => "வணக்கம் 🙏 \n\nதமிழன் ஜாப்ஸ் நினைவூட்டல் உங்கள் வேலை வாய்ப்பு பதிவு எண் {$job->id} என்ற பதிவு இன்று முற்றுப்பெறவுள்ளது ⏲️.\n\n*நிறுவனம்:* {$job->company_name}\n*வேலையின் பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```நீங்கள் தொடர்ந்து வெற்றியடைய தமிழன் ஜாப்ஸ் எப்போதும் வாழ்த்துகிறது```\n\n_Support: 8233823308_"
+//             );
+//             break;
+
+//         case 'tmrw_expiry':
+//             $variables = array(
+//                 '{data}' => "வணக்கம் 🙏 \n\nதமிழன் ஜாப்ஸ் நினைவூட்டல் உங்கள் வேலை வாய்ப்பு பதிவு எண் {$job->id} என்ற பதிவு நாளை முற்றுப்பெறவுள்ளது ⏲️.\n\n*நிறுவனம்:* {$job->company_name}\n*வேலையின் பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```நீங்கள் தொடர்ந்து வெற்றியடைய தமிழன் ஜாப்ஸ் எப்போதும் வாழ்த்துகிறது```\n\n_Support: 8233823308_"
+//             );
+//             break;
+
+//         default:
+//             $variables = array(
+//                 '{data}' => "Hello *{$userName}*, \njust a friendly reminder that your job post with ID: {$job->id} is set to expire tomorrow.\n\n ```Continued success to you, Regards Tamilanjobs ```"
+//             );
+//             break;
+//     }
+
+
+
+//     $curl = curl_init();
+
+//     $postFields = array(
+//         'appkey' => 'f968d928-adbd-4fb5-895d-21a2c07a4d10',
+//         'authkey' => 'vWreQ9PltLOtQmAvDCkbJXWsVomnDnLOMnChOzK9iZENWR6K3o',
+//         'to' => '+91' . $mobile_number,
+//         'template_id' => $templateId,
+//         'variables' => $variables // convert the array into a JSON string
+//     );
+
+//     curl_setopt_array($curl, array(
+//         CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
+//         CURLOPT_RETURNTRANSFER => true,
+//         CURLOPT_ENCODING => '',
+//         CURLOPT_MAXREDIRS => 10,
+//         CURLOPT_TIMEOUT => 0,
+//         CURLOPT_FOLLOWLOCATION => true,
+//         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//         CURLOPT_CUSTOMREQUEST => 'POST',
+//         CURLOPT_POSTFIELDS =>  http_build_query($postFields),
+//         CURLOPT_SSL_VERIFYPEER => false,
+//     ));
+
+//     $response = curl_exec($curl);
+
+//     if ($response === false) {
+//         echo 'Curl error: ' . curl_error($curl);
+//     } else {
+//         $response;
+//     }
+
+
+//     curl_close($curl);
+
+//     return $response;
+// }
+// function sendWhatsAppTextToExecutivePay($jobid, $status)
+// {
+//     $job = \App\Models\Jobs::find($jobid);
+//     $user = \App\Models\User::find($job->user_id);
+//     $payment = \App\Models\JobsPayment::find($job->payment_id);
+
+//     if ($payment && $payment != null) {
+//         $amount = $payment->total_amount ?? "0";
+//     } else {
+//         $amount = "0";
+//     }
+
+//     if ($user && $user->first_name != null) {
+//         $userName = $user->first_name . $user->last_name ?? '';
+//     } else {
+//         $userName = $job->contact_number ?? '';
+//     }
+
+//     $mobileNumbers = ['8675002943', '9655008990']; //$booking->contact_number;
+//     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
+
+//     switch ($status) {
+
+//         case 'paid':
+//             $variables = array(
+//                 '{data}' => "Payment Paid ✅\n\n, The job with ID: {$job->id} payment has been paid successfully.✅ \n\n *Name:* {$userName}\n\n *Contact Number:* {$job->contact_number}\n *Amount:* {$amount}, \n\n *Company:* {$job->company_name}\n *Post Name:* {$job->job_role}\n *Vacancies:* {$job->vacancy}\n *Job ID:* {$job->id}\n\n_Support: 8233823308_",
+//             );
+//             break;
+//         case 'failed':
+//             $variables = array(
+//                 '{data}' => "Payment Failed ❌\n\n, The job with ID: {$job->id} payment has been failed.❌ \n\n*Contact Number:* {$job->contact_number}\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n_Support: 8233823308_",
+//             );
+//             break;
+//     }
+
+
+
+//     $curl = curl_init();
+
+//     foreach ($mobileNumbers as $mobile_number) {
+//         $postFields = array(
+//             'appkey' => 'f968d928-adbd-4fb5-895d-21a2c07a4d10',
+//             'authkey' => 'vWreQ9PltLOtQmAvDCkbJXWsVomnDnLOMnChOzK9iZENWR6K3o',
+//             'to' => '+91' . $mobile_number,
+//             'template_id' => $templateId,
+//             'variables' => $variables // convert the array into a JSON string
+//         );
+
+//         curl_setopt_array($curl, array(
+//             CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
+//             CURLOPT_RETURNTRANSFER => true,
+//             CURLOPT_ENCODING => '',
+//             CURLOPT_MAXREDIRS => 10,
+//             CURLOPT_TIMEOUT => 0,
+//             CURLOPT_FOLLOWLOCATION => true,
+//             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//             CURLOPT_CUSTOMREQUEST => 'POST',
+//             CURLOPT_POSTFIELDS =>  http_build_query($postFields),
+//             CURLOPT_SSL_VERIFYPEER => false,
+//         ));
+
+//         $response = curl_exec($curl);
+
+//         if ($response === false) {
+//             echo 'Curl error: ' . curl_error($curl);
+//         } else {
+//             $response;
+//         }
+//     }
+
+//     curl_close($curl);
+
+//     return $response;
+// }
+
+
+
+// function sendWhatsAppTextToExecutive($jobid, $status)
+// {
+//     $job = \App\Models\Jobs::find($jobid);
+
+//     $mobileNumbers = ['8675002943', '9655008990']; //$booking->contact_number;
+//     $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
+
+//     switch ($status) {
+//         case 'job_post':
+//             $variables = array(
+//                 '{data}' => "Job post Received ✅ \n\n, The job with ID: {$job->id} has been posted successfully. \n\n *Company:* {$job->company_name}\n*Contact Number:* {$job->contact_number}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\nco: 8233823308_",
+//             );
+//             break;
+//     }
+
+
+
+//     $curl = curl_init();
+
+//     foreach ($mobileNumbers as $mobile_number) {
+//         $postFields = array(
+//             'appkey' => 'f968d928-adbd-4fb5-895d-21a2c07a4d10',
+//             'authkey' => 'vWreQ9PltLOtQmAvDCkbJXWsVomnDnLOMnChOzK9iZENWR6K3o',
+//             'to' => '+91' . $mobile_number,
+//             'template_id' => $templateId,
+//             'variables' => $variables // convert the array into a JSON string
+//         );
+
+//         curl_setopt_array($curl, array(
+//             CURLOPT_URL => 'https://server.apiwasender.com/api/create-message',
+//             CURLOPT_RETURNTRANSFER => true,
+//             CURLOPT_ENCODING => '',
+//             CURLOPT_MAXREDIRS => 10,
+//             CURLOPT_TIMEOUT => 0,
+//             CURLOPT_FOLLOWLOCATION => true,
+//             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//             CURLOPT_CUSTOMREQUEST => 'POST',
+//             CURLOPT_POSTFIELDS =>  http_build_query($postFields),
+//             CURLOPT_SSL_VERIFYPEER => false,
+//         ));
+
+//         $response = curl_exec($curl);
+
+//         if ($response === false) {
+//             echo 'Curl error: ' . curl_error($curl);
+//         } else {
+//             $response;
+//         }
+//     }
+
+//     curl_close($curl);
+
+
+
+
+//     return $response;
+// }
 
 
 function sentSMS($contacts, $text)
@@ -2062,7 +2060,7 @@ function sentSMS($contacts, $text)
     // ];
     //----------------------------------------------------sms eagleminds tech----------------------------------------------------------- 
     $key = "nPD1MSa7HP0NczP0";
-    $mbl = '91'.$contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
+    $mbl = '91' . $contacts;     /*or $mbl="XXXXXXXXXX,XXXXXXXXXX";*/
     // //$message_content=urlencode(''.$otp.' is your OTP to verify your mobile number on the Jobs7 app/website. '.$org);
     $message_content = urlencode('http://bit.ly/3IE6Vue is your verification code for Tamilanjobs - Find Jobs Locally. Nammav2app');
 
@@ -2074,4 +2072,221 @@ function sentSMS($contacts, $text)
 
     return json_decode($output, true);
     exit();
+}
+
+function generateJobpostMessage($job, $status, $userName, $endDate)
+{
+    switch ($status) {
+        case 'failed':
+
+            return  array(
+                '{data}' => "அன்பார்ந்த *{$userName}*/, வணக்கம் 🙏\n\n⛔ உங்கள் வேலை வாய்ப்பு  பதிவுக்கான பணம் செலுத்த முடியவில்லை. ❌\n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```Regards Tamilanjobs```\n\nநன்றி 🙏 "
+
+            );
+            break;
+
+        case 'paid':
+
+            return array(
+                '{data}' => "அன்பார்ந்த *{$userName}* வணக்கம்! 🙏\n\n✅ உங்கள் வேலை வாய்ப்பு  பதிவுக்கான பணம் செலுத்தப்பட்டது. 👍\n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```தமிழன் ஜாப்ஸ் மூலம் நீங்கள் சிறந்த பணியாட்களை பெற வாழ்த்துக்கள் 🙏```\n\n_Support: 8233823308_"
+            );
+            break;
+
+        case 'job_post':
+
+           return array(
+
+                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,\n\nஉங்கள் வேலைவாய்ப்பு பதிவு வெற்றிகரமாக பதிவிடப்பட்டது.👍\n\nஎங்கள் வாடிக்கையாளர் சேவை அதிகாரி/ நிர்வாகி உங்களை தொடர்பு கொண்டு உங்கள் நிறுவனம் சம்பந்தப்பட்ட சரிபார்ப்புகளை முடித்த பிறகு உங்கள் பதிவு நேரலையில் கொண்டுவரப்படும்.\n\nஅழைப்பு வரும் வரை தயவுசெய்து காத்திருக்கவும். \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```We appreciate your trust in Tamilanjobs ```\n\n_Support: 8233823308_ \n\nநன்றி!🙏",
+
+            );
+            break;
+
+        case 'featured':
+
+            return array(
+                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏, \n\nஉங்கள் வேலை வாய்ப்பு தகவல் தமிழன் ஜாப்ஸ் பிரீமிம் (Featured Jobs)-இல் கொண்டுவரபட்டுள்ளது. 👑. \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n\n```உங்கள் வெற்றி எங்கள் வெற்றி, நன்றி🙏```\n\n_Support: 8233823308_"
+            );
+            break;
+
+
+        case 'active':
+
+            return array(
+                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏, \n\nஉங்கள் வேலை வாய்ப்பு தமிழன் ஜாப்ஸ் நேரலையில் கொண்டுவரப்பட்டது. ✅. \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```உங்கள் வெற்றி எங்கள் வெற்றி, நன்றி🙏```\n\n_Support: 8233823308_"
+            );
+            break;
+
+        case 'rejected':
+
+            return array(
+                '{data}' => "அன்பார்ந்த, *{$userName}*! வணக்கம் 🙏, \n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு குழுவின் (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது.\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
+            );
+            break;
+
+        case 'suspended':
+            return array(
+                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,,\n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
+            );
+            break;
+
+        case 'inactive':
+
+            return array(
+                '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,\n\n⚠️ உங்கள் வேலை வாய்ப்பு பதிவு நிராகரிக்கப்படுகிறது ⚠️.\n\nஉங்கள் வேலைவாய்ப்பு பதிவானது எங்கள் சரிபார்ப்பு (Verification ) அழைப்பினை ஏற்காததால் அல்லது எங்கள் நிபந்தனை நிபந்தனைகளுக்கு உட்படாததால் நிராகரிக்கப்படுகிறது\n\nமேலும் விவரமறிய 8233823308 என்ற எண்ணை காலை 9 மணி முதல் மாலை 6 மணி வரை அழைக்கலாம். நன்றி"
+
+            );
+            break;
+
+        case 'expiry':
+
+            return array(
+                '{data}' => "Hello {$userName}, just letting you know that your job post with ID: {$job->id} has now expired."
+            );
+            break;
+
+        case 'today_expiry':
+            return array(
+                '{data}' => "வணக்கம் 🙏 \n\nதமிழன் ஜாப்ஸ் நினைவூட்டல் உங்கள் வேலை வாய்ப்பு பதிவு எண் {$job->id} என்ற பதிவு இன்று முற்றுப்பெறவுள்ளது ⏲️.\n\n*நிறுவனம்:* {$job->company_name}\n*வேலையின் பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```நீங்கள் தொடர்ந்து வெற்றியடைய தமிழன் ஜாப்ஸ் எப்போதும் வாழ்த்துகிறது```\n\n_Support: 8233823308_"
+            );
+            break;
+
+        case 'tmrw_expiry':
+            return array(
+                '{data}' => "வணக்கம் 🙏 \n\nதமிழன் ஜாப்ஸ் நினைவூட்டல் உங்கள் வேலை வாய்ப்பு பதிவு எண் {$job->id} என்ற பதிவு நாளை முற்றுப்பெறவுள்ளது ⏲️.\n\n*நிறுவனம்:* {$job->company_name}\n*வேலையின் பெயர்:* {$job->job_role}\n*காலியிடம்:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```நீங்கள் தொடர்ந்து வெற்றியடைய தமிழன் ஜாப்ஸ் எப்போதும் வாழ்த்துகிறது```\n\n_Support: 8233823308_"
+            );
+            break;
+
+        default:
+            return array(
+                '{data}' => "Hello *{$userName}*, \njust a friendly reminder that your job post with ID: {$job->id} is set to expire tomorrow.\n\n ```Continued success to you, Regards Tamilanjobs ```"
+            );
+            break;
+    }
+
+}
+
+
+function generateExecuteMessage($job, $status){
+    switch ($status) {
+        case 'job_post':
+            return array(
+                '{data}' => "Job post Received ✅ \n\n, The job with ID: {$job->id} has been posted successfully. \n\n *Company:* {$job->company_name}\n*Contact Number:* {$job->contact_number}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\nco: 8233823308_",
+            );
+            break;
+    }
+}
+
+function generateExecutePayMessage($job, $status, $userName, $amount){
+    switch ($status) {
+
+        case 'paid':
+            return array(
+                '{data}' => "Payment Paid ✅\n\n, The job with ID: {$job->id} payment has been paid successfully.✅ \n\n *Name:* {$userName}\n\n *Contact Number:* {$job->contact_number}\n *Amount:* {$amount}, \n\n *Company:* {$job->company_name}\n *Post Name:* {$job->job_role}\n *Vacancies:* {$job->vacancy}\n *Job ID:* {$job->id}\n\n_Support: 8233823308_",
+            );
+            break;
+        case 'failed':
+            return array(
+                '{data}' => "Payment Failed ❌\n\n, The job with ID: {$job->id} payment has been failed.❌ \n\n*Contact Number:* {$job->contact_number}\n*Company:* {$job->company_name}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\n_Support: 8233823308_",
+            );
+            break;
+    }
+}
+function sendWhatsAppTextToExecutive($jobid, $status)
+{
+    $job = \App\Models\Jobs::find($jobid);
+    $mobileNumbers = ['8675002943', '9655008990'];
+
+    $message = generateExecuteMessage($job, $status);
+
+    foreach ($mobileNumbers as $mobile_number) {
+        $response = sendMessage($mobile_number, $message);
+    }
+
+    return $response;
+}
+
+function sendWhatsAppTextToExecutivePay($jobid, $status)
+{
+
+    $job = \App\Models\Jobs::find($jobid);
+    $user = \App\Models\User::find($job->user_id);
+    $payment = \App\Models\JobsPayment::find($job->payment_id);
+
+    if ($payment && $payment != null) {
+        $amount = $payment->total_amount ?? "0";
+    } else {
+        $amount = "0";
+    }
+
+    if ($user && $user->first_name != null) {
+        $userName = $user->first_name . $user->last_name ?? '';
+    } else {
+        $userName = $job->contact_number ?? '';
+    }
+
+    $mobileNumbers = ['8675002943', '9655008990'];
+
+    $message = generateExecutePayMessage($job, $status, $userName, $amount);
+
+    foreach ($mobileNumbers as $mobile_number) {
+        $response = sendMessage($mobile_number, $message);
+    }
+
+    return $response;
+}
+
+function sendWhatsAppText($jobid, $status)
+{ 
+
+
+    $job = \App\Models\Jobs::find($jobid);
+
+    $user = \App\Models\User::find($job->user_id);
+
+    if ($user && $user->first_name != null) {
+        $userName = $user->first_name;
+    } else {
+        $userName = $job->contact_number;
+    }  
+    $endDate = date('d-m-Y', strtotime($job->end_date));
+
+    $message = generateJobpostMessage($job, $status, $userName, $endDate);
+    $response = sendMessage($job->contact_number, $message);
+
+    return $response;
+}
+
+function sendMessage($mobile_number, $message)
+{
+    $appkey = 'f968d928-adbd-4fb5-895d-21a2c07a4d10';
+    $authkey = 'vWreQ9PltLOtQmAvDCkbJXWsVomnDnLOMnChOzK9iZENWR6K3o';
+    $templateId = '9ab51226-db07-4a56-89a1-466828a587ef';
+    $url = 'https://server.apiwasender.com/api/create-message';
+
+    $postFields = array(
+        'appkey' => $appkey,
+        'authkey' => $authkey,
+        'to' => '+91' . $mobile_number,
+        'template_id' => $templateId,
+        'variables' => $message
+    );
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => http_build_query($postFields),
+        CURLOPT_SSL_VERIFYPEER => false,
+    ));
+
+    $response = curl_exec($curl);
+    curl_close($curl);
+
+    return $response;
 }

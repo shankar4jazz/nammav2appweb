@@ -18,6 +18,7 @@ use App\Models\ProviderDocument;
 use App\Models\Documents;
 use App\Models\UserDevices;
 use App\Models\HandymanRating;
+use App\Models\Qualification;
 use App\Models\ProviderSubscription;
 use App\Models\BookingHandymanMapping;
 use App\Http\Resources\API\HandymanRatingResource;
@@ -50,11 +51,8 @@ class UserController extends Controller
         return comman_custom_response($response);
     }
 
-
-
     public function login(UserRequest $request)
     {
-
         if ($request->is('api/*')) {
 
             $input = $request->all();
@@ -244,26 +242,36 @@ class UserController extends Controller
 
     public function jobseekerDetails(Request $request)
     {
-        $id = $request->id;
+		$id = $request->id;
 
+		$user = User::where('id', $id)
+			->select('id', 'username', 'first_name', 'last_name', 'email', 'contact_number', 'display_name', 'address', 'details', 'qualification_id')
+			->with(['city'])
+			->first();
 
-        $user = User::select('users.id', 'username', 'first_name', 'last_name', 'email',  'contact_number', 'display_name',  'address', 'details', 'cities.name as city')
-            ->leftJoin('cities', 'cities.id', '=', 'users.city_id')
-            ->where('users.id', $id)
-            ->first();
+		$message = __('messages.detail');
+		if (empty($user)) {
+			$message = __('messages.user_not_found');
+			return comman_message_response($message, 400);
+		}
 
-        $message = __('messages.detail');
-        if (empty($user)) {
-            $message = __('messages.user_not_found');
-            return comman_message_response($message, 400);
-        }
+		$user['profile_image'] = getSingleMedia($user, 'profile_image', null);
+		$user['resume'] = getSingleMedia($user, 'resume', null);
 
-        $user['profile_image'] = getSingleMedia($user, 'profile_image', null);
-        $user['resume'] = getSingleMedia($user, 'resume', null);
-        // $user['en_city_name'] = $user->city->name;
+		// Attempt to retrieve the qualification separately
+		$qualification = Qualification::find($user->qualification_id);
 
-        $response = $user;
-        return comman_custom_response($response, 200);
+		if ($qualification) {
+			$user['qualification_name'] = $qualification->name; // Replace 'name' with the actual column you want from the qualification table
+		} else {
+			$user['qualification_name'] = 'No qualification found';
+		}
+
+		unset($user['media']);
+		$response = $user;
+
+		return comman_custom_response($response, 200);
+     
     }
 
     public function changePassword(Request $request)
@@ -389,6 +397,9 @@ class UserController extends Controller
 
 
         if ($user_data != null) {
+            if (isset($input['player_id'])) {				
+                $user_data->update(['player_id' => $input['player_id']]);
+            }
             if (!isset($user_data->login_type) || $user_data->login_type  == '') {
                 if ($request->login_type === 'google') {
                     $message = __('validation.unique', ['attribute' => 'email']);
@@ -707,6 +718,25 @@ class UserController extends Controller
             'job_category' => $request->job_category,
             'districts' => $request->districts
         ];
+        if (isset($request->job_category) && $request->job_category != null) {
+            $data = json_decode(json_decode($request->job_category), true);           
+
+            if (is_array($data)) {
+                $ids = array_map(function ($item) {
+
+                    
+                    return isset($item['id']) ? ['id' => $item['id']] : null;
+                }, $data);
+
+                $ids = array_filter($ids);
+
+                $newJson = json_encode($ids);
+
+               
+            }
+
+            $user->job_categories = $newJson;
+        }
 
         $user->details = json_encode($details);
 
@@ -738,6 +768,7 @@ class UserController extends Controller
             $user_data['companies'] = $user_data->companies;
         }
         $user_data['user_role'] = $user->getRoleNames();
+        $user_data['qualification'] = $user_data->qualification;
         unset($user_data['roles']);
         unset($user_data['media']);
         $response = [
@@ -820,6 +851,7 @@ class UserController extends Controller
 
                 $success['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
                 $success['profile_image'] =  $user_data->social_image;
+                $success['qualification'] = $user_data->qualification;
                 unset($success['media']);
                 unset($user_data['roles']);
 
@@ -1089,6 +1121,7 @@ class UserController extends Controller
                             $success['is_subscribe'] = is_subscribed_user($user_data->id);
                         }
                         $success['is_verify_provider'] = (int) $is_verify_provider;
+                        $success['qualification'] = $user_data->qualification;
                         unset($success['media']);
                         unset($user_data['roles']);
 

@@ -16,8 +16,6 @@ class JobsPaymentController extends Controller
         $data = $request->all();
         $data['datetime'] = isset($request->datetime) ? date('Y-m-d H:i:s', strtotime($request->datetime)) : date('Y-m-d H:i:s');
         $result = JobsPayment::updateOrCreate(['job_id' => $data['job_id']], $data);
-
-
         $booking = Jobs::find($request->job_id);
         $booking->payment_id = $result->id;
         if (isset($data['status'])) {

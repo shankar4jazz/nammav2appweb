@@ -585,69 +585,34 @@ class JobsController extends Controller
         return comman_custom_response($items);
     }
 
+
     public function getJobsListByCityAndCategorySlug(Request $request)
     {
-        $booking = Jobs::where('status', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
+        $booking = Jobs::where('status', 1)
+            ->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
         if (isset($request->state_id)) {
             $booking->where("state_id", $request->state_id);
         }
 
-
         if (isset($request->qualification_id)) {
             $booking->where("education", $request->qualification_id);
         }
 
-
-
-        if (isset($request->district_id)) {
-
-            if ($request->district_id == 'jobs-in-all-districts' && $request->jobcategory_id == 'all-categories') {
-
-                $booking->where('status', 1);
-            } else if ($request->district_id == 'jobs-in-all-districts') {
-                if (isset($request->jobcategory_id)) {
-                    $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
-
-                    $booking->where('jobcategory_id', $cat->id);
-                    $booking->where('status', 1);
-                }
-            } else if ($request->district_id == "null") {
-
-                $booking->where('status', 1);
-            } else if ($request->jobcategory_id == 'all-categories') {
-
-                $district =  District::where('slug', $request->district_id)->get();
-                $booking->where('status', 1);
-                $booking->whereHas('jobDistricts', function ($a) use ($district) {
-                    $a->where('district_id', $district[0]->id);
-                    $a->orWhere('district_id',  100);
-                });
-            } else {
-
-
-                $district =  District::where('slug', $request->district_id)->get();
-                if (isset($request->jobcategory_id)) {
-                    $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
-                    $booking->where('jobcategory_id', $cat->id);
-                }
-                $booking->where('status', 1);
-                $booking->whereHas('jobDistricts', function ($a) use ($district) {
-                    $a->where('district_id', $district[0]->id);
-                    $a->orWhere('district_id',  100);
-                });
-            }
-        } else {
-
-            $booking->where('status', 1);
+        if (isset($request->jobcategory_id) && $request->jobcategory_id != 'all-categories') {
+            $cat = JobsCategory::where('slug', $request->jobcategory_id)->first();
+            $booking->where('jobcategory_id', $cat->id);
         }
 
-        //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
-
-        //$per_page = config('constant.PER_PAGE_LIMIT');
+        if (isset($request->district_id) && $request->district_id != 'jobs-in-all-districts') {
+            $district = District::where('slug', $request->district_id)->get();
+            $booking->whereHas('jobDistricts', function ($a) use ($district) {
+                $a->where('district_id', $district[0]->id)
+                    ->orWhere('district_id', 100);
+            });
+        }
 
         $per_page = 25;
-        $page = $request->page;
         if ($request->has('per_page') && !empty($request->per_page)) {
             if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
@@ -657,23 +622,12 @@ class JobsController extends Controller
             }
         }
 
-
-
+        $page = $request->page ?? 1;
         $start = ($page - 1) * $per_page;
+        $orderBy = $request->orderby ?? 'desc';
 
-        if (!empty($request->page)) {
-
-            $page = $request->page;
-
-            $start = ($page - 1) * $per_page;
-        }
-        $orderBy = 'desc';
-        if ($request->has('orderby') && !empty($request->orderby)) {
-            $orderBy = $request->orderby;
-        }
-
-        $booking = $booking->orderBy('updated_at', $orderBy)->offset($start)->limit($per_page)->get();
-        $items = JobsResource::collection($booking);
+        $items = $booking->orderBy('updated_at', $orderBy)->paginate($per_page);
+        $itemsCollection = JobsResource::collection($items);
 
         // $response = [
         //     'pagination' => [
@@ -689,8 +643,10 @@ class JobsController extends Controller
         //     'data' => $items,
         // ];
 
-        return comman_custom_response($items);
+        return comman_custom_response($itemsCollection);
     }
+
+
 
 
     public function jobseerkerJobsForYou(Request $request)

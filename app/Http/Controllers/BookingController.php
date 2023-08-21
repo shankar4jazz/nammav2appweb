@@ -176,6 +176,7 @@ class BookingController extends Controller
             $result->couponAdded()->create($coupon_data);
         }
         if ($request->has('booking_address_id') && $request->booking_address_id != null) {
+            
             $booking_address_mapping = ProviderAddressMapping::find($data['booking_address_id']);
 
             $booking_address_data = [
@@ -186,6 +187,19 @@ class BookingController extends Controller
             ];
 
             $result->addressAdded()->create($booking_address_data);
+        }
+
+        if($request->has('long') && $request->long != null && $request->has('lat') && $request->lat != null){
+
+            $booking_address_data = [
+                'booking_id'    => $result->id,
+                'address'          => $request->address,
+                'latitude'      => $request->lat,
+                'longitude' => $request->long,
+            ];
+
+            $result->addressAdded()->create($booking_address_data);
+
         }
 
 

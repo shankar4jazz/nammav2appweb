@@ -100,7 +100,7 @@ Route::get('search-list', [API\CommanController::class, 'getSearchList']);
 Route::get('slider-list', [API\SliderController::class, 'getSliderList']);
 Route::get('top-rated-service', [API\ServiceController::class, 'getTopRatedService']);
 Route::post('provider-leads', [API\ProviderLeadsController::class, 'saveLeads']);
-Route::get('qualifications', [API\QualificationController::class, 'getQualificationsList']);
+Route::post('qualifications', [API\QualificationController::class, 'getQualificationsList']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -148,15 +148,16 @@ Route::get('/sse-version', function () {
 
 Route::post('apply-jobs', [API\JobCallActivitiesController::class, 'getCallActivitiesByJobseekerId']);
 
-Route::get('education-jobseekers', [API\JobseekerController::class, 'getJobseekerDetailsByEducation']);
+Route::post('education-jobseekers', [API\JobseekerController::class, 'getJobseekerDetailsByEducation']);
+Route::post('jobcategory-jobseekers', [API\JobseekerController::class, 'getJobseekerDetailsByJobcategory']);
 
+Route::get('access-plans', [API\AccessPlanController::class, 'jobsPlanLists']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    
+        
     Route::post('apply-status', [API\JobCallActivitiesController::class, 'setStatus']);
     Route::get('job-invoice/{id}', [App\Http\Controllers\JobsController::class, 'createPDF']);
     Route::post('save-jobs', [App\Http\Controllers\JobsController::class, 'store']);
     Route::post('add-jobs', [App\Http\Controllers\JobsController::class, 'saveJobPost']);
-
 
     Route::post('create-jobs', [App\Http\Controllers\TamilanJobsController::class, 'store']);
     Route::post('service-save', [App\Http\Controllers\ServiceController::class, 'store']);
@@ -184,8 +185,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('save-payment', [API\PaymentController::class, 'savePayment']);
     Route::get('payment-list', [API\PaymentController::class, 'paymentList']);
-
-
     Route::post('save-provideraddress', [App\Http\Controllers\ProviderAddressMappingController::class, 'store']);
     Route::get('provideraddress-list', [API\ProviderAddressMappingController::class, 'getProviderAddressList']);
     Route::post('provideraddress-delete/{id}', [App\Http\Controllers\ProviderAddressMappingController::class, 'destroy']);
@@ -209,6 +208,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('handyman-payout-list', [API\PayoutController::class, 'handymanPayoutList']);
 
     Route::get('plan-list', [API\PlanController::class, 'planList']);
+ 
 
     Route::post('save-subscription', [API\SubscriptionController::class, 'providerSubscribe']);
     Route::post('cancel-subscription', [API\SubscriptionController::class, 'cancelSubscription']);

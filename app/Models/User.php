@@ -25,7 +25,7 @@ class User extends Authenticatable implements HasMedia
         'handymantype_id','is_online',
         'player_id', 'country_id', 'state_id', 'district_id', 'city_id', 'address', 'provider_id', 'status',
         'display_name', 'providertype_id', 'is_featured', 'time_zone', 'last_notification_seen', 'login_type', 'service_address_id', 'uid', 'is_subscribe',
-        'social_image', 'is_available', 'designation', 'last_online_time'
+        'social_image', 'is_available', 'designation', 'last_online_time', 'qualification_id', 'age_limit', 'job_categories'
     ];
 
     /**
@@ -170,6 +170,11 @@ class User extends Authenticatable implements HasMedia
     public function payment()
     {
         return $this->hasMany(Payment::class, 'customer_id', 'id');
+    }
+
+    public function qualification()
+    {
+        return $this->belongsTo(Qualification::class, 'qualification_id', 'id');
     }
 
     public function routeNotificationForOneSignal()

@@ -83,7 +83,7 @@
                                     
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.state') ]),
                                     ]) }}
-                                        <input type="hidden" name="state_id" value="{{$jobsdata->state_id}}" />
+                                    
                                     </div>
 
                                     <div class="form-group col-md-6">
@@ -343,7 +343,7 @@
                 var service_address_id = "{{ isset($jobsdata->service_address_id) ? $jobsdata->service_address_id : 0 }}";
                 // userName(user_id);
                 getTax(provider_id, districts);
-                $('#state_id').attr('disabled', true);
+                //$('#state_id').attr('disabled', true);
                 stateName(country_id, state_id);
                 //districtName(state_id, district_id);
                 providerAddress(provider_id, service_address_id);
