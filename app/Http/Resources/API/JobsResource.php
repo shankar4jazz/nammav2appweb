@@ -3,6 +3,8 @@
 namespace App\Http\Resources\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\User;
+use App\Models\AccessPayment;
 
 class JobsResource extends JsonResource
 {
@@ -14,8 +16,18 @@ class JobsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $extention = imageExtention(getSingleMedia($this, 'jobs_image', null));
-        $user = new UserResource($this->user);
+        // $extention = imageExtention(getSingleMedia($this, 'jobs_image', null));
+        // $user = new UserResource($this->user);
+
+        $applicationCount = $this->jobsActivity->where('jobs_id', $this->id)->count();
+        $seekerCount = User::whereRaw("JSON_CONTAINS(job_categories, '{\"id\":$this->jobcategory_id}')")->count();
+        $paidRecord = AccessPayment::where('job_id', $this->id)
+            ->where('employer_id', $this->user_id)
+            ->first();
+
+        $extraPaid = $paidRecord ? $paidRecord->payment_status : "failed";
+        $verified = $paidRecord ? $paidRecord->is_verified : 0;
+
         return [
             'id'            => $this->id,
             'title'         => $this->title,
@@ -68,7 +80,7 @@ class JobsResource extends JsonResource
             'job_image'     =>  getSingleMedia($this, 'jobs_image', null),
             'districts' => $this->getJobDistricts->map(function ($jobDistrict) {
                 return [
-                    'id' => $jobDistrict->district->id?? '',
+                    'id' => $jobDistrict->district->id ?? '',
                     'name' => $jobDistrict->district->name ?? '',
                     'dt_name_tamil' => $jobDistrict->district->dt_name_tamil ?? ''
                     // Add other district fields as needed
@@ -76,18 +88,21 @@ class JobsResource extends JsonResource
             }),
             'disclose_salary' => $this->disclose_salary,
             'disclose_company' => $this->disclose_company,
+            'view_application_count' => $applicationCount,
+            'view_seeker_count' => $seekerCount,
+            'extra_paid' => $extraPaid,
+            'is_verified' => $verified
+
             // 'apply_list' => $this->jobsActivity->map(function ($jobDistrict) {
             //     return [
             //         'jobseeker_id' => $jobDistrict->jobseeker->id?? '',                   
-			// 		'activity_type' => $jobDistrict->jobseeker->activity_type?? '',
+            // 		'activity_type' => $jobDistrict->jobseeker->activity_type?? '',
             //         'name' => $jobDistrict->jobseeker->first_name ?? '' 
-                   
+
             //         // Add other district fields as needed
             //     ];
             // }),
-           
-           // 'apply_status'     => optional($this->jobsActivity)->jobseeker_id,
+            // 'apply_status'     => optional($this->jobsActivity)->jobseeker_id,
         ];
     }
 }
- 

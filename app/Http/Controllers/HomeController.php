@@ -52,12 +52,14 @@ class HomeController extends Controller
             $data =  Booking::myBooking()->where('status', 'pending')->whereDate('date', '>=', $start)->whereDate('date',   '<=', $end)->with('service')->get();
             return response()->json($data);
         }
+
         $setting_data = Setting::select('value')->where('type', 'dashboard_setting')->where('key', 'dashboard_setting')->first();
         $data['dashboard_setting']  =   !empty($setting_data) ? json_decode($setting_data->value) : [];
         $provider_setting_data = Setting::select('value')->where('type', 'provider_dashboard_setting')->where('key', 'provider_dashboard_setting')->first();
         $data['provider_dashboard_setting']  =  !empty($provider_setting_data) ? json_decode($provider_setting_data->value) : [];
         $handyman_setting_data = Setting::select('value')->where('type', 'handyman_dashboard_setting')->where('key', 'handyman_dashboard_setting')->first();
         $data['handyman_dashboard_setting']  =   !empty($handyman_setting_data) ? json_decode($handyman_setting_data->value) : [];
+        
 
         $data['dashboard'] = [
             'count_total_jobs'                  => Jobs::myJobs()->count(),

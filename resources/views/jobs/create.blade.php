@@ -117,7 +117,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 {{ Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false) }}
-                                {{ Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required']) }}
+                                {{ Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('marital_status'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required']) }}
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
                             <div class="form-group col-md-6">

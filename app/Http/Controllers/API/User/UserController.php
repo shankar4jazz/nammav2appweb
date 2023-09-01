@@ -21,6 +21,7 @@ use App\Models\HandymanRating;
 use App\Models\Qualification;
 use App\Models\ProviderSubscription;
 use App\Models\BookingHandymanMapping;
+use App\Models\Company;
 use App\Http\Resources\API\HandymanRatingResource;
 
 class UserController extends Controller
@@ -242,36 +243,35 @@ class UserController extends Controller
 
     public function jobseekerDetails(Request $request)
     {
-		$id = $request->id;
+        $id = $request->id;
 
-		$user = User::where('id', $id)
-			->select('id', 'username', 'first_name', 'last_name', 'email', 'contact_number', 'display_name', 'address', 'details', 'qualification_id')
-			->with(['city'])
-			->first();
+        $user = User::where('id', $id)
+            ->select('id', 'username', 'first_name', 'last_name', 'email', 'contact_number', 'display_name', 'address', 'details', 'qualification_id')
+            ->with(['city'])
+            ->first();
 
-		$message = __('messages.detail');
-		if (empty($user)) {
-			$message = __('messages.user_not_found');
-			return comman_message_response($message, 400);
-		}
+        $message = __('messages.detail');
+        if (empty($user)) {
+            $message = __('messages.user_not_found');
+            return comman_message_response($message, 400);
+        }
 
-		$user['profile_image'] = getSingleMedia($user, 'profile_image', null);
-		$user['resume'] = getSingleMedia($user, 'resume', null);
+        $user['profile_image'] = getSingleMedia($user, 'profile_image', null);
+        $user['resume'] = getSingleMedia($user, 'resume', null);
 
-		// Attempt to retrieve the qualification separately
-		$qualification = Qualification::find($user->qualification_id);
+        // Attempt to retrieve the qualification separately
+        $qualification = Qualification::find($user->qualification_id);
 
-		if ($qualification) {
-			$user['qualification_name'] = $qualification->name; // Replace 'name' with the actual column you want from the qualification table
-		} else {
-			$user['qualification_name'] = 'No qualification found';
-		}
+        if ($qualification) {
+            $user['qualification_name'] = $qualification->name; // Replace 'name' with the actual column you want from the qualification table
+        } else {
+            $user['qualification_name'] = 'No qualification found';
+        }
 
-		unset($user['media']);
-		$response = $user;
+        unset($user['media']);
+        $response = $user;
 
-		return comman_custom_response($response, 200);
-     
+        return comman_custom_response($response, 200);
     }
 
     public function changePassword(Request $request)
@@ -397,7 +397,7 @@ class UserController extends Controller
 
 
         if ($user_data != null) {
-            if (isset($input['player_id'])) {				
+            if (isset($input['player_id'])) {
                 $user_data->update(['player_id' => $input['player_id']]);
             }
             if (!isset($user_data->login_type) || $user_data->login_type  == '') {
@@ -677,7 +677,7 @@ class UserController extends Controller
         return comman_custom_response($response);
     }
     public function uploadResume(UserRequest $request)
-    {      
+    {
         if ($request->has('id') && !empty($request->id)) {
 
             $user = User::find((int)$request->id);
@@ -690,7 +690,7 @@ class UserController extends Controller
         if (isset($request->resume) && $request->resume != null) {
             //$user->clearMediaCollection('resume');
 
-            
+
             $user->addMediaFromRequest('resume')->toMediaCollection('resume', 's3');
         }
         $response = [
@@ -719,20 +719,18 @@ class UserController extends Controller
             'districts' => $request->districts
         ];
         if (isset($request->job_category) && $request->job_category != null) {
-            $data = json_decode(json_decode($request->job_category), true);           
+            $data = json_decode(json_decode($request->job_category), true);
 
             if (is_array($data)) {
                 $ids = array_map(function ($item) {
 
-                    
+
                     return isset($item['id']) ? ['id' => $item['id']] : null;
                 }, $data);
 
                 $ids = array_filter($ids);
 
                 $newJson = json_encode($ids);
-
-               
             }
 
             $user->job_categories = $newJson;
@@ -742,18 +740,41 @@ class UserController extends Controller
 
         $user->fill($request->all())->update();
 
-        if (isset($request->profile_image) && $request->profile_image != null) {
-            // $user->clearMediaCollection('profile_image');
-           // $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image', 's3');
-           //storeMediaFile($result, $request->jobs_image, 'jobs_image');
-           storeMediaFile($user, $request->profile_image, 'profile_image');
 
+        if (isset($request->name) || isset($request->address)) {
+            $companyDetails = [
+                'name' => $request->name,
+                'address' => $request->address,
+                'gst' => $request->address,
+                'user_id' => $request->id
+            ];
+
+
+            $company = Company::updateOrCreate(['id' => $request->company_id], $companyDetails);
+
+
+            //$user->companies()->associate($company);
+            //$user->save();
+        }
+
+        if (isset($request->profile_image) && $request->profile_image != null) {
+            $user->clearMediaCollection('profile_image');
+            // $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image', 's3');
+            //storeMediaFile($result, $request->jobs_image, 'jobs_image');
+            storeMediaFile($user, $request->profile_image, 'profile_image');
         }
 
         if (isset($request->resume) && $request->resume != null) {
-            // $user->clearMediaCollection('resume');
-           
-           $user->addMediaFromRequest('resume')->toMediaCollection('resume', 's3');
+            $user->clearMediaCollection('resume');
+
+            $user->addMediaFromRequest('resume')->toMediaCollection('resume', 's3');
+        }
+
+
+        if (isset($request->company_proof) && $request->company_proof != null) {
+            $user->clearMediaCollection('company_proof');
+
+            $user->addMediaFromRequest('company_proof')->toMediaCollection('company_proof', 's3');
         }
 
         $user_data = User::find($user->id);

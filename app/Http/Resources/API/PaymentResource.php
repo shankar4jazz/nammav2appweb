@@ -29,6 +29,7 @@ class PaymentResource extends JsonResource
             'price'         => optional($this->booking->service)->price,
             'discount'      => optional($this->booking->service)->discount,
             'extra_charges' => BookingChargesResource::collection(optional($this->booking)->bookingExtraCharge)
+            
         ];
     }
 }

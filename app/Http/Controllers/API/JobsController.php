@@ -871,7 +871,7 @@ class JobsController extends Controller
 
     public function getFeatureJobs(Request $request)
     {
-        $booking = Jobs::where('status', 1)->where('is_featured', 1);
+        $booking = Jobs::where('status', 1)->where('is_featured', 1)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
 
 

@@ -32,7 +32,7 @@ class CompanyController extends Controller
 
         $result = Company::updateOrCreate(['id' => $request->id], $user_favourite);
 
-        $message = __('messages.update_form',[ 'form' => __('Company') ] );
+        $message = __('messages.update_form',[ 'form' => __('Company')] );
 		if($result->wasRecentlyCreated){
 			$message = __('messages.save_form',[ 'form' => __('Company') ] );
 		}
@@ -46,8 +46,7 @@ class CompanyController extends Controller
     	
         $booking->whereHas('users', function ($a) use ($request) {
             $a->where('user_id', $request->user_id);
-        });   
-       
+        });          
 
         //$service = Service::where('service_type','service')->withTrashed()->with(['providers','category','serviceRating']);
 

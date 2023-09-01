@@ -34,12 +34,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  */
 require __DIR__ . '/admin-api.php';
 
+//chat 
+
+Route::post('/chat', [App\Http\Controllers\ChatController::class, 'chat']);
+
+//end chat
+
 Route::post('upload-resume', [API\User\UserController::class, 'uploadResume']);
 Route::get('message-lists', [API\MessageListsController::class, 'messageList']);
 
 Route::get('jobs-plan-list', [API\JobsPlanController::class, 'planLists']);
 Route::get('get-plan-list', [API\JobsPlanController::class, 'jobsPlanList']);
 Route::post('jobs-save-payment', [API\JobsPaymentController::class, 'savePayment']);
+Route::post('access-payment', [API\AccessPaymentController::class, 'savePayment']);
 Route::post('check-jobs-payment', [API\JobsPaymentController::class, 'checkPayment']);
 Route::post('save-call-activities', [API\JobCallActivitiesController::class, 'saveCallActivities']);
 Route::post('get-call-activities', [API\JobCallActivitiesController::class, 'getCallActivitiesByJobId']);
@@ -130,21 +137,7 @@ Route::get('post-job-status', [API\PostJobRequestController::class, 'postRequest
 Route::get('get-version', [API\CommanController::class, 'getVersion']);
 Route::get('job-invoice/{id}', [App\Http\Controllers\JobsController::class, 'createPDF']);
 
-Route::get('/sse-version', function () {
-    header('Content-Type: text/event-stream');
-    header('Cache-Control: no-cache');
 
-    $versionData = json_decode(file_get_contents(storage_path('app/version.json')), true);
-    $updatedVersion = $versionData['version']; // Replace with your updated version
-
-    $response = new StreamedResponse(function () use ($updatedVersion) {
-        // Send the SSE event with the updated version        
-        echo  json_encode(['version' => $updatedVersion]);
-        flush();
-    });
-
-    return $response;
-});
 
 Route::post('apply-jobs', [API\JobCallActivitiesController::class, 'getCallActivitiesByJobseekerId']);
 

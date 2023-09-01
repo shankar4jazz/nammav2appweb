@@ -13,12 +13,12 @@ class Company extends Model implements HasMedia
     use HasFactory,InteractsWithMedia,SoftDeletes;
     protected $table = 'companies';
     protected $fillable = [
-        'user_id', 'name', 'status'
+        'user_id', 'name', 'status', 'gst', 'address'
     ];
 
     protected $casts = [
         'user_id'    => 'integer',
-        'status'    => 'integer',
+        'status'    => 'integer'
     ];
 
     public function users(){

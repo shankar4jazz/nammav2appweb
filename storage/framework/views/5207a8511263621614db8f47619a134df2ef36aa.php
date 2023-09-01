@@ -1,40 +1,51 @@
- <x-master-layout>
+ <?php if (isset($component)) { $__componentOriginalc6e081c8432fe1dd6b4e43af4871c93447ee9b23 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\MasterLayout::class, []); ?>
+<?php $component->withName('master-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
      <div class="container-fluid">
          <div class="row">
              <div class="col-lg-12">
                  <div class="card card-block card-stretch">
                      <div class="card-body p-0">
                          <div class="d-flex justify-content-between align-items-center p-3 flex-wrap gap-3">
-                             <h5 class="font-weight-bold">{{ $pageTitle ?? trans('messages.list') }}</h5>
+                             <h5 class="font-weight-bold"><?php echo e($pageTitle ?? trans('messages.list')); ?></h5>
 
 
-                             {{ Form::open(['url' => '/jobseeker', 'method' => 'get']) }}
+                             <?php echo e(Form::open(['url' => '/jobseeker', 'method' => 'get'])); ?>
+
 
                              <div class="row">
                                  <div class="form-group col-md-6">
-                                     {{ Form::select('state_id', [], null, [
+                                     <?php echo e(Form::select('state_id', [], null, [
                                         'class' => 'form-control select2js state_id',
                                         'data-placeholder' => __('messages.select_name', ['select' => __('messages.state')]),
                                         'id' => 'state_id'
-                                    ]) }}
+                                    ])); ?>
+
                                  </div>
                                  <div class="form-group col-md-6">
-                                     {{ Form::select('district_id', [], old('district_id'), [
+                                     <?php echo e(Form::select('district_id', [], old('district_id'), [
                                         'class' => 'select2js form-group district_id',
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.district') ]),
                                         'id' => 'district_id'
-                                    ]) }}
+                                    ])); ?>
+
                                  </div>
                              </div>
 
                              <!-- <button type="submit" class="btn btn-primary">Filter</button> -->
-                             {{ Form::submit( trans('messages.save'), ['class'=>'btn btn-md btn-primary float-right']) }}
-                             {{ Form::close() }}
-                             @if($auth_user->can('user add'))
-                             <a href="{{ route('user.create') }}" class="float-right mr-1 btn btn-sm btn-primary"><i class="fa fa-plus-circle"></i> {{ __('messages.add_form_title',['form' => __('messages.user')  ]) }}</a>
-                             @endif
+                             <?php echo e(Form::submit( trans('messages.save'), ['class'=>'btn btn-md btn-primary float-right'])); ?>
+
+                             <?php echo e(Form::close()); ?>
+
+                             <?php if($auth_user->can('user add')): ?>
+                             <a href="<?php echo e(route('user.create')); ?>" class="float-right mr-1 btn btn-sm btn-primary"><i class="fa fa-plus-circle"></i> <?php echo e(__('messages.add_form_title',['form' => __('messages.user')  ])); ?></a>
+                             <?php endif; ?>
                          </div>
-                         {{ $dataTable->table(['class' => 'table  w-100'],false) }}
+                         <?php echo e($dataTable->table(['class' => 'table  w-100'],false)); ?>
+
                      </div>
                  </div>
              </div>
@@ -54,8 +65,8 @@
 
                              
                                  <div class="statistics-card statistics-card__style2 statistics-card__pending-withdraw">
-                                     <h2>{{ $totalCounts['Total']  }}</h2>
-                                     <h3>{{__('Total Job-Seekers')}}</h3>
+                                     <h2><?php echo e($totalCounts['Total']); ?></h2>
+                                     <h3><?php echo e(__('Total Job-Seekers')); ?></h3>
                                  </div>
 
                                  
@@ -68,7 +79,7 @@
                              <div class="card">
                                  <div class="card-body">
                                      <div class="d-flex justify-content-between align-items-center flex-wrap">
-                                         <h4 class="">{{__('Gender Ratio')}}</h4>
+                                         <h4 class=""><?php echo e(__('Gender Ratio')); ?></h4>
                                      </div>
                                      <div id="chart" class="custom-chart"></div>
                                  </div>
@@ -82,15 +93,16 @@
      </main>
 
 
-     @section('bottom_script')
-     {{ $dataTable->scripts() }}
+     <?php $__env->startSection('bottom_script'); ?>
+     <?php echo e($dataTable->scripts()); ?>
+
 
 
      <script type="text/javascript">
-         var maleCount = parseInt("{{ isset($totalCounts['Male']) ? $totalCounts['Male'] : 0 }}");
-         var femaleCount = parseInt("{{ isset($totalCounts['Female']) ? $totalCounts['Female'] : 0 }}");
-         var NotCompleted = parseInt("{{ isset($totalCounts['NULL']) ? $totalCounts['NULL'] : 0 }}");
-         var other = parseInt("{{ isset($totalCounts['Other']) ? $totalCounts['Other'] : 0 }}");
+         var maleCount = parseInt("<?php echo e(isset($totalCounts['Male']) ? $totalCounts['Male'] : 0); ?>");
+         var femaleCount = parseInt("<?php echo e(isset($totalCounts['Female']) ? $totalCounts['Female'] : 0); ?>");
+         var NotCompleted = parseInt("<?php echo e(isset($totalCounts['NULL']) ? $totalCounts['NULL'] : 0); ?>");
+         var other = parseInt("<?php echo e(isset($totalCounts['Other']) ? $totalCounts['Other'] : 0); ?>");
 
          var options = {
              series: [maleCount, femaleCount, NotCompleted, other],
@@ -117,9 +129,9 @@
 
 
 
-         var country_id = "{{ isset($jobsdata->country_id) ? $jobsdata->country_id : 101 }}";
-         var district_id = "{{ request('district_id', 0) }}";
-         var state_id = "{{ isset($jobsdata->state_id) ? $jobsdata->state_id : 35 }}";
+         var country_id = "<?php echo e(isset($jobsdata->country_id) ? $jobsdata->country_id : 101); ?>";
+         var district_id = "<?php echo e(request('district_id', 0)); ?>";
+         var state_id = "<?php echo e(isset($jobsdata->state_id) ? $jobsdata->state_id : 35); ?>";
          stateName(country_id, state_id);
 
          $(document).on('change', '#state_id', function() {
@@ -131,7 +143,7 @@
 
          function districtName(state_id, district = "") {
              // console.log(district);
-             var state_route = "{{ route('ajax-list', [ 'type' => 'district','state_id' =>'']) }}" + state_id;
+             var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'district','state_id' =>''])); ?>" + state_id;
              state_route = state_route.replace('amp;', '');
 
              $.ajax({
@@ -139,7 +151,7 @@
                  success: function(result) {
                      $('#district_id').select2({
                          width: '100%',
-                         placeholder: "{{ trans('messages.select_name',['select' => trans('messages.district')]) }}",
+                         placeholder: "<?php echo e(trans('messages.select_name',['select' => trans('messages.district')])); ?>",
                          data: result.results
                      });
                      if (district != null) {
@@ -150,7 +162,7 @@
          }
 
          function stateName(country, state = "") {
-             var state_route = "{{ route('ajax-list', [ 'type' => 'state','country_id' =>'']) }}" + country;
+             var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'state','country_id' =>''])); ?>" + country;
              state_route = state_route.replace('amp;', '');
 
              $.ajax({
@@ -158,7 +170,7 @@
                  success: function(result) {
                      $('#state_id').select2({
                          width: '100%',
-                         placeholder: "{{ trans('messages.select_name',['select' => trans('messages.state')]) }}",
+                         placeholder: "<?php echo e(trans('messages.select_name',['select' => trans('messages.state')])); ?>",
                          data: result.results
 
                      });
@@ -169,5 +181,10 @@
              });
          }
      </script>
-     @endsection
- </x-master-layout>
+     <?php $__env->stopSection(); ?>
+  <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc6e081c8432fe1dd6b4e43af4871c93447ee9b23)): ?>
+<?php $component = $__componentOriginalc6e081c8432fe1dd6b4e43af4871c93447ee9b23; ?>
+<?php unset($__componentOriginalc6e081c8432fe1dd6b4e43af4871c93447ee9b23); ?>
+<?php endif; ?><?php /**PATH C:\wamp64\www\nammav2appweb-3\resources\views/jobseeker/index.blade.php ENDPATH**/ ?>

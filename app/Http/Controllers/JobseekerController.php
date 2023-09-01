@@ -18,10 +18,31 @@ class JobseekerController extends Controller
      */
     public function index(JobseekerDataTable $dataTable)
     {
-        $pageTitle = __('messages.list_form_title',['form' => __('messages.user')] );
+        $pageTitle = __('messages.list_form_title', ['form' => __('messages.user')]);
         $assets = ['datatable'];
         $auth_user = authSession();
-        return $dataTable->render('jobseeker.index', compact('pageTitle','assets','auth_user'));
+        $providerdata = [];
+        $earningData = [];
+
+        $totalJobseekers = $dataTable->getTotalJobseekers();
+        $totalMale = isset($totalJobseekers['Male']) ? $totalJobseekers['Male'] : 0;
+        $totalFemale = isset($totalJobseekers['Female']) ? $totalJobseekers['Female'] : 0;
+        $totalOther = isset($totalJobseekers['Other']) ? $totalJobseekers['Other'] : 0;
+        $totalNULL = isset($totalJobseekers['Null']) ? $totalJobseekers['Null'] : 0;
+
+
+
+        $totalCounts = [
+            'Male' => $totalMale,
+            'Female' => $totalFemale,
+            'Other' => $totalOther,
+            'NULL' => $totalNULL,
+            'Total' => $totalMale + $totalFemale + $totalOther
+        ];
+
+
+        $totalJobseekers = $dataTable->getTotalJobseekers();
+        return $dataTable->render('jobseeker.index', compact('pageTitle', 'assets', 'auth_user',  'providerdata', 'auth_user', 'earningData', 'totalCounts'));
     }
 
     /**
@@ -35,14 +56,14 @@ class JobseekerController extends Controller
         $auth_user = authSession();
 
         $customerdata = User::find($id);
-        $pageTitle = __('messages.update_form_title',['form'=> __('messages.user')]);
-        
-        if($customerdata == null){
-            $pageTitle = __('messages.add_button_form',['form' => __('messages.user')]);
+        $pageTitle = __('messages.update_form_title', ['form' => __('messages.user')]);
+
+        if ($customerdata == null) {
+            $pageTitle = __('messages.add_button_form', ['form' => __('messages.user')]);
             $customerdata = new User;
         }
-        
-        return view('customer.create', compact('pageTitle' ,'customerdata' ,'auth_user' ));
+
+        return view('customer.create', compact('pageTitle', 'customerdata', 'auth_user'));
     }
 
     /**
@@ -53,63 +74,62 @@ class JobseekerController extends Controller
      */
     public function store(UserRequest $request)
     {
-        if(demoUserPermission()){
+        if (demoUserPermission()) {
             return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
         $data = $request->all();
         $id = $data['id'];
         $data['user_type'] = $data['user_type'] ?? 'user';
 
-        $data['display_name'] = $data['first_name']." ".$data['last_name'];
+        $data['display_name'] = $data['first_name'] . " " . $data['last_name'];
         // Save User data...
-        if($id == null){
+        if ($id == null) {
             $data['password'] = bcrypt($data['password']);
             $user = User::create($data);
-        }else{
+        } else {
             $user = User::findOrFail($id);
             // User data...
             $user->removeRole($user->user_type);
             $user->fill($data)->update();
         }
         $user->assignRole($data['user_type']);
-        $message = __('messages.update_form',[ 'form' => __('messages.user') ] );
-		if($user->wasRecentlyCreated){
-			$message = __('messages.save_form',[ 'form' => __('messages.user') ] );
-		}
+        $message = __('messages.update_form', ['form' => __('messages.user')]);
+        if ($user->wasRecentlyCreated) {
+            $message = __('messages.save_form', ['form' => __('messages.user')]);
+        }
 
-		return redirect(route('user.index'))->withSuccess($message);
+        return redirect(route('user.index'))->withSuccess($message);
     }
 
 
-  public function quickCreate(Request $request)
-    {     
-      
+    public function quickCreate(Request $request)
+    {
+
         $id = $request->id;
 
-      
+
         $auth_user = authSession();
 
         $data = $request->all();
-       
+
 
         $customerdata = User::find($id);
-        $pageTitle = __('messages.update_form_title',['form'=> __('messages.user')]);
-        
-        if($customerdata == null){
-            $pageTitle = __('messages.add_button_form',['form' => __('messages.user')]);
+        $pageTitle = __('messages.update_form_title', ['form' => __('messages.user')]);
+
+        if ($customerdata == null) {
+            $pageTitle = __('messages.add_button_form', ['form' => __('messages.user')]);
             $customerdata = new User;
             $customerdata['contact_number'] = $data['mobile_no'];
             $customerdata['type'] = $data['type'];
-
         }
-        
-       return view('customer.quickcreate', compact('pageTitle' ,'customerdata' ,'auth_user' ));
+
+        return view('customer.quickcreate', compact('pageTitle', 'customerdata', 'auth_user'));
     }
 
 
     public function quickStore(UserRequest $request)
     {
-        if(demoUserPermission()){
+        if (demoUserPermission()) {
             return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
         $data = $request->all();
@@ -118,34 +138,30 @@ class JobseekerController extends Controller
 
         $data['display_name'] = $data['first_name'];
         $data['username'] = $data['first_name'];
-       
-        if($id == null){            
+
+        if ($id == null) {
             $data['password'] = bcrypt($data['contact_number']);
             $user = User::create($data);
-        }else{
+        } else {
             $user = User::findOrFail($id);
             // User data...
             $user->removeRole($user->user_type);
             $user->fill($data)->update();
-          
         }
-       
+
         $user->assignRole($data['user_type']);
-        $message = __('messages.update_form',[ 'form' => __('messages.user') ] );
-		if($user->wasRecentlyCreated){
-			$message = __('messages.save_form',[ 'form' => __('messages.user') ] );
-		}
-        
-		if($data['type'] == 'booking'){
+        $message = __('messages.update_form', ['form' => __('messages.user')]);
+        if ($user->wasRecentlyCreated) {
+            $message = __('messages.save_form', ['form' => __('messages.user')]);
+        }
 
-        return redirect(route('booking.addquick', ['mobile_no' =>$data['contact_number'], 'user_type' => $data['user_type']]))->withSuccess($message);
-       
+        if ($data['type'] == 'booking') {
 
-       }
-       if($data['type'] == 'jobs'){
-        return redirect(route('jobs.jobadd', ['mobile_no' =>$data['contact_number'], 'user_type' => $data['user_type']]))->withSuccess($message);
-
-       }
+            return redirect(route('booking.addquick', ['mobile_no' => $data['contact_number'], 'user_type' => $data['user_type']]))->withSuccess($message);
+        }
+        if ($data['type'] == 'jobs') {
+            return redirect(route('jobs.jobadd', ['mobile_no' => $data['contact_number'], 'user_type' => $data['user_type']]))->withSuccess($message);
+        }
     }
 
     /**
@@ -158,14 +174,13 @@ class JobseekerController extends Controller
     {
         $auth_user = authSession();
         $customerdata = User::find($id);
-        if(empty($customerdata))
-        {
-            $msg = __('messages.not_found_entry',['name' => __('messages.user')] );
+        if (empty($customerdata)) {
+            $msg = __('messages.not_found_entry', ['name' => __('messages.user')]);
             return redirect(route('user.index'))->withError($msg);
         }
-        $customer_pending_trans  = Payment::where('customer_id', $id)->where('payment_status','pending')->get();
-        $pageTitle = __('messages.view_form_title',['form'=> __('messages.user')]);
-        return view('customer.view', compact('pageTitle' ,'customerdata' ,'auth_user','customer_pending_trans' ));
+        $customer_pending_trans  = Payment::where('customer_id', $id)->where('payment_status', 'pending')->get();
+        $pageTitle = __('messages.view_form_title', ['form' => __('messages.user')]);
+        return view('customer.view', compact('pageTitle', 'customerdata', 'auth_user', 'customer_pending_trans'));
     }
 
     /**
@@ -199,39 +214,40 @@ class JobseekerController extends Controller
      */
     public function destroy($id)
     {
-        if(demoUserPermission()){
+        if (demoUserPermission()) {
             return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
         $user = User::find($id);
-        $msg = __('messages.msg_fail_to_delete',['item' => __('messages.user')] );
-        
-        if($user != '') { 
+        $msg = __('messages.msg_fail_to_delete', ['item' => __('messages.user')]);
+
+        if ($user != '') {
             $user->delete();
-            $msg = __('messages.msg_deleted',['name' => __('messages.user')] );
+            $msg = __('messages.msg_deleted', ['name' => __('messages.user')]);
         }
-        if(request()->is('api/*')) {
+        if (request()->is('api/*')) {
             return comman_message_response($msg);
-		}
+        }
         return redirect()->back()->withSuccess($msg);
     }
-    public function action(Request $request){
-        if(demoUserPermission()){
+    public function action(Request $request)
+    {
+        if (demoUserPermission()) {
             return  redirect()->back()->withErrors(trans('messages.demo_permission_denied'));
         }
         $id = $request->id;
-        $user = User::withTrashed()->where('id',$id)->first();
-        $msg = __('messages.not_found_entry',['name' => __('messages.user')] );
-        if($request->type == 'restore') {
+        $user = User::withTrashed()->where('id', $id)->first();
+        $msg = __('messages.not_found_entry', ['name' => __('messages.user')]);
+        if ($request->type == 'restore') {
             $user->restore();
-            $msg = __('messages.msg_restored',['name' => __('messages.user')] );
+            $msg = __('messages.msg_restored', ['name' => __('messages.user')]);
         }
-        if($request->type === 'forcedelete'){
+        if ($request->type === 'forcedelete') {
             $user->forceDelete();
-            $msg = __('messages.msg_forcedelete',['name' => __('messages.user')] );
+            $msg = __('messages.msg_forcedelete', ['name' => __('messages.user')]);
         }
-        if(request()->is('api/*')) {
+        if (request()->is('api/*')) {
             return comman_message_response($msg);
-		}
-        return comman_custom_response(['message'=> $msg , 'status' => true]);
+        }
+        return comman_custom_response(['message' => $msg, 'status' => true]);
     }
 }

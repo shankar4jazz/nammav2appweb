@@ -8,6 +8,7 @@ use App\Models\JobCallActivities;
 use App\Models\Jobs;
 use App\Http\Resources\API\JobCallAcitvitiesResource;
 use App\Http\Resources\API\JobsApplyResource;
+use Illuminate\Support\Facades\DB;
 
 
 class JobCallActivitiesController extends Controller
@@ -125,7 +126,7 @@ class JobCallActivitiesController extends Controller
         // Remove duplicate job IDs and keep only unique job IDs
         $uniqueJobIds = $jobIds->unique()->values()->all();
 
-        $jobs = Jobs::whereIn("id", $uniqueJobIds);
+        $jobs = Jobs::whereIn("id", $uniqueJobIds)->where('end_date', '>=', DB::raw('CURRENT_DATE()'));
 
         $per_page = config('constant.PER_PAGE_LIMIT');
         if ($request->has('per_page') && !empty($request->per_page)) {

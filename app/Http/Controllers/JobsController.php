@@ -345,9 +345,6 @@ class JobsController extends Controller
             'date_time' => $providerdata->jobsPayment?->updated_at?->tz('Asia/Kolkata')->format('d-m-Y h:i:s A') ?? '-'
         ];
 
-
-
-
         $pageTitle = __('messages.view_form_title', ['form' => __('messages.jobs')]);
         return $dataTable
             ->with('id', $id)
