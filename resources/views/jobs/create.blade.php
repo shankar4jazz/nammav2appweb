@@ -678,6 +678,7 @@
                 let selectedCityName = $(this).find('option:selected').text();
                 $('#city_name').val(selectedCityName);
 
+                
 
             })
 
