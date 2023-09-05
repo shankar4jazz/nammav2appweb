@@ -3,8 +3,10 @@
 namespace App\DataTables;
 
 use App\Traits\DataTableTrait;
-
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -25,6 +27,15 @@ class JobseekerDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->addColumn('display_name', function ($row) {
+                return $row->first_name . ' ' . $row->last_name;
+            })
+            ->addColumn('gender', function($row) {
+                $details = json_decode($row->details, true);
+                $gender = $details['gender'] ?? 'N/A';
+                $gender = ($gender === "0") ? "Male" : (($gender === "1") ? "Female" : $gender);
+                return $gender;
+            })
             ->editColumn('status', function ($user) {
                 if ($user->status == '0') {
                     $status = '<span class="badge-inactive">' . __('messages.inactive') . '</span>';
@@ -71,6 +82,10 @@ class JobseekerDataTable extends DataTable
         // }
 
         // Check for district filter
+        if (request()->has('qual_id')) {
+            $q_id = request()->input('qual_id');
+            $query = $query->where('qualification_id', $q_id);
+        }
         if (request()->has('district_id')) {
             $district = request()->input('district_id');
             $query = $query->whereRaw("JSON_CONTAINS(districts, '{\"id\":$district}')");
@@ -106,12 +121,12 @@ class JobseekerDataTable extends DataTable
         $textNullCount = $queryForTextNull->whereRaw("JSON_CONTAINS(details, '{\"gender\":\"Null\"}')")->count();
 
         // Clone the query to count 'Male'
-        $queryForOther= clone $query;
+        $queryForOther = clone $query;
         $otherCount = $queryForOther->whereRaw("JSON_CONTAINS(details, '{\"gender\":\"2\"}')")->count();
 
-         // Clone the query to count 'other'
-         $queryForMales1 = clone $query;
-         $maleCount1 = $queryForMales1->whereRaw("JSON_CONTAINS(details, '{\"gender\":\"Male\"}')")->count();
+        // Clone the query to count 'other'
+        $queryForMales1 = clone $query;
+        $maleCount1 = $queryForMales1->whereRaw("JSON_CONTAINS(details, '{\"gender\":\"Male\"}')")->count();
 
         // Clone the query to count 'Female'
         $queryForFemales1 = clone $query;
@@ -125,26 +140,16 @@ class JobseekerDataTable extends DataTable
         // ];
 
         // Create an array with the counts
-      
+
         $counts = [
-            'Male' => $maleCount+$maleCount1,
-            'Female' => $femaleCount+$femaleCount1,
+            'Male' => $maleCount + $maleCount1,
+            'Female' => $femaleCount + $femaleCount1,
             'Total' => $maleCount + $femaleCount, // Optional, if you want the total count
-            'Null'=>$nullCount+$textNullCount,
-            'Other'=>$otherCount
+            'Null' => $nullCount + $textNullCount,
+            'Other' => $otherCount
         ];
-
-      
-
         return $counts;
     }
-
-
-
-
-
-
-
 
     /**
      * Get columns.
@@ -161,6 +166,8 @@ class JobseekerDataTable extends DataTable
                 ->width(60),
             Column::make('display_name')
                 ->title(__('messages.name')),
+            Column::make('gender')
+                ->title(__('gender')),
             Column::make('contact_number'),
             Column::make('status'),
             Column::make('is_available'),
@@ -172,6 +179,24 @@ class JobseekerDataTable extends DataTable
         ];
     }
 
+    public function html(): HtmlBuilder
+    {
+        return $this->builder()
+            ->setTableId('users-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('add'),
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload'),
+            ]);
+    }
     /**
      * Get filename for export.
      *
@@ -179,6 +204,6 @@ class JobseekerDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Provider_' . date('YmdHis');
+        return 'Jobseekers_' . date('YmdHis');
     }
 }

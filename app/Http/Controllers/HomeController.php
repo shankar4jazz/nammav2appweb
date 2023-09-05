@@ -59,7 +59,7 @@ class HomeController extends Controller
         $data['provider_dashboard_setting']  =  !empty($provider_setting_data) ? json_decode($provider_setting_data->value) : [];
         $handyman_setting_data = Setting::select('value')->where('type', 'handyman_dashboard_setting')->where('key', 'handyman_dashboard_setting')->first();
         $data['handyman_dashboard_setting']  =   !empty($handyman_setting_data) ? json_decode($handyman_setting_data->value) : [];
-        
+
 
         $data['dashboard'] = [
             'count_total_jobs'                  => Jobs::myJobs()->count(),
@@ -349,6 +349,25 @@ class HomeController extends Controller
         $value = $request->q;
         $auth_user = authSession();
         switch ($request->type) {
+            case 'edu_category':
+                $items = \App\Models\QualificationCategory::select('id', 'qualification as text');
+                if ($value != '') {
+                    $items->where('qualification', 'LIKE', $value . '%');
+                }
+
+                $items = $items->get();
+                break;
+            case 'qualification':
+                $items = \App\Models\Qualification::select('id', 'name as text');
+                if ($value != '') {
+                    $items->where('name', 'LIKE', $value . '%');
+                }
+                if (isset($request->category_id)) {
+                    $items->where('category_id', $request->category_id);
+                }
+
+                $items = $items->orderBy('name', 'asc')->get();
+                break;
             case 'permission':
                 $items = \App\Models\Permission::select('id', 'name as text')->whereNull('parent_id');
                 if ($value != '') {

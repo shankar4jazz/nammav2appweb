@@ -30,8 +30,6 @@ class JobseekerController extends Controller
         $totalOther = isset($totalJobseekers['Other']) ? $totalJobseekers['Other'] : 0;
         $totalNULL = isset($totalJobseekers['Null']) ? $totalJobseekers['Null'] : 0;
 
-
-
         $totalCounts = [
             'Male' => $totalMale,
             'Female' => $totalFemale,

@@ -148,7 +148,7 @@
                             <div class="form-group col-md-6">
                                 <?php echo e(Form::label('marital_status',trans('messages.marital').' <span class="text-danger">*</span>',['class'=>'form-control-label'],false)); ?>
 
-                                <?php echo e(Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('gender'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required'])); ?>
+                                <?php echo e(Form::select('marital_status',['1' => __('messages.marital_1') , '0' => __('messages.marital_0'), '2' => __('Both') ],old('marital_status'),[ 'id' => 'marital' ,'class' =>'form-control select2js','required'])); ?>
 
                                 <small class="help-block with-errors text-danger"></small>
                             </div>
@@ -237,7 +237,7 @@
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.state') ]),
                                     ])); ?>
 
-                                    <input type="hidden" name="state_id" value="<?php echo e($jobsdata->state_id); ?>" />
+                                    
                                 </div>
 
                                 <div class="form-group col-md-4">
@@ -557,7 +557,7 @@
                 userName(user_id);
                 var provider_id = '5';
 
-                $('#state_id').attr('disabled', true);
+                //$('#state_id').attr('disabled', true);
                 stateName(country_id, state_id);
                 getTax(provider_id, districts);
 

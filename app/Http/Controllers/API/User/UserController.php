@@ -716,41 +716,25 @@ class UserController extends Controller
             'gender'     => $request->gender,
             'category_name' => $request->category_name,
             'job_category' => $request->job_category,
-            'districts' => $request->districts
+            'districts' => $request->districts,
+            "district" => $request->district,
+            'jobs_status' => $request->jobs_status
         ];
-        if (isset($request->job_category) && $request->job_category != null) {
-            $data = json_decode(json_decode($request->job_category), true);
-
-            if (is_array($data)) {
-                $ids = array_map(function ($item) {
-
-
-                    return isset($item['id']) ? ['id' => $item['id']] : null;
-                }, $data);
-
-                $ids = array_filter($ids);
-
-                $newJson = json_encode($ids);
-            }
-
-            $user->job_categories = $newJson;
-        }
 
         $user->details = json_encode($details);
 
         $user->fill($request->all())->update();
 
-
-        if (isset($request->name) || isset($request->address)) {
+        if (isset($request->company_name) || isset($request->company_address)) {
             $companyDetails = [
-                'name' => $request->name,
-                'address' => $request->address,
-                'gst' => $request->address,
+                'name' => $request->comapny_name,
+                'address' => $request->company_address,
+                'gst' => $request->gst,
                 'user_id' => $request->id
             ];
 
 
-            $company = Company::updateOrCreate(['id' => $request->company_id], $companyDetails);
+            $company = Company::updateOrCreate(['user_id' => $request->id], $companyDetails);
 
 
             //$user->companies()->associate($company);
@@ -785,7 +769,7 @@ class UserController extends Controller
 
             $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
         } else if ($request->user_type == "jobs") {
-
+            $user_data['company_proof'] = getSingleMedia($user_data, 'company_proof', null);
             $user_data['companies'] = $user_data->companies;
         }
         $user_data['user_role'] = $user->getRoleNames();
@@ -833,7 +817,9 @@ class UserController extends Controller
                     'gender'     => $request->gender,
                     'category_name' => "",
                     'job_category' => "",
-                    'districts' => ""
+                    'districts' => "",
+                    "district" => "",
+                    'jobs_status' => ""
                 ];
 
                 $user->details = json_encode($details);
@@ -866,6 +852,7 @@ class UserController extends Controller
 
                     $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
                 } else if ($request->user_type == "jobs") {
+                    $user_data['company_proof'] = getSingleMedia($user_data, 'company_proof', null);
 
                     $user_data['companies'] = $user_data->companies;
                 }
@@ -1123,8 +1110,10 @@ class UserController extends Controller
 
                         if ($request->user_type == "jobseeker") {
 
+
                             $user_data['resume'] = getSingleMedia($user_data, 'resume', null);
                         } else if ($request->user_type == "jobs") {
+                            $user_data['company_proof'] = getSingleMedia($user_data, 'company_proof', null);
 
                             $user_data['companies'] = $user_data->companies;
                         }
