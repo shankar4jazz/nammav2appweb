@@ -30,11 +30,26 @@ class JobseekerDataTable extends DataTable
             ->addColumn('display_name', function ($row) {
                 return $row->first_name . ' ' . $row->last_name;
             })
-            ->addColumn('gender', function($row) {
+            ->addColumn('gender', function ($row) {
                 $details = json_decode($row->details, true);
                 $gender = $details['gender'] ?? 'N/A';
                 $gender = ($gender === "0") ? "Male" : (($gender === "1") ? "Female" : $gender);
                 return $gender;
+            })
+            ->addColumn('job_location', function ($row) {
+                $details = json_decode($row->details, true);
+                $location = isset($details['districts']) ? $details['districts'] : 'N/A';
+                $loc=json_decode($location, true);
+
+                if (is_array($loc)) {
+                    $names = array_map(function($item) {
+                        return isset($item['name']) ? $item['name'] : 'N/A';
+                    }, $loc);
+                
+                    return implode(", ", $names);
+                } else {
+                    return "N/A";
+                }
             })
             ->editColumn('status', function ($user) {
                 if ($user->status == '0') {
@@ -171,6 +186,19 @@ class JobseekerDataTable extends DataTable
             Column::make('contact_number'),
             Column::make('status'),
             Column::make('is_available'),
+            Column::make('first_name') // Assuming this field exists
+                ->title('First Name')
+                ->visible(false) // Hide from DataTable
+                ->exportable(true), // Include in export
+
+            Column::make('job_location') // Assuming this field exists
+                ->title('Prefered Location')
+                ->visible(false) // Hide from DataTable
+                ->exportable(true), // Include in export
+            Column::make('last_name') // Assuming this field exists
+                ->title('Last Name')
+                ->visible(false) // Hide from DataTable
+                ->exportable(true), // Include in export
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -179,22 +207,31 @@ class JobseekerDataTable extends DataTable
         ];
     }
 
-    public function html(): HtmlBuilder
+    public function html()
     {
         return $this->builder()
             ->setTableId('users-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
-                Button::make('add'),
-                Button::make('excel'),
-                Button::make('csv'),
-                Button::make('pdf'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload'),
+                Button::make('excel')
+                    ->exportAction('excel', 'Export to Excel')
+                    ->filename($this->filename()),
+                Button::make('csv')
+                    ->exportAction('csv', 'Export to CSV')
+                    ->filename($this->filename()),
+                Button::make('pdf')
+                    ->exportAction('pdf', 'Export to PDF')
+                    ->filename($this->filename())
+            ])
+            ->parameters([
+                'lengthMenu' => [
+                    range(100, 100), // Generates an array [1, 2, ..., 100]
+                    range(100, 100) // Generates an array [1, 2, ..., 100]
+                ],
             ]);
     }
     /**

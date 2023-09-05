@@ -4,6 +4,10 @@
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
+     <?php $__env->startPush('styles'); ?>
+   
+     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+     <?php $__env->stopPush(); ?>
      <div class="container-fluid">
          <div class="row">
              <div class="col-lg-12">
@@ -16,7 +20,6 @@
                              <?php endif; ?>
                          </div>
                          <?php echo e(Form::open(['url' => '/jobseeker', 'method' => 'get'])); ?>
-
 
 
                          <div class="d-flex justify-content-start align-items-start p-1 flex-wrap gap-1">
@@ -73,7 +76,6 @@
          </div>
      </div>
 
-
      <main class="main-area">
          <div class="main-content">
              <div class="container-fluid">
@@ -101,15 +103,18 @@
              </div>
          </div>
      </main>
-
      <?php $__env->startSection('bottom_script'); ?>
      <?php echo e($dataTable->scripts(attributes: ['type' => 'module'])); ?>
 
 
-
-
-
-
+ 
+     <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+   
 
      <script type="text/javascript">
          var maleCount = parseInt("<?php echo e(isset($totalCounts['Male']) ? $totalCounts['Male'] : 0); ?>");
@@ -224,7 +229,7 @@
          function qualificationName(category, qual = '') {
              var state_route = "<?php echo e(route('ajax-list', [ 'type' => 'qualification', 'category_id' =>''])); ?>" + category;
              state_route = state_route.replace('amp;', '');
-         
+
              $.ajax({
                  url: state_route,
                  success: function(result) {
@@ -235,7 +240,7 @@
 
                      });
                      if (qual != null && qual != '') {
-                     
+
                          $("#qual_id").val(qual).trigger('change');
                      }
                  }

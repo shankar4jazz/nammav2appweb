@@ -708,18 +708,16 @@ class UserController extends Controller
             return comman_message_response(__('messages.no_record_found'), 400);
         }
 
-        $details = [
-            'martial_status' => $request->martial_status,
-            'dob' => $request->dob,
-            'experience' => $request->experience,
-            'education'  => $request->education,
-            'gender'     => $request->gender,
-            'category_name' => $request->category_name,
-            'job_category' => $request->job_category,
-            'districts' => $request->districts,
-            "district" => $request->district,
-            'jobs_status' => $request->jobs_status
+        $details = [];
+
+        $keys = [
+            'martial_status', 'dob', 'experience', 'education', 'gender',
+            'category_name', 'job_category', 'districts', 'district', 'jobs_status'
         ];
+
+        foreach ($keys as $key) {
+            $details[$key] = $request->has($key) && !empty($request->$key) ? $request->$key : "";
+        }
 
         $user->details = json_encode($details);
 
