@@ -5,10 +5,10 @@
 <div class="d-flex justify-content-end align-items-center">
     @if(!$user->trashed())
         @if($auth_user->can('user view'))
-        <a class="mr-2" href="{{ route('user.show',$user->id) }}"><i class="far fa-eye text-secondary"></i></a>
+        <a class="mr-2" href="{{ route('jobseeker.show',$user->id) }}"><i class="far fa-eye text-secondary"></i></a>
         @endif
         @if($auth_user->can('user edit'))
-        <a class="mr-2" href="{{ route('user.create',['id' => $user->id]) }}" title="{{ __('messages.update_form_title',['form' => __('messages.user') ]) }}"><i class="fas fa-pen text-primary "></i></a>
+        <a class="mr-2" href="{{ route('jobseeker.create',['id' => $user->id]) }}" title="{{ __('messages.update_form_title',['form' => __('messages.user') ]) }}"><i class="fas fa-pen text-primary "></i></a>
         @endif
         @if($auth_user->can('user delete'))
         <a class="mr-2 text-danger" href="javascript:void(0)" data--submit="user{{$user->id}}" 

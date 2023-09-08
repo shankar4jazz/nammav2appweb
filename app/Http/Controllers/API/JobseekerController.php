@@ -47,7 +47,7 @@ class JobseekerController extends Controller
         }
     }
 
-    public function getJobseekerDetailsByJobcategory(Request $request)
+    public function getJobseekerDetailsByJobcategory33(Request $request)
     {
 
         // $id = 12; 
@@ -98,7 +98,7 @@ class JobseekerController extends Controller
         }
     }
 
-    public function getJobseekerDetailsByJobcategory33(Request $request)
+    public function getJobseekerDetailsByJobcategory(Request $request)
     {
         $id = $request->job_category;
         // Define the number of items per page

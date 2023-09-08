@@ -185,7 +185,7 @@
                                     
                                         'data-placeholder' => __('messages.select_name',[ 'select' => __('messages.state') ]),
                                     ]) }}
-                                    
+
                                 </div>
 
                                 <div class="form-group col-md-4">
@@ -678,7 +678,7 @@
                 let selectedCityName = $(this).find('option:selected').text();
                 $('#city_name').val(selectedCityName);
 
-                
+
 
             })
 

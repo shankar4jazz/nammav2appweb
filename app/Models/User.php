@@ -25,7 +25,7 @@ class User extends Authenticatable implements HasMedia
         'handymantype_id', 'is_online',
         'player_id', 'country_id', 'state_id', 'district_id', 'city_id', 'address', 'provider_id', 'status',
         'display_name', 'providertype_id', 'is_featured', 'time_zone', 'last_notification_seen', 'login_type', 'service_address_id', 'uid', 'is_subscribe',
-        'social_image', 'is_available', 'designation', 'last_online_time', 'qualification_id', 'age_limit', 'job_categories'
+        'social_image', 'is_available', 'designation', 'last_online_time', 'age_limit', 'job_categories', 'qualification_id', 'edu_category_id', 'jobs_status', 'pincode', 'marital_status', 'dob', 'experience', 'gender', 'districts'
     ];
 
     /**

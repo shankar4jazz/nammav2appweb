@@ -687,18 +687,32 @@ class UserController extends Controller
         }
 
         $user->fill($request->all())->update();
-        if (isset($request->resume) && $request->resume != null) {
-            //$user->clearMediaCollection('resume');
 
+		$mediaMap = [
+			'1' => 'resume',
+			'2' => 'company_proof'
+		];
+		
+		if (isset($mediaMap[$request->type])) {
+			$mediaType = $mediaMap[$request->type];
+			if (isset($request->$mediaType) && $request->$mediaType != null) {
+				$this->handleMediaUpload($user, $mediaType);
+				$file = getSingleMedia($user, $mediaType, null);
+			}
+		}
 
-            $user->addMediaFromRequest('resume')->toMediaCollection('resume', 's3');
-        }
-        $response = [
-            'status' => true,
-        ];
+		$response = [
+			'status' => true,
+			'message' => "Upload successful",
+			'resume' => $file ?? null
+		];
 
         return comman_custom_response($response, 200);
     }
+	private function handleMediaUpload($user, $mediaType) {
+		$user->clearMediaCollection($mediaType);
+		$user->addMediaFromRequest($mediaType)->toMediaCollection($mediaType, 's3');
+	}
     public function editUser(UserRequest $request)
     {
         if ($request->has('id') && !empty($request->id)) {
@@ -725,7 +739,7 @@ class UserController extends Controller
 
         if (isset($request->company_name) || isset($request->company_address)) {
             $companyDetails = [
-                'name' => $request->comapny_name,
+                'name' => $request->company_name,
                 'address' => $request->company_address,
                 'gst' => $request->gst,
                 'user_id' => $request->id
@@ -771,7 +785,7 @@ class UserController extends Controller
             $user_data['companies'] = $user_data->companies;
         }
         $user_data['user_role'] = $user->getRoleNames();
-        $user_data['qualification'] = $user_data->qualification;
+        $user_data['qualification'] = $user_data->qualification ?? [];
         unset($user_data['roles']);
         unset($user_data['media']);
         $response = [
@@ -915,12 +929,15 @@ class UserController extends Controller
 
 
             if ($user_data == null) {
+
                 $user = User::create($input);
                 $user->assignRole($input['user_type']);
 
                 if (request('player_id') != null) {
                     $user->player_id = request('player_id');
                 }
+
+
 
                 $fourRandomDigit = rand(1000, 9999);
 
@@ -929,7 +946,7 @@ class UserController extends Controller
                 if ($smsReply['status'] == 'Success') {
 
                     $user->otp = $fourRandomDigit;
-                    $user->save();
+                    $result  = $user->save();
                     if (isset($input['device_token'])) {
                         $device = UserDevices::firstOrCreate(['user_id' => $user->id]);
                         $device->device_token = $input['device_token'];
@@ -940,6 +957,7 @@ class UserController extends Controller
                         'is_user_valid' => true,
                         'sms_sent' => true
                     ];
+                    sendWhatsAppNewJobseekerToExecutive($user, $input['user_type']);
                     return comman_custom_response($otp_response, 200);
                 } else {
 

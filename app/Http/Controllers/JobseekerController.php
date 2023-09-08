@@ -79,6 +79,7 @@ class JobseekerController extends Controller
         $id = $data['id'];
         $data['user_type'] = $data['user_type'] ?? 'user';
 
+
         $data['display_name'] = $data['first_name'] . " " . $data['last_name'];
         // Save User data...
         if ($id == null) {
@@ -86,7 +87,22 @@ class JobseekerController extends Controller
             $user = User::create($data);
         } else {
             $user = User::findOrFail($id);
-            // User data...
+
+            $districts = $data['districts'];
+            $formattedDistricts = array_map(function ($district) {
+                return ['id' => (int) $district];
+            }, $districts);
+
+
+            $jobcat = $data['job_categories'];
+            $formattedJobCat = array_map(function ($district) {
+                return ['id' => (int) $district];
+            }, $jobcat);
+
+
+            $data['districts'] = json_encode($formattedDistricts);
+            $data['job_categories'] = json_encode($formattedJobCat);
+
             $user->removeRole($user->user_type);
             $user->fill($data)->update();
         }
@@ -96,7 +112,7 @@ class JobseekerController extends Controller
             $message = __('messages.save_form', ['form' => __('messages.user')]);
         }
 
-        return redirect(route('user.index'))->withSuccess($message);
+        return redirect('jobseeker/'.$id)->withSuccess($message);
     }
 
 
@@ -174,11 +190,11 @@ class JobseekerController extends Controller
         $customerdata = User::find($id);
         if (empty($customerdata)) {
             $msg = __('messages.not_found_entry', ['name' => __('messages.user')]);
-            return redirect(route('user.index'))->withError($msg);
+            return redirect(route('jobseeker.index'))->withError($msg);
         }
         $customer_pending_trans  = Payment::where('customer_id', $id)->where('payment_status', 'pending')->get();
         $pageTitle = __('messages.view_form_title', ['form' => __('messages.user')]);
-        return view('customer.view', compact('pageTitle', 'customerdata', 'auth_user', 'customer_pending_trans'));
+        return view('jobseeker.view', compact('pageTitle', 'customerdata', 'auth_user', 'customer_pending_trans'));
     }
 
     /**

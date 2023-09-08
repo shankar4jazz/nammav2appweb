@@ -6,10 +6,10 @@
 <div class="d-flex justify-content-end align-items-center">
     <?php if(!$user->trashed()): ?>
         <?php if($auth_user->can('user view')): ?>
-        <a class="mr-2" href="<?php echo e(route('user.show',$user->id)); ?>"><i class="far fa-eye text-secondary"></i></a>
+        <a class="mr-2" href="<?php echo e(route('jobseeker.show',$user->id)); ?>"><i class="far fa-eye text-secondary"></i></a>
         <?php endif; ?>
         <?php if($auth_user->can('user edit')): ?>
-        <a class="mr-2" href="<?php echo e(route('user.create',['id' => $user->id])); ?>" title="<?php echo e(__('messages.update_form_title',['form' => __('messages.user') ])); ?>"><i class="fas fa-pen text-primary "></i></a>
+        <a class="mr-2" href="<?php echo e(route('jobseeker.create',['id' => $user->id])); ?>" title="<?php echo e(__('messages.update_form_title',['form' => __('messages.user') ])); ?>"><i class="fas fa-pen text-primary "></i></a>
         <?php endif; ?>
         <?php if($auth_user->can('user delete')): ?>
         <a class="mr-2 text-danger" href="javascript:void(0)" data--submit="user<?php echo e($user->id); ?>" 

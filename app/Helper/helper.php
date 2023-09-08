@@ -116,18 +116,20 @@ function getSingleMedia($model, $collection = 'profile_image', $skip = true)
     }
 
     if ($media !== null) {
-        // Assuming the media disk is set to 's3'
+
         $disk = $media->disk;
-        // Generate the Cloudflare R2 URL based on the disk and path
+
         $cloudflareR2Url = getCloudflareR2Url($media);
+
         return $cloudflareR2Url;
     }
 
     if (getFileExistsCheck($media)) {
 
 
-        //d Generate the Cloudflare R2 URL based on the disk and path
+
         $cloudflareR2Url = getCloudflareR2Url($media);
+
         return $cloudflareR2Url;
         // return $media->getFullUrl();
     } else {
@@ -2094,7 +2096,7 @@ function generateJobpostMessage($job, $status, $userName, $endDate)
 
         case 'job_post':
 
-           return array(
+            return array(
 
                 '{data}' => "அன்பார்ந்த *{$userName}*! வணக்கம் 🙏,\n\nஉங்கள் வேலைவாய்ப்பு பதிவு வெற்றிகரமாக பதிவிடப்பட்டது.👍\n\nஎங்கள் வாடிக்கையாளர் சேவை அதிகாரி/ நிர்வாகி உங்களை தொடர்பு கொண்டு உங்கள் நிறுவனம் சம்பந்தப்பட்ட சரிபார்ப்புகளை முடித்த பிறகு உங்கள் பதிவு நேரலையில் கொண்டுவரப்படும்.\n\nஅழைப்பு வரும் வரை தயவுசெய்து காத்திருக்கவும். \n\n*நிறுவனம்:* {$job->company_name}\n*வேலை பெயர்:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*வேலை எண்:* {$job->id}\n*முற்றுப்பெறும் நாள்:* {$endDate}\n\n```We appreciate your trust in Tamilanjobs ```\n\n_Support: 8233823308_ \n\nநன்றி!🙏",
 
@@ -2162,21 +2164,48 @@ function generateJobpostMessage($job, $status, $userName, $endDate)
             );
             break;
     }
-
 }
 
 
-function generateExecuteMessage($job, $status){
+function generateExecuteMessage($job, $status)
+{
     switch ($status) {
         case 'job_post':
             return array(
-                '{data}' => "Job post Received ✅ \n\n, The job with ID: {$job->id} has been posted successfully. \n\n *Company:* {$job->company_name}\n*Contact Number:* {$job->contact_number}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\nco: 8233823308_",
+                '{data}' => "Job post Received ✅ \n\n, The job with ID: {$job->id} has been posted successfully. \n\n *Company:* {$job->company_name}\n*Contact Number:* {$job->contact_number}\n*Post Name:* {$job->job_role}\n*Vacancies:* {$job->vacancy}\n*Job ID:* {$job->id}\n\nsupport: 8233823308_",
             );
             break;
     }
 }
 
-function generateExecutePayMessage($job, $status, $userName, $amount){
+function generateNewUserExecuteMessage($user, $status)
+{
+    switch ($status) {
+        case 'jobseeker':
+            return array(
+                '{data}' => "New Jobseeker 🕵️‍♂️ \n\n Jobseeker ID: {$user->id} has been register successfully in TamilanJobs. \n\n *Contact Number:* {$user->contact_number}\n *First Name:* {$user->first_name}\n *Gender:* {$user->gender}\n\nPlease Contact at  {$user->contact_number} Get more details",
+            );
+            break;
+        case 'jobs':
+            return array(
+                '{data}' => "New Employer 👨‍💼 \n\n Employer ID: {$user->id} has been register successfully in TamilanJobs. \n\n *Contact Number:* {$user->contact_number}\n *First Name:* {$user->first_name}\n *Gender:* {$user->gender}\n\nPlease Contact at  {$user->contact_number} Get more details and Verified",
+            );
+            break;
+        case 'user':
+            return array(
+                '{data}' => "New user 👩🏻‍💼 \n\n User ID: {$user->id} has been register successfully in nammav2app. \n\n *Contact Number:* {$user->contact_number}\n *First Name:* {$user->first_name}\n *Gender:* {$user->gender}\n\nPlease Contact at  {$user->contact_number} Get more details",
+            );
+            break;
+        case 'provider':
+            return array(
+                '{data}' => "New Provider 👩‍🚒 \n\n, Provider ID: {$user->id} has been register successfully in nammav2app. \n\n *Contact Number:* {$user->contact_number}\n *First Name:* {$user->first_name}\n *Gender:* {$user->gender}\n\nPlease Contact at  {$user->contact_number} Get more details",
+            );
+            break;
+    }
+}
+
+function generateExecutePayMessage($job, $status, $userName, $amount)
+{
     switch ($status) {
 
         case 'paid':
@@ -2200,6 +2229,28 @@ function sendWhatsAppTextToExecutive($jobid, $status)
 
     foreach ($mobileNumbers as $mobile_number) {
         $response = sendMessage($mobile_number, $message);
+    }
+
+    return $response;
+}
+
+function sendWhatsAppNewJobseekerToExecutive($user, $status)
+{
+
+    $mobileNumbers = ['8675002943', '9655008990'];
+
+    $message = generateNewUserExecuteMessage($user, $status);
+
+    foreach ($mobileNumbers as $mobile_number) {
+
+        try {
+            $response = sendMessage($mobile_number, $message);
+        } catch (\Exception $e) {
+            // Log the error for debugging purposes
+            //\Log::error("Error sending WhatsApp message to $mobile_number: " . $e->getMessage());
+            // Continue with the next iteration, so other numbers still get the message
+            continue;
+        }
     }
 
     return $response;
@@ -2236,7 +2287,7 @@ function sendWhatsAppTextToExecutivePay($jobid, $status)
 }
 
 function sendWhatsAppText($jobid, $status)
-{ 
+{
 
 
     $job = \App\Models\Jobs::find($jobid);
@@ -2247,7 +2298,7 @@ function sendWhatsAppText($jobid, $status)
         $userName = $user->first_name;
     } else {
         $userName = $job->contact_number;
-    }  
+    }
     $endDate = date('d-m-Y', strtotime($job->end_date));
 
     $message = generateJobpostMessage($job, $status, $userName, $endDate);
@@ -2272,21 +2323,30 @@ function sendMessage($mobile_number, $message)
     );
 
     $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => http_build_query($postFields),
-        CURLOPT_SSL_VERIFYPEER => false,
-    ));
+    try {
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => http_build_query($postFields),
+            CURLOPT_SSL_VERIFYPEER => false,
+        ));
 
-    $response = curl_exec($curl);
-    curl_close($curl);
+        $response = curl_exec($curl);
+        if (curl_errno($curl)) {
+            throw new \Exception(curl_error($curl));
+        }
+    } catch (\Exception $e) {
+       // \Log::error("Error in sendMessage function: " . $e->getMessage());
+        throw $e; // Re-throwing the exception to be caught in the calling function
+    } finally {
+        curl_close($curl);
+    }
 
     return $response;
 }
